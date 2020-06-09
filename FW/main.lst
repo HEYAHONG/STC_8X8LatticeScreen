@@ -9,1396 +9,1543 @@
                                       9 ; Public variables in this module
                                      10 ;--------------------------------------------------------
                                      11 	.globl _main
-                                     12 	.globl _Uart_Interrupt
-                                     13 	.globl _Uart_Send
-                                     14 	.globl _Uart_Init
-                                     15 	.globl _systick_interrupt
-                                     16 	.globl _systick_init
-                                     17 	.globl _LS_DisplayOneRow
-                                     18 	.globl _LS_595_DataOut
-                                     19 	.globl _CY
-                                     20 	.globl _AC
-                                     21 	.globl _F0
-                                     22 	.globl _RS1
-                                     23 	.globl _RS0
-                                     24 	.globl _OV
-                                     25 	.globl _F1
-                                     26 	.globl _P
-                                     27 	.globl _PS
-                                     28 	.globl _PT1
-                                     29 	.globl _PX1
-                                     30 	.globl _PT0
-                                     31 	.globl _PX0
-                                     32 	.globl _RD
-                                     33 	.globl _WR
-                                     34 	.globl _T1
-                                     35 	.globl _T0
-                                     36 	.globl _INT1
-                                     37 	.globl _INT0
-                                     38 	.globl _TXD
-                                     39 	.globl _RXD
-                                     40 	.globl _P3_7
-                                     41 	.globl _P3_6
-                                     42 	.globl _P3_5
-                                     43 	.globl _P3_4
-                                     44 	.globl _P3_3
-                                     45 	.globl _P3_2
-                                     46 	.globl _P3_1
-                                     47 	.globl _P3_0
-                                     48 	.globl _EA
-                                     49 	.globl _ES
-                                     50 	.globl _ET1
-                                     51 	.globl _EX1
-                                     52 	.globl _ET0
-                                     53 	.globl _EX0
-                                     54 	.globl _P2_7
-                                     55 	.globl _P2_6
-                                     56 	.globl _P2_5
-                                     57 	.globl _P2_4
-                                     58 	.globl _P2_3
-                                     59 	.globl _P2_2
-                                     60 	.globl _P2_1
-                                     61 	.globl _P2_0
-                                     62 	.globl _SM0
-                                     63 	.globl _SM1
-                                     64 	.globl _SM2
-                                     65 	.globl _REN
-                                     66 	.globl _TB8
-                                     67 	.globl _RB8
-                                     68 	.globl _TI
-                                     69 	.globl _RI
-                                     70 	.globl _P1_7
-                                     71 	.globl _P1_6
-                                     72 	.globl _P1_5
-                                     73 	.globl _P1_4
-                                     74 	.globl _P1_3
-                                     75 	.globl _P1_2
-                                     76 	.globl _P1_1
-                                     77 	.globl _P1_0
-                                     78 	.globl _TF1
-                                     79 	.globl _TR1
-                                     80 	.globl _TF0
-                                     81 	.globl _TR0
-                                     82 	.globl _IE1
-                                     83 	.globl _IT1
-                                     84 	.globl _IE0
-                                     85 	.globl _IT0
-                                     86 	.globl _P0_7
-                                     87 	.globl _P0_6
-                                     88 	.globl _P0_5
-                                     89 	.globl _P0_4
-                                     90 	.globl _P0_3
-                                     91 	.globl _P0_2
-                                     92 	.globl _P0_1
-                                     93 	.globl _P0_0
-                                     94 	.globl _B
-                                     95 	.globl _ACC
-                                     96 	.globl _PSW
-                                     97 	.globl _IP
-                                     98 	.globl _P3
-                                     99 	.globl _IE
-                                    100 	.globl _P2
-                                    101 	.globl _SBUF
-                                    102 	.globl _SCON
-                                    103 	.globl _P1
-                                    104 	.globl _TH1
-                                    105 	.globl _TH0
-                                    106 	.globl _TL1
-                                    107 	.globl _TL0
-                                    108 	.globl _TMOD
-                                    109 	.globl _TCON
-                                    110 	.globl _PCON
-                                    111 	.globl _DPH
-                                    112 	.globl _DPL
-                                    113 	.globl _SP
-                                    114 	.globl _P0
-                                    115 	.globl _Tx_Busy
-                                    116 	.globl _Last_Receive_Tick
-                                    117 	.globl _Uart_Receive_Buff_Index
-                                    118 	.globl _Uart_Receive_Buff
-                                    119 	.globl _systick
-                                    120 	.globl _On_Uart_Buff_Full_PARM_2
-                                    121 	.globl _On_Uart_Idle_PARM_2
-                                    122 	.globl _LS_DisplayOneRow_PARM_2
-                                    123 	.globl _LS_595_DataOut_PARM_2
-                                    124 	.globl _LS_RAM
-                                    125 	.globl _LS_Init
-                                    126 	.globl _LS_Deinit
-                                    127 	.globl _LS_Refresh
-                                    128 	.globl _On_SysTick_Timer
-                                    129 	.globl _On_Uart_Idle
-                                    130 	.globl _On_Uart_Buff_Full
-                                    131 ;--------------------------------------------------------
-                                    132 ; special function registers
+                                     12 	.globl _Clk_In_Interrupt
+                                     13 	.globl _Clk_In_Init
+                                     14 	.globl _Uart_Interrupt
+                                     15 	.globl _Uart_Send
+                                     16 	.globl _Uart_Init
+                                     17 	.globl _systick_interrupt
+                                     18 	.globl _systick_init
+                                     19 	.globl _LS_DisplayOneRow
+                                     20 	.globl _LS_595_DataOut
+                                     21 	.globl _CY
+                                     22 	.globl _AC
+                                     23 	.globl _F0
+                                     24 	.globl _RS1
+                                     25 	.globl _RS0
+                                     26 	.globl _OV
+                                     27 	.globl _F1
+                                     28 	.globl _P
+                                     29 	.globl _PS
+                                     30 	.globl _PT1
+                                     31 	.globl _PX1
+                                     32 	.globl _PT0
+                                     33 	.globl _PX0
+                                     34 	.globl _RD
+                                     35 	.globl _WR
+                                     36 	.globl _T1
+                                     37 	.globl _T0
+                                     38 	.globl _INT1
+                                     39 	.globl _INT0
+                                     40 	.globl _TXD
+                                     41 	.globl _RXD
+                                     42 	.globl _P3_7
+                                     43 	.globl _P3_6
+                                     44 	.globl _P3_5
+                                     45 	.globl _P3_4
+                                     46 	.globl _P3_3
+                                     47 	.globl _P3_2
+                                     48 	.globl _P3_1
+                                     49 	.globl _P3_0
+                                     50 	.globl _EA
+                                     51 	.globl _ES
+                                     52 	.globl _ET1
+                                     53 	.globl _EX1
+                                     54 	.globl _ET0
+                                     55 	.globl _EX0
+                                     56 	.globl _P2_7
+                                     57 	.globl _P2_6
+                                     58 	.globl _P2_5
+                                     59 	.globl _P2_4
+                                     60 	.globl _P2_3
+                                     61 	.globl _P2_2
+                                     62 	.globl _P2_1
+                                     63 	.globl _P2_0
+                                     64 	.globl _SM0
+                                     65 	.globl _SM1
+                                     66 	.globl _SM2
+                                     67 	.globl _REN
+                                     68 	.globl _TB8
+                                     69 	.globl _RB8
+                                     70 	.globl _TI
+                                     71 	.globl _RI
+                                     72 	.globl _P1_7
+                                     73 	.globl _P1_6
+                                     74 	.globl _P1_5
+                                     75 	.globl _P1_4
+                                     76 	.globl _P1_3
+                                     77 	.globl _P1_2
+                                     78 	.globl _P1_1
+                                     79 	.globl _P1_0
+                                     80 	.globl _TF1
+                                     81 	.globl _TR1
+                                     82 	.globl _TF0
+                                     83 	.globl _TR0
+                                     84 	.globl _IE1
+                                     85 	.globl _IT1
+                                     86 	.globl _IE0
+                                     87 	.globl _IT0
+                                     88 	.globl _P0_7
+                                     89 	.globl _P0_6
+                                     90 	.globl _P0_5
+                                     91 	.globl _P0_4
+                                     92 	.globl _P0_3
+                                     93 	.globl _P0_2
+                                     94 	.globl _P0_1
+                                     95 	.globl _P0_0
+                                     96 	.globl _B
+                                     97 	.globl _ACC
+                                     98 	.globl _PSW
+                                     99 	.globl _IP
+                                    100 	.globl _P3
+                                    101 	.globl _IE
+                                    102 	.globl _P2
+                                    103 	.globl _SBUF
+                                    104 	.globl _SCON
+                                    105 	.globl _P1
+                                    106 	.globl _TH1
+                                    107 	.globl _TH0
+                                    108 	.globl _TL1
+                                    109 	.globl _TL0
+                                    110 	.globl _TMOD
+                                    111 	.globl _TCON
+                                    112 	.globl _PCON
+                                    113 	.globl _DPH
+                                    114 	.globl _DPL
+                                    115 	.globl _SP
+                                    116 	.globl _P0
+                                    117 	.globl _Tx_Busy
+                                    118 	.globl _Last_Receive_Tick
+                                    119 	.globl _Uart_Receive_Buff_Index
+                                    120 	.globl _Uart_Receive_Buff
+                                    121 	.globl _systick
+                                    122 	.globl _On_Uart_Buff_Full_PARM_2
+                                    123 	.globl _On_Uart_Idle_PARM_2
+                                    124 	.globl _LS_DisplayOneRow_PARM_2
+                                    125 	.globl _LS_595_DataOut_PARM_2
+                                    126 	.globl _LS_RAM
+                                    127 	.globl _LS_Init
+                                    128 	.globl _LS_Deinit
+                                    129 	.globl _LS_Refresh
+                                    130 	.globl _On_SysTick_Timer
+                                    131 	.globl _On_Uart_Idle
+                                    132 	.globl _On_Uart_Buff_Full
                                     133 ;--------------------------------------------------------
-                                    134 	.area RSEG    (ABS,DATA)
-      000000                        135 	.org 0x0000
-                           000080   136 G$P0$0_0$0 == 0x0080
-                           000080   137 _P0	=	0x0080
-                           000081   138 G$SP$0_0$0 == 0x0081
-                           000081   139 _SP	=	0x0081
-                           000082   140 G$DPL$0_0$0 == 0x0082
-                           000082   141 _DPL	=	0x0082
-                           000083   142 G$DPH$0_0$0 == 0x0083
-                           000083   143 _DPH	=	0x0083
-                           000087   144 G$PCON$0_0$0 == 0x0087
-                           000087   145 _PCON	=	0x0087
-                           000088   146 G$TCON$0_0$0 == 0x0088
-                           000088   147 _TCON	=	0x0088
-                           000089   148 G$TMOD$0_0$0 == 0x0089
-                           000089   149 _TMOD	=	0x0089
-                           00008A   150 G$TL0$0_0$0 == 0x008a
-                           00008A   151 _TL0	=	0x008a
-                           00008B   152 G$TL1$0_0$0 == 0x008b
-                           00008B   153 _TL1	=	0x008b
-                           00008C   154 G$TH0$0_0$0 == 0x008c
-                           00008C   155 _TH0	=	0x008c
-                           00008D   156 G$TH1$0_0$0 == 0x008d
-                           00008D   157 _TH1	=	0x008d
-                           000090   158 G$P1$0_0$0 == 0x0090
-                           000090   159 _P1	=	0x0090
-                           000098   160 G$SCON$0_0$0 == 0x0098
-                           000098   161 _SCON	=	0x0098
-                           000099   162 G$SBUF$0_0$0 == 0x0099
-                           000099   163 _SBUF	=	0x0099
-                           0000A0   164 G$P2$0_0$0 == 0x00a0
-                           0000A0   165 _P2	=	0x00a0
-                           0000A8   166 G$IE$0_0$0 == 0x00a8
-                           0000A8   167 _IE	=	0x00a8
-                           0000B0   168 G$P3$0_0$0 == 0x00b0
-                           0000B0   169 _P3	=	0x00b0
-                           0000B8   170 G$IP$0_0$0 == 0x00b8
-                           0000B8   171 _IP	=	0x00b8
-                           0000D0   172 G$PSW$0_0$0 == 0x00d0
-                           0000D0   173 _PSW	=	0x00d0
-                           0000E0   174 G$ACC$0_0$0 == 0x00e0
-                           0000E0   175 _ACC	=	0x00e0
-                           0000F0   176 G$B$0_0$0 == 0x00f0
-                           0000F0   177 _B	=	0x00f0
-                           000091   178 Lmain.LS_Init$P1M1$1_0$28 == 0x0091
-                           000091   179 _LS_Init_P1M1_65536_28	=	0x0091
-                           000092   180 Lmain.LS_Init$P1M0$1_0$28 == 0x0092
-                           000092   181 _LS_Init_P1M0_65536_28	=	0x0092
-                           000091   182 Lmain.LS_Deinit$P1M1$1_0$29 == 0x0091
-                           000091   183 _LS_Deinit_P1M1_65536_29	=	0x0091
-                           000092   184 Lmain.LS_Deinit$P1M0$1_0$29 == 0x0092
-                           000092   185 _LS_Deinit_P1M0_65536_29	=	0x0092
-                           00008E   186 Lmain.systick_init$AUXR$1_0$42 == 0x008e
-                           00008E   187 _systick_init_AUXR_65536_42	=	0x008e
-                           00008E   188 Lmain.Uart_Init$AUXR$1_0$47 == 0x008e
-                           00008E   189 _Uart_Init_AUXR_65536_47	=	0x008e
-                           0000D6   190 Lmain.Uart_Init$T2H$1_0$47 == 0x00d6
-                           0000D6   191 _Uart_Init_T2H_65536_47	=	0x00d6
-                           0000D7   192 Lmain.Uart_Init$T2L$1_0$47 == 0x00d7
-                           0000D7   193 _Uart_Init_T2L_65536_47	=	0x00d7
-                           0000A2   194 Lmain.Uart_Init$P_SW1$1_0$47 == 0x00a2
-                           0000A2   195 _Uart_Init_P_SW1_65536_47	=	0x00a2
-                                    196 ;--------------------------------------------------------
-                                    197 ; special function bits
-                                    198 ;--------------------------------------------------------
-                                    199 	.area RSEG    (ABS,DATA)
-      000000                        200 	.org 0x0000
-                           000080   201 G$P0_0$0_0$0 == 0x0080
-                           000080   202 _P0_0	=	0x0080
-                           000081   203 G$P0_1$0_0$0 == 0x0081
-                           000081   204 _P0_1	=	0x0081
-                           000082   205 G$P0_2$0_0$0 == 0x0082
-                           000082   206 _P0_2	=	0x0082
-                           000083   207 G$P0_3$0_0$0 == 0x0083
-                           000083   208 _P0_3	=	0x0083
-                           000084   209 G$P0_4$0_0$0 == 0x0084
-                           000084   210 _P0_4	=	0x0084
-                           000085   211 G$P0_5$0_0$0 == 0x0085
-                           000085   212 _P0_5	=	0x0085
-                           000086   213 G$P0_6$0_0$0 == 0x0086
-                           000086   214 _P0_6	=	0x0086
-                           000087   215 G$P0_7$0_0$0 == 0x0087
-                           000087   216 _P0_7	=	0x0087
-                           000088   217 G$IT0$0_0$0 == 0x0088
-                           000088   218 _IT0	=	0x0088
-                           000089   219 G$IE0$0_0$0 == 0x0089
-                           000089   220 _IE0	=	0x0089
-                           00008A   221 G$IT1$0_0$0 == 0x008a
-                           00008A   222 _IT1	=	0x008a
-                           00008B   223 G$IE1$0_0$0 == 0x008b
-                           00008B   224 _IE1	=	0x008b
-                           00008C   225 G$TR0$0_0$0 == 0x008c
-                           00008C   226 _TR0	=	0x008c
-                           00008D   227 G$TF0$0_0$0 == 0x008d
-                           00008D   228 _TF0	=	0x008d
-                           00008E   229 G$TR1$0_0$0 == 0x008e
-                           00008E   230 _TR1	=	0x008e
-                           00008F   231 G$TF1$0_0$0 == 0x008f
-                           00008F   232 _TF1	=	0x008f
-                           000090   233 G$P1_0$0_0$0 == 0x0090
-                           000090   234 _P1_0	=	0x0090
-                           000091   235 G$P1_1$0_0$0 == 0x0091
-                           000091   236 _P1_1	=	0x0091
-                           000092   237 G$P1_2$0_0$0 == 0x0092
-                           000092   238 _P1_2	=	0x0092
-                           000093   239 G$P1_3$0_0$0 == 0x0093
-                           000093   240 _P1_3	=	0x0093
-                           000094   241 G$P1_4$0_0$0 == 0x0094
-                           000094   242 _P1_4	=	0x0094
-                           000095   243 G$P1_5$0_0$0 == 0x0095
-                           000095   244 _P1_5	=	0x0095
-                           000096   245 G$P1_6$0_0$0 == 0x0096
-                           000096   246 _P1_6	=	0x0096
-                           000097   247 G$P1_7$0_0$0 == 0x0097
-                           000097   248 _P1_7	=	0x0097
-                           000098   249 G$RI$0_0$0 == 0x0098
-                           000098   250 _RI	=	0x0098
-                           000099   251 G$TI$0_0$0 == 0x0099
-                           000099   252 _TI	=	0x0099
-                           00009A   253 G$RB8$0_0$0 == 0x009a
-                           00009A   254 _RB8	=	0x009a
-                           00009B   255 G$TB8$0_0$0 == 0x009b
-                           00009B   256 _TB8	=	0x009b
-                           00009C   257 G$REN$0_0$0 == 0x009c
-                           00009C   258 _REN	=	0x009c
-                           00009D   259 G$SM2$0_0$0 == 0x009d
-                           00009D   260 _SM2	=	0x009d
-                           00009E   261 G$SM1$0_0$0 == 0x009e
-                           00009E   262 _SM1	=	0x009e
-                           00009F   263 G$SM0$0_0$0 == 0x009f
-                           00009F   264 _SM0	=	0x009f
-                           0000A0   265 G$P2_0$0_0$0 == 0x00a0
-                           0000A0   266 _P2_0	=	0x00a0
-                           0000A1   267 G$P2_1$0_0$0 == 0x00a1
-                           0000A1   268 _P2_1	=	0x00a1
-                           0000A2   269 G$P2_2$0_0$0 == 0x00a2
-                           0000A2   270 _P2_2	=	0x00a2
-                           0000A3   271 G$P2_3$0_0$0 == 0x00a3
-                           0000A3   272 _P2_3	=	0x00a3
-                           0000A4   273 G$P2_4$0_0$0 == 0x00a4
-                           0000A4   274 _P2_4	=	0x00a4
-                           0000A5   275 G$P2_5$0_0$0 == 0x00a5
-                           0000A5   276 _P2_5	=	0x00a5
-                           0000A6   277 G$P2_6$0_0$0 == 0x00a6
-                           0000A6   278 _P2_6	=	0x00a6
-                           0000A7   279 G$P2_7$0_0$0 == 0x00a7
-                           0000A7   280 _P2_7	=	0x00a7
-                           0000A8   281 G$EX0$0_0$0 == 0x00a8
-                           0000A8   282 _EX0	=	0x00a8
-                           0000A9   283 G$ET0$0_0$0 == 0x00a9
-                           0000A9   284 _ET0	=	0x00a9
-                           0000AA   285 G$EX1$0_0$0 == 0x00aa
-                           0000AA   286 _EX1	=	0x00aa
-                           0000AB   287 G$ET1$0_0$0 == 0x00ab
-                           0000AB   288 _ET1	=	0x00ab
-                           0000AC   289 G$ES$0_0$0 == 0x00ac
-                           0000AC   290 _ES	=	0x00ac
-                           0000AF   291 G$EA$0_0$0 == 0x00af
-                           0000AF   292 _EA	=	0x00af
-                           0000B0   293 G$P3_0$0_0$0 == 0x00b0
-                           0000B0   294 _P3_0	=	0x00b0
-                           0000B1   295 G$P3_1$0_0$0 == 0x00b1
-                           0000B1   296 _P3_1	=	0x00b1
-                           0000B2   297 G$P3_2$0_0$0 == 0x00b2
-                           0000B2   298 _P3_2	=	0x00b2
-                           0000B3   299 G$P3_3$0_0$0 == 0x00b3
-                           0000B3   300 _P3_3	=	0x00b3
-                           0000B4   301 G$P3_4$0_0$0 == 0x00b4
-                           0000B4   302 _P3_4	=	0x00b4
-                           0000B5   303 G$P3_5$0_0$0 == 0x00b5
-                           0000B5   304 _P3_5	=	0x00b5
-                           0000B6   305 G$P3_6$0_0$0 == 0x00b6
-                           0000B6   306 _P3_6	=	0x00b6
-                           0000B7   307 G$P3_7$0_0$0 == 0x00b7
-                           0000B7   308 _P3_7	=	0x00b7
-                           0000B0   309 G$RXD$0_0$0 == 0x00b0
-                           0000B0   310 _RXD	=	0x00b0
-                           0000B1   311 G$TXD$0_0$0 == 0x00b1
-                           0000B1   312 _TXD	=	0x00b1
-                           0000B2   313 G$INT0$0_0$0 == 0x00b2
-                           0000B2   314 _INT0	=	0x00b2
-                           0000B3   315 G$INT1$0_0$0 == 0x00b3
-                           0000B3   316 _INT1	=	0x00b3
-                           0000B4   317 G$T0$0_0$0 == 0x00b4
-                           0000B4   318 _T0	=	0x00b4
-                           0000B5   319 G$T1$0_0$0 == 0x00b5
-                           0000B5   320 _T1	=	0x00b5
-                           0000B6   321 G$WR$0_0$0 == 0x00b6
-                           0000B6   322 _WR	=	0x00b6
-                           0000B7   323 G$RD$0_0$0 == 0x00b7
-                           0000B7   324 _RD	=	0x00b7
-                           0000B8   325 G$PX0$0_0$0 == 0x00b8
-                           0000B8   326 _PX0	=	0x00b8
-                           0000B9   327 G$PT0$0_0$0 == 0x00b9
-                           0000B9   328 _PT0	=	0x00b9
-                           0000BA   329 G$PX1$0_0$0 == 0x00ba
-                           0000BA   330 _PX1	=	0x00ba
-                           0000BB   331 G$PT1$0_0$0 == 0x00bb
-                           0000BB   332 _PT1	=	0x00bb
-                           0000BC   333 G$PS$0_0$0 == 0x00bc
-                           0000BC   334 _PS	=	0x00bc
-                           0000D0   335 G$P$0_0$0 == 0x00d0
-                           0000D0   336 _P	=	0x00d0
-                           0000D1   337 G$F1$0_0$0 == 0x00d1
-                           0000D1   338 _F1	=	0x00d1
-                           0000D2   339 G$OV$0_0$0 == 0x00d2
-                           0000D2   340 _OV	=	0x00d2
-                           0000D3   341 G$RS0$0_0$0 == 0x00d3
-                           0000D3   342 _RS0	=	0x00d3
-                           0000D4   343 G$RS1$0_0$0 == 0x00d4
-                           0000D4   344 _RS1	=	0x00d4
-                           0000D5   345 G$F0$0_0$0 == 0x00d5
-                           0000D5   346 _F0	=	0x00d5
-                           0000D6   347 G$AC$0_0$0 == 0x00d6
-                           0000D6   348 _AC	=	0x00d6
-                           0000D7   349 G$CY$0_0$0 == 0x00d7
-                           0000D7   350 _CY	=	0x00d7
-                                    351 ;--------------------------------------------------------
-                                    352 ; overlayable register banks
-                                    353 ;--------------------------------------------------------
-                                    354 	.area REG_BANK_0	(REL,OVR,DATA)
-      000000                        355 	.ds 8
-                                    356 	.area REG_BANK_1	(REL,OVR,DATA)
-      000000                        357 	.ds 8
-                                    358 ;--------------------------------------------------------
-                                    359 ; overlayable bit register bank
-                                    360 ;--------------------------------------------------------
-                                    361 	.area BIT_BANK	(REL,OVR,DATA)
-      000000                        362 bits:
-      000000                        363 	.ds 1
-                           008000   364 	b0 = bits[0]
-                           008100   365 	b1 = bits[1]
-                           008200   366 	b2 = bits[2]
-                           008300   367 	b3 = bits[3]
-                           008400   368 	b4 = bits[4]
-                           008500   369 	b5 = bits[5]
-                           008600   370 	b6 = bits[6]
-                           008700   371 	b7 = bits[7]
-                                    372 ;--------------------------------------------------------
-                                    373 ; internal ram data
-                                    374 ;--------------------------------------------------------
-                                    375 	.area DSEG    (DATA)
-                           000000   376 G$LS_RAM$0_0$0==.
-      000000                        377 _LS_RAM::
-      000000                        378 	.ds 8
-                           000008   379 Lmain.LS_595_DataOut$Col_Data$1_0$30==.
-      000008                        380 _LS_595_DataOut_PARM_2:
-      000008                        381 	.ds 1
-                           000009   382 Lmain.LS_DisplayOneRow$Col_Index$1_0$38==.
-      000009                        383 _LS_DisplayOneRow_PARM_2:
-      000009                        384 	.ds 1
-                           00000A   385 Lmain.LS_Refresh$i$1_0$41==.
-      00000A                        386 _LS_Refresh_i_65536_41:
-      00000A                        387 	.ds 1
-                           00000B   388 Lmain.systick_interrupt$sloc0$0_1$0==.
-      00000B                        389 _systick_interrupt_sloc0_1_0:
-      00000B                        390 	.ds 8
-                           000013   391 Lmain.On_Uart_Idle$length$1_0$58==.
-      000013                        392 _On_Uart_Idle_PARM_2:
-      000013                        393 	.ds 2
-                           000015   394 Lmain.On_Uart_Buff_Full$length$1_0$63==.
-      000015                        395 _On_Uart_Buff_Full_PARM_2:
-      000015                        396 	.ds 2
-                                    397 ;--------------------------------------------------------
-                                    398 ; overlayable items in internal ram 
-                                    399 ;--------------------------------------------------------
-                                    400 ;--------------------------------------------------------
-                                    401 ; Stack segment in internal ram 
-                                    402 ;--------------------------------------------------------
-                                    403 	.area	SSEG
-      000000                        404 __start__stack:
-      000000                        405 	.ds	1
-                                    406 
+                                    134 ; special function registers
+                                    135 ;--------------------------------------------------------
+                                    136 	.area RSEG    (ABS,DATA)
+      000000                        137 	.org 0x0000
+                           000080   138 G$P0$0_0$0 == 0x0080
+                           000080   139 _P0	=	0x0080
+                           000081   140 G$SP$0_0$0 == 0x0081
+                           000081   141 _SP	=	0x0081
+                           000082   142 G$DPL$0_0$0 == 0x0082
+                           000082   143 _DPL	=	0x0082
+                           000083   144 G$DPH$0_0$0 == 0x0083
+                           000083   145 _DPH	=	0x0083
+                           000087   146 G$PCON$0_0$0 == 0x0087
+                           000087   147 _PCON	=	0x0087
+                           000088   148 G$TCON$0_0$0 == 0x0088
+                           000088   149 _TCON	=	0x0088
+                           000089   150 G$TMOD$0_0$0 == 0x0089
+                           000089   151 _TMOD	=	0x0089
+                           00008A   152 G$TL0$0_0$0 == 0x008a
+                           00008A   153 _TL0	=	0x008a
+                           00008B   154 G$TL1$0_0$0 == 0x008b
+                           00008B   155 _TL1	=	0x008b
+                           00008C   156 G$TH0$0_0$0 == 0x008c
+                           00008C   157 _TH0	=	0x008c
+                           00008D   158 G$TH1$0_0$0 == 0x008d
+                           00008D   159 _TH1	=	0x008d
+                           000090   160 G$P1$0_0$0 == 0x0090
+                           000090   161 _P1	=	0x0090
+                           000098   162 G$SCON$0_0$0 == 0x0098
+                           000098   163 _SCON	=	0x0098
+                           000099   164 G$SBUF$0_0$0 == 0x0099
+                           000099   165 _SBUF	=	0x0099
+                           0000A0   166 G$P2$0_0$0 == 0x00a0
+                           0000A0   167 _P2	=	0x00a0
+                           0000A8   168 G$IE$0_0$0 == 0x00a8
+                           0000A8   169 _IE	=	0x00a8
+                           0000B0   170 G$P3$0_0$0 == 0x00b0
+                           0000B0   171 _P3	=	0x00b0
+                           0000B8   172 G$IP$0_0$0 == 0x00b8
+                           0000B8   173 _IP	=	0x00b8
+                           0000D0   174 G$PSW$0_0$0 == 0x00d0
+                           0000D0   175 _PSW	=	0x00d0
+                           0000E0   176 G$ACC$0_0$0 == 0x00e0
+                           0000E0   177 _ACC	=	0x00e0
+                           0000F0   178 G$B$0_0$0 == 0x00f0
+                           0000F0   179 _B	=	0x00f0
+                           000091   180 Lmain.LS_Init$P1M1$1_0$28 == 0x0091
+                           000091   181 _LS_Init_P1M1_65536_28	=	0x0091
+                           000092   182 Lmain.LS_Init$P1M0$1_0$28 == 0x0092
+                           000092   183 _LS_Init_P1M0_65536_28	=	0x0092
+                           000091   184 Lmain.LS_Deinit$P1M1$1_0$29 == 0x0091
+                           000091   185 _LS_Deinit_P1M1_65536_29	=	0x0091
+                           000092   186 Lmain.LS_Deinit$P1M0$1_0$29 == 0x0092
+                           000092   187 _LS_Deinit_P1M0_65536_29	=	0x0092
+                           00008E   188 Lmain.systick_init$AUXR$1_0$42 == 0x008e
+                           00008E   189 _systick_init_AUXR_65536_42	=	0x008e
+                           0000B1   190 Lmain.systick_init$P3M1$1_1$43 == 0x00b1
+                           0000B1   191 _systick_init_P3M1_65537_43	=	0x00b1
+                           0000B2   192 Lmain.systick_init$P3M0$1_1$43 == 0x00b2
+                           0000B2   193 _systick_init_P3M0_65537_43	=	0x00b2
+                           00008E   194 Lmain.Uart_Init$AUXR$1_0$48 == 0x008e
+                           00008E   195 _Uart_Init_AUXR_65536_48	=	0x008e
+                           0000D6   196 Lmain.Uart_Init$T2H$1_0$48 == 0x00d6
+                           0000D6   197 _Uart_Init_T2H_65536_48	=	0x00d6
+                           0000D7   198 Lmain.Uart_Init$T2L$1_0$48 == 0x00d7
+                           0000D7   199 _Uart_Init_T2L_65536_48	=	0x00d7
+                           0000A2   200 Lmain.Uart_Init$P_SW1$1_0$48 == 0x00a2
+                           0000A2   201 _Uart_Init_P_SW1_65536_48	=	0x00a2
+                           0000B1   202 Lmain.Clk_In_Init$P3M1$1_0$58 == 0x00b1
+                           0000B1   203 _Clk_In_Init_P3M1_65536_58	=	0x00b1
+                           0000B2   204 Lmain.Clk_In_Init$P3M0$1_0$58 == 0x00b2
+                           0000B2   205 _Clk_In_Init_P3M0_65536_58	=	0x00b2
+                                    206 ;--------------------------------------------------------
+                                    207 ; special function bits
+                                    208 ;--------------------------------------------------------
+                                    209 	.area RSEG    (ABS,DATA)
+      000000                        210 	.org 0x0000
+                           000080   211 G$P0_0$0_0$0 == 0x0080
+                           000080   212 _P0_0	=	0x0080
+                           000081   213 G$P0_1$0_0$0 == 0x0081
+                           000081   214 _P0_1	=	0x0081
+                           000082   215 G$P0_2$0_0$0 == 0x0082
+                           000082   216 _P0_2	=	0x0082
+                           000083   217 G$P0_3$0_0$0 == 0x0083
+                           000083   218 _P0_3	=	0x0083
+                           000084   219 G$P0_4$0_0$0 == 0x0084
+                           000084   220 _P0_4	=	0x0084
+                           000085   221 G$P0_5$0_0$0 == 0x0085
+                           000085   222 _P0_5	=	0x0085
+                           000086   223 G$P0_6$0_0$0 == 0x0086
+                           000086   224 _P0_6	=	0x0086
+                           000087   225 G$P0_7$0_0$0 == 0x0087
+                           000087   226 _P0_7	=	0x0087
+                           000088   227 G$IT0$0_0$0 == 0x0088
+                           000088   228 _IT0	=	0x0088
+                           000089   229 G$IE0$0_0$0 == 0x0089
+                           000089   230 _IE0	=	0x0089
+                           00008A   231 G$IT1$0_0$0 == 0x008a
+                           00008A   232 _IT1	=	0x008a
+                           00008B   233 G$IE1$0_0$0 == 0x008b
+                           00008B   234 _IE1	=	0x008b
+                           00008C   235 G$TR0$0_0$0 == 0x008c
+                           00008C   236 _TR0	=	0x008c
+                           00008D   237 G$TF0$0_0$0 == 0x008d
+                           00008D   238 _TF0	=	0x008d
+                           00008E   239 G$TR1$0_0$0 == 0x008e
+                           00008E   240 _TR1	=	0x008e
+                           00008F   241 G$TF1$0_0$0 == 0x008f
+                           00008F   242 _TF1	=	0x008f
+                           000090   243 G$P1_0$0_0$0 == 0x0090
+                           000090   244 _P1_0	=	0x0090
+                           000091   245 G$P1_1$0_0$0 == 0x0091
+                           000091   246 _P1_1	=	0x0091
+                           000092   247 G$P1_2$0_0$0 == 0x0092
+                           000092   248 _P1_2	=	0x0092
+                           000093   249 G$P1_3$0_0$0 == 0x0093
+                           000093   250 _P1_3	=	0x0093
+                           000094   251 G$P1_4$0_0$0 == 0x0094
+                           000094   252 _P1_4	=	0x0094
+                           000095   253 G$P1_5$0_0$0 == 0x0095
+                           000095   254 _P1_5	=	0x0095
+                           000096   255 G$P1_6$0_0$0 == 0x0096
+                           000096   256 _P1_6	=	0x0096
+                           000097   257 G$P1_7$0_0$0 == 0x0097
+                           000097   258 _P1_7	=	0x0097
+                           000098   259 G$RI$0_0$0 == 0x0098
+                           000098   260 _RI	=	0x0098
+                           000099   261 G$TI$0_0$0 == 0x0099
+                           000099   262 _TI	=	0x0099
+                           00009A   263 G$RB8$0_0$0 == 0x009a
+                           00009A   264 _RB8	=	0x009a
+                           00009B   265 G$TB8$0_0$0 == 0x009b
+                           00009B   266 _TB8	=	0x009b
+                           00009C   267 G$REN$0_0$0 == 0x009c
+                           00009C   268 _REN	=	0x009c
+                           00009D   269 G$SM2$0_0$0 == 0x009d
+                           00009D   270 _SM2	=	0x009d
+                           00009E   271 G$SM1$0_0$0 == 0x009e
+                           00009E   272 _SM1	=	0x009e
+                           00009F   273 G$SM0$0_0$0 == 0x009f
+                           00009F   274 _SM0	=	0x009f
+                           0000A0   275 G$P2_0$0_0$0 == 0x00a0
+                           0000A0   276 _P2_0	=	0x00a0
+                           0000A1   277 G$P2_1$0_0$0 == 0x00a1
+                           0000A1   278 _P2_1	=	0x00a1
+                           0000A2   279 G$P2_2$0_0$0 == 0x00a2
+                           0000A2   280 _P2_2	=	0x00a2
+                           0000A3   281 G$P2_3$0_0$0 == 0x00a3
+                           0000A3   282 _P2_3	=	0x00a3
+                           0000A4   283 G$P2_4$0_0$0 == 0x00a4
+                           0000A4   284 _P2_4	=	0x00a4
+                           0000A5   285 G$P2_5$0_0$0 == 0x00a5
+                           0000A5   286 _P2_5	=	0x00a5
+                           0000A6   287 G$P2_6$0_0$0 == 0x00a6
+                           0000A6   288 _P2_6	=	0x00a6
+                           0000A7   289 G$P2_7$0_0$0 == 0x00a7
+                           0000A7   290 _P2_7	=	0x00a7
+                           0000A8   291 G$EX0$0_0$0 == 0x00a8
+                           0000A8   292 _EX0	=	0x00a8
+                           0000A9   293 G$ET0$0_0$0 == 0x00a9
+                           0000A9   294 _ET0	=	0x00a9
+                           0000AA   295 G$EX1$0_0$0 == 0x00aa
+                           0000AA   296 _EX1	=	0x00aa
+                           0000AB   297 G$ET1$0_0$0 == 0x00ab
+                           0000AB   298 _ET1	=	0x00ab
+                           0000AC   299 G$ES$0_0$0 == 0x00ac
+                           0000AC   300 _ES	=	0x00ac
+                           0000AF   301 G$EA$0_0$0 == 0x00af
+                           0000AF   302 _EA	=	0x00af
+                           0000B0   303 G$P3_0$0_0$0 == 0x00b0
+                           0000B0   304 _P3_0	=	0x00b0
+                           0000B1   305 G$P3_1$0_0$0 == 0x00b1
+                           0000B1   306 _P3_1	=	0x00b1
+                           0000B2   307 G$P3_2$0_0$0 == 0x00b2
+                           0000B2   308 _P3_2	=	0x00b2
+                           0000B3   309 G$P3_3$0_0$0 == 0x00b3
+                           0000B3   310 _P3_3	=	0x00b3
+                           0000B4   311 G$P3_4$0_0$0 == 0x00b4
+                           0000B4   312 _P3_4	=	0x00b4
+                           0000B5   313 G$P3_5$0_0$0 == 0x00b5
+                           0000B5   314 _P3_5	=	0x00b5
+                           0000B6   315 G$P3_6$0_0$0 == 0x00b6
+                           0000B6   316 _P3_6	=	0x00b6
+                           0000B7   317 G$P3_7$0_0$0 == 0x00b7
+                           0000B7   318 _P3_7	=	0x00b7
+                           0000B0   319 G$RXD$0_0$0 == 0x00b0
+                           0000B0   320 _RXD	=	0x00b0
+                           0000B1   321 G$TXD$0_0$0 == 0x00b1
+                           0000B1   322 _TXD	=	0x00b1
+                           0000B2   323 G$INT0$0_0$0 == 0x00b2
+                           0000B2   324 _INT0	=	0x00b2
+                           0000B3   325 G$INT1$0_0$0 == 0x00b3
+                           0000B3   326 _INT1	=	0x00b3
+                           0000B4   327 G$T0$0_0$0 == 0x00b4
+                           0000B4   328 _T0	=	0x00b4
+                           0000B5   329 G$T1$0_0$0 == 0x00b5
+                           0000B5   330 _T1	=	0x00b5
+                           0000B6   331 G$WR$0_0$0 == 0x00b6
+                           0000B6   332 _WR	=	0x00b6
+                           0000B7   333 G$RD$0_0$0 == 0x00b7
+                           0000B7   334 _RD	=	0x00b7
+                           0000B8   335 G$PX0$0_0$0 == 0x00b8
+                           0000B8   336 _PX0	=	0x00b8
+                           0000B9   337 G$PT0$0_0$0 == 0x00b9
+                           0000B9   338 _PT0	=	0x00b9
+                           0000BA   339 G$PX1$0_0$0 == 0x00ba
+                           0000BA   340 _PX1	=	0x00ba
+                           0000BB   341 G$PT1$0_0$0 == 0x00bb
+                           0000BB   342 _PT1	=	0x00bb
+                           0000BC   343 G$PS$0_0$0 == 0x00bc
+                           0000BC   344 _PS	=	0x00bc
+                           0000D0   345 G$P$0_0$0 == 0x00d0
+                           0000D0   346 _P	=	0x00d0
+                           0000D1   347 G$F1$0_0$0 == 0x00d1
+                           0000D1   348 _F1	=	0x00d1
+                           0000D2   349 G$OV$0_0$0 == 0x00d2
+                           0000D2   350 _OV	=	0x00d2
+                           0000D3   351 G$RS0$0_0$0 == 0x00d3
+                           0000D3   352 _RS0	=	0x00d3
+                           0000D4   353 G$RS1$0_0$0 == 0x00d4
+                           0000D4   354 _RS1	=	0x00d4
+                           0000D5   355 G$F0$0_0$0 == 0x00d5
+                           0000D5   356 _F0	=	0x00d5
+                           0000D6   357 G$AC$0_0$0 == 0x00d6
+                           0000D6   358 _AC	=	0x00d6
+                           0000D7   359 G$CY$0_0$0 == 0x00d7
+                           0000D7   360 _CY	=	0x00d7
+                                    361 ;--------------------------------------------------------
+                                    362 ; overlayable register banks
+                                    363 ;--------------------------------------------------------
+                                    364 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                        365 	.ds 8
+                                    366 	.area REG_BANK_1	(REL,OVR,DATA)
+      000000                        367 	.ds 8
+                                    368 ;--------------------------------------------------------
+                                    369 ; overlayable bit register bank
+                                    370 ;--------------------------------------------------------
+                                    371 	.area BIT_BANK	(REL,OVR,DATA)
+      000000                        372 bits:
+      000000                        373 	.ds 1
+                           008000   374 	b0 = bits[0]
+                           008100   375 	b1 = bits[1]
+                           008200   376 	b2 = bits[2]
+                           008300   377 	b3 = bits[3]
+                           008400   378 	b4 = bits[4]
+                           008500   379 	b5 = bits[5]
+                           008600   380 	b6 = bits[6]
+                           008700   381 	b7 = bits[7]
+                                    382 ;--------------------------------------------------------
+                                    383 ; internal ram data
+                                    384 ;--------------------------------------------------------
+                                    385 	.area DSEG    (DATA)
+                           000000   386 G$LS_RAM$0_0$0==.
+      000000                        387 _LS_RAM::
+      000000                        388 	.ds 8
+                           000008   389 Lmain.LS_595_DataOut$Col_Data$1_0$30==.
+      000008                        390 _LS_595_DataOut_PARM_2:
+      000008                        391 	.ds 1
+                           000009   392 Lmain.LS_DisplayOneRow$Col_Index$1_0$38==.
+      000009                        393 _LS_DisplayOneRow_PARM_2:
+      000009                        394 	.ds 1
+                           00000A   395 Lmain.LS_Refresh$i$1_0$41==.
+      00000A                        396 _LS_Refresh_i_65536_41:
+      00000A                        397 	.ds 1
+                           00000B   398 Lmain.systick_interrupt$sloc0$0_1$0==.
+      00000B                        399 _systick_interrupt_sloc0_1_0:
+      00000B                        400 	.ds 8
+                           000013   401 Lmain.On_Uart_Idle$length$1_0$62==.
+      000013                        402 _On_Uart_Idle_PARM_2:
+      000013                        403 	.ds 2
+                           000015   404 Lmain.On_Uart_Buff_Full$length$1_0$67==.
+      000015                        405 _On_Uart_Buff_Full_PARM_2:
+      000015                        406 	.ds 2
                                     407 ;--------------------------------------------------------
-                                    408 ; indirectly addressable internal ram data
+                                    408 ; overlayable items in internal ram 
                                     409 ;--------------------------------------------------------
-                                    410 	.area ISEG    (DATA)
-                           000000   411 G$systick$0_0$0==.
-      000000                        412 _systick::
-      000000                        413 	.ds 8
-                           000008   414 G$Uart_Receive_Buff$0_0$0==.
-      000008                        415 _Uart_Receive_Buff::
-      000008                        416 	.ds 64
-                           000048   417 G$Uart_Receive_Buff_Index$0_0$0==.
-      000048                        418 _Uart_Receive_Buff_Index::
-      000048                        419 	.ds 1
-                           000049   420 G$Last_Receive_Tick$0_0$0==.
-      000049                        421 _Last_Receive_Tick::
-      000049                        422 	.ds 8
-                                    423 ;--------------------------------------------------------
-                                    424 ; absolute internal ram data
-                                    425 ;--------------------------------------------------------
-                                    426 	.area IABS    (ABS,DATA)
-                                    427 	.area IABS    (ABS,DATA)
-                                    428 ;--------------------------------------------------------
-                                    429 ; bit data
-                                    430 ;--------------------------------------------------------
-                                    431 	.area BSEG    (BIT)
-                           000000   432 G$Tx_Busy$0_0$0==.
-      000000                        433 _Tx_Busy::
-      000000                        434 	.ds 1
+                                    410 ;--------------------------------------------------------
+                                    411 ; Stack segment in internal ram 
+                                    412 ;--------------------------------------------------------
+                                    413 	.area	SSEG
+      000000                        414 __start__stack:
+      000000                        415 	.ds	1
+                                    416 
+                                    417 ;--------------------------------------------------------
+                                    418 ; indirectly addressable internal ram data
+                                    419 ;--------------------------------------------------------
+                                    420 	.area ISEG    (DATA)
+                           000000   421 G$systick$0_0$0==.
+      000000                        422 _systick::
+      000000                        423 	.ds 8
+                           000008   424 G$Uart_Receive_Buff$0_0$0==.
+      000008                        425 _Uart_Receive_Buff::
+      000008                        426 	.ds 64
+                           000048   427 G$Uart_Receive_Buff_Index$0_0$0==.
+      000048                        428 _Uart_Receive_Buff_Index::
+      000048                        429 	.ds 1
+                           000049   430 G$Last_Receive_Tick$0_0$0==.
+      000049                        431 _Last_Receive_Tick::
+      000049                        432 	.ds 8
+                                    433 ;--------------------------------------------------------
+                                    434 ; absolute internal ram data
                                     435 ;--------------------------------------------------------
-                                    436 ; paged external ram data
-                                    437 ;--------------------------------------------------------
-                                    438 	.area PSEG    (PAG,XDATA)
-                                    439 ;--------------------------------------------------------
-                                    440 ; external ram data
-                                    441 ;--------------------------------------------------------
-                                    442 	.area XSEG    (XDATA)
-                                    443 ;--------------------------------------------------------
-                                    444 ; absolute external ram data
+                                    436 	.area IABS    (ABS,DATA)
+                                    437 	.area IABS    (ABS,DATA)
+                                    438 ;--------------------------------------------------------
+                                    439 ; bit data
+                                    440 ;--------------------------------------------------------
+                                    441 	.area BSEG    (BIT)
+                           000000   442 G$Tx_Busy$0_0$0==.
+      000000                        443 _Tx_Busy::
+      000000                        444 	.ds 1
                                     445 ;--------------------------------------------------------
-                                    446 	.area XABS    (ABS,XDATA)
+                                    446 ; paged external ram data
                                     447 ;--------------------------------------------------------
-                                    448 ; external initialized ram data
+                                    448 	.area PSEG    (PAG,XDATA)
                                     449 ;--------------------------------------------------------
-                                    450 	.area XISEG   (XDATA)
-                                    451 	.area HOME    (CODE)
-                                    452 	.area GSINIT0 (CODE)
-                                    453 	.area GSINIT1 (CODE)
-                                    454 	.area GSINIT2 (CODE)
-                                    455 	.area GSINIT3 (CODE)
-                                    456 	.area GSINIT4 (CODE)
-                                    457 	.area GSINIT5 (CODE)
-                                    458 	.area GSINIT  (CODE)
-                                    459 	.area GSFINAL (CODE)
-                                    460 	.area CSEG    (CODE)
-                                    461 ;--------------------------------------------------------
-                                    462 ; interrupt vector 
-                                    463 ;--------------------------------------------------------
-                                    464 	.area HOME    (CODE)
-      000000                        465 __interrupt_vect:
-      000000 02r00r00         [24]  466 	ljmp	__sdcc_gsinit_startup
-      000003 32               [24]  467 	reti
-      000004                        468 	.ds	7
-      00000B 02r00rCF         [24]  469 	ljmp	_systick_interrupt
-      00000E                        470 	.ds	5
-      000013 32               [24]  471 	reti
-      000014                        472 	.ds	7
-      00001B 32               [24]  473 	reti
-      00001C                        474 	.ds	7
-      000023 02r01rD0         [24]  475 	ljmp	_Uart_Interrupt
-                                    476 ;--------------------------------------------------------
-                                    477 ; global & static initialisations
-                                    478 ;--------------------------------------------------------
-                                    479 	.area HOME    (CODE)
-                                    480 	.area GSINIT  (CODE)
-                                    481 	.area GSFINAL (CODE)
-                                    482 	.area GSINIT  (CODE)
-                                    483 	.globl __sdcc_gsinit_startup
-                                    484 	.globl __sdcc_program_startup
-                                    485 	.globl __start__stack
-                                    486 	.globl __mcs51_genXINIT
-                                    487 	.globl __mcs51_genXRAMCLEAR
-                                    488 	.globl __mcs51_genRAMCLEAR
-                                    489 ;------------------------------------------------------------
-                                    490 ;Allocation info for local variables in function 'LS_Refresh'
-                                    491 ;------------------------------------------------------------
-                                    492 ;i                         Allocated with name '_LS_Refresh_i_65536_41'
-                                    493 ;------------------------------------------------------------
-                           000000   494 	G$LS_Refresh$0$0 ==.
-                           000000   495 	C$LatticeScreen.c$94$1_0$41 ==.
-                                    496 ;	LatticeScreen.c:94: static unsigned char i=0;
-      000000 75*0A 00         [24]  497 	mov	_LS_Refresh_i_65536_41,#0x00
-                           000003   498 	C$LatticeScreen.c$3$1_0$65 ==.
-                                    499 ;	LatticeScreen.c:3: unsigned char LS_RAM[8]={0x0,0x10,0x38,0x54,0x10,0x10,0x10,0x0};//默认显示数据，向上的箭头
-      000003 75*00 00         [24]  500 	mov	_LS_RAM,#0x00
-      000006 75*01 10         [24]  501 	mov	(_LS_RAM + 0x0001),#0x10
-      000009 75*02 38         [24]  502 	mov	(_LS_RAM + 0x0002),#0x38
-      00000C 75*03 54         [24]  503 	mov	(_LS_RAM + 0x0003),#0x54
-      00000F 75*04 10         [24]  504 	mov	(_LS_RAM + 0x0004),#0x10
-      000012 75*05 10         [24]  505 	mov	(_LS_RAM + 0x0005),#0x10
-      000015 75*06 10         [24]  506 	mov	(_LS_RAM + 0x0006),#0x10
-      000018 75*07 00         [24]  507 	mov	(_LS_RAM + 0x0007),#0x00
-                           00001B   508 	C$main.c$24$1_0$65 ==.
-                                    509 ;	main.c:24: __idata uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
-      00001B 78r00            [12]  510 	mov	r0,#_systick
-      00001D E4               [12]  511 	clr	a
-      00001E F6               [12]  512 	mov	@r0,a
-      00001F 08               [12]  513 	inc	r0
-      000020 F6               [12]  514 	mov	@r0,a
-      000021 08               [12]  515 	inc	r0
-      000022 F6               [12]  516 	mov	@r0,a
-      000023 08               [12]  517 	inc	r0
-      000024 F6               [12]  518 	mov	@r0,a
-      000025 08               [12]  519 	inc	r0
-      000026 F6               [12]  520 	mov	@r0,a
-      000027 08               [12]  521 	inc	r0
-      000028 F6               [12]  522 	mov	@r0,a
-      000029 08               [12]  523 	inc	r0
-      00002A F6               [12]  524 	mov	@r0,a
-      00002B 08               [12]  525 	inc	r0
-      00002C F6               [12]  526 	mov	@r0,a
-                           00002D   527 	C$main.c$125$1_0$65 ==.
-                                    528 ;	main.c:125: __idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0;
-      00002D 78r48            [12]  529 	mov	r0,#_Uart_Receive_Buff_Index
-      00002F 76 00            [12]  530 	mov	@r0,#0x00
-                           000031   531 	C$main.c$126$1_0$65 ==.
-                                    532 ;	main.c:126: __idata uint64_t Last_Receive_Tick=0;
-      000031 78r49            [12]  533 	mov	r0,#_Last_Receive_Tick
-      000033 F6               [12]  534 	mov	@r0,a
-      000034 08               [12]  535 	inc	r0
-      000035 F6               [12]  536 	mov	@r0,a
-      000036 08               [12]  537 	inc	r0
-      000037 F6               [12]  538 	mov	@r0,a
-      000038 08               [12]  539 	inc	r0
-      000039 F6               [12]  540 	mov	@r0,a
-      00003A 08               [12]  541 	inc	r0
-      00003B F6               [12]  542 	mov	@r0,a
-      00003C 08               [12]  543 	inc	r0
-      00003D F6               [12]  544 	mov	@r0,a
-      00003E 08               [12]  545 	inc	r0
-      00003F F6               [12]  546 	mov	@r0,a
-      000040 08               [12]  547 	inc	r0
-      000041 F6               [12]  548 	mov	@r0,a
-                           000042   549 	C$main.c$67$1_0$65 ==.
-                                    550 ;	main.c:67: __bit Tx_Busy=0;//串口发送忙标志
-                                    551 ;	assignBit
-      000042 C2*00            [12]  552 	clr	_Tx_Busy
-                                    553 	.area GSFINAL (CODE)
-      000000 02r00r26         [24]  554 	ljmp	__sdcc_program_startup
-                                    555 ;--------------------------------------------------------
-                                    556 ; Home
-                                    557 ;--------------------------------------------------------
-                                    558 	.area HOME    (CODE)
-                                    559 	.area HOME    (CODE)
-      000026                        560 __sdcc_program_startup:
-      000026 02r02r88         [24]  561 	ljmp	_main
-                                    562 ;	return from main will return to caller
-                                    563 ;--------------------------------------------------------
-                                    564 ; code
+                                    450 ; external ram data
+                                    451 ;--------------------------------------------------------
+                                    452 	.area XSEG    (XDATA)
+                                    453 ;--------------------------------------------------------
+                                    454 ; absolute external ram data
+                                    455 ;--------------------------------------------------------
+                                    456 	.area XABS    (ABS,XDATA)
+                                    457 ;--------------------------------------------------------
+                                    458 ; external initialized ram data
+                                    459 ;--------------------------------------------------------
+                                    460 	.area XISEG   (XDATA)
+                                    461 	.area HOME    (CODE)
+                                    462 	.area GSINIT0 (CODE)
+                                    463 	.area GSINIT1 (CODE)
+                                    464 	.area GSINIT2 (CODE)
+                                    465 	.area GSINIT3 (CODE)
+                                    466 	.area GSINIT4 (CODE)
+                                    467 	.area GSINIT5 (CODE)
+                                    468 	.area GSINIT  (CODE)
+                                    469 	.area GSFINAL (CODE)
+                                    470 	.area CSEG    (CODE)
+                                    471 ;--------------------------------------------------------
+                                    472 ; interrupt vector 
+                                    473 ;--------------------------------------------------------
+                                    474 	.area HOME    (CODE)
+      000000                        475 __interrupt_vect:
+      000000 02r00r00         [24]  476 	ljmp	__sdcc_gsinit_startup
+      000003 02r02r79         [24]  477 	ljmp	_Clk_In_Interrupt
+      000006                        478 	.ds	5
+      00000B 02r00rD5         [24]  479 	ljmp	_systick_interrupt
+      00000E                        480 	.ds	5
+      000013 32               [24]  481 	reti
+      000014                        482 	.ds	7
+      00001B 32               [24]  483 	reti
+      00001C                        484 	.ds	7
+      000023 02r01rD8         [24]  485 	ljmp	_Uart_Interrupt
+                                    486 ;--------------------------------------------------------
+                                    487 ; global & static initialisations
+                                    488 ;--------------------------------------------------------
+                                    489 	.area HOME    (CODE)
+                                    490 	.area GSINIT  (CODE)
+                                    491 	.area GSFINAL (CODE)
+                                    492 	.area GSINIT  (CODE)
+                                    493 	.globl __sdcc_gsinit_startup
+                                    494 	.globl __sdcc_program_startup
+                                    495 	.globl __start__stack
+                                    496 	.globl __mcs51_genXINIT
+                                    497 	.globl __mcs51_genXRAMCLEAR
+                                    498 	.globl __mcs51_genRAMCLEAR
+                                    499 ;------------------------------------------------------------
+                                    500 ;Allocation info for local variables in function 'LS_Refresh'
+                                    501 ;------------------------------------------------------------
+                                    502 ;i                         Allocated with name '_LS_Refresh_i_65536_41'
+                                    503 ;------------------------------------------------------------
+                           000000   504 	G$LS_Refresh$0$0 ==.
+                           000000   505 	C$LatticeScreen.c$94$1_0$41 ==.
+                                    506 ;	LatticeScreen.c:94: static unsigned char i=0;
+      000000 75*0A 00         [24]  507 	mov	_LS_Refresh_i_65536_41,#0x00
+                           000003   508 	C$LatticeScreen.c$3$1_0$69 ==.
+                                    509 ;	LatticeScreen.c:3: unsigned char LS_RAM[8]={0x0,0x10,0x38,0x54,0x10,0x10,0x10,0x0};//默认显示数据，向上的箭头
+      000003 75*00 00         [24]  510 	mov	_LS_RAM,#0x00
+      000006 75*01 10         [24]  511 	mov	(_LS_RAM + 0x0001),#0x10
+      000009 75*02 38         [24]  512 	mov	(_LS_RAM + 0x0002),#0x38
+      00000C 75*03 54         [24]  513 	mov	(_LS_RAM + 0x0003),#0x54
+      00000F 75*04 10         [24]  514 	mov	(_LS_RAM + 0x0004),#0x10
+      000012 75*05 10         [24]  515 	mov	(_LS_RAM + 0x0005),#0x10
+      000015 75*06 10         [24]  516 	mov	(_LS_RAM + 0x0006),#0x10
+      000018 75*07 00         [24]  517 	mov	(_LS_RAM + 0x0007),#0x00
+                           00001B   518 	C$main.c$24$1_0$69 ==.
+                                    519 ;	main.c:24: __idata uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
+      00001B 78r00            [12]  520 	mov	r0,#_systick
+      00001D E4               [12]  521 	clr	a
+      00001E F6               [12]  522 	mov	@r0,a
+      00001F 08               [12]  523 	inc	r0
+      000020 F6               [12]  524 	mov	@r0,a
+      000021 08               [12]  525 	inc	r0
+      000022 F6               [12]  526 	mov	@r0,a
+      000023 08               [12]  527 	inc	r0
+      000024 F6               [12]  528 	mov	@r0,a
+      000025 08               [12]  529 	inc	r0
+      000026 F6               [12]  530 	mov	@r0,a
+      000027 08               [12]  531 	inc	r0
+      000028 F6               [12]  532 	mov	@r0,a
+      000029 08               [12]  533 	inc	r0
+      00002A F6               [12]  534 	mov	@r0,a
+      00002B 08               [12]  535 	inc	r0
+      00002C F6               [12]  536 	mov	@r0,a
+                           00002D   537 	C$main.c$135$1_0$69 ==.
+                                    538 ;	main.c:135: __idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0;
+      00002D 78r48            [12]  539 	mov	r0,#_Uart_Receive_Buff_Index
+      00002F 76 00            [12]  540 	mov	@r0,#0x00
+                           000031   541 	C$main.c$136$1_0$69 ==.
+                                    542 ;	main.c:136: __idata uint64_t Last_Receive_Tick=0;
+      000031 78r49            [12]  543 	mov	r0,#_Last_Receive_Tick
+      000033 F6               [12]  544 	mov	@r0,a
+      000034 08               [12]  545 	inc	r0
+      000035 F6               [12]  546 	mov	@r0,a
+      000036 08               [12]  547 	inc	r0
+      000037 F6               [12]  548 	mov	@r0,a
+      000038 08               [12]  549 	inc	r0
+      000039 F6               [12]  550 	mov	@r0,a
+      00003A 08               [12]  551 	inc	r0
+      00003B F6               [12]  552 	mov	@r0,a
+      00003C 08               [12]  553 	inc	r0
+      00003D F6               [12]  554 	mov	@r0,a
+      00003E 08               [12]  555 	inc	r0
+      00003F F6               [12]  556 	mov	@r0,a
+      000040 08               [12]  557 	inc	r0
+      000041 F6               [12]  558 	mov	@r0,a
+                           000042   559 	C$main.c$77$1_0$69 ==.
+                                    560 ;	main.c:77: __bit Tx_Busy=0;//串口发送忙标志
+                                    561 ;	assignBit
+      000042 C2*00            [12]  562 	clr	_Tx_Busy
+                                    563 	.area GSFINAL (CODE)
+      000000 02r00r26         [24]  564 	ljmp	__sdcc_program_startup
                                     565 ;--------------------------------------------------------
-                                    566 	.area CSEG    (CODE)
-                                    567 ;------------------------------------------------------------
-                                    568 ;Allocation info for local variables in function 'LS_Init'
-                                    569 ;------------------------------------------------------------
-                                    570 ;P1M1                      Allocated with name '_LS_Init_P1M1_65536_28'
-                                    571 ;P1M0                      Allocated with name '_LS_Init_P1M0_65536_28'
-                                    572 ;------------------------------------------------------------
-                           000000   573 	G$LS_Init$0$0 ==.
-                           000000   574 	C$LatticeScreen.c$7$0_0$28 ==.
-                                    575 ;	LatticeScreen.c:7: void LS_Init()
-                                    576 ;	-----------------------------------------
-                                    577 ;	 function LS_Init
-                                    578 ;	-----------------------------------------
-      000000                        579 _LS_Init:
-                           000007   580 	ar7 = 0x07
-                           000006   581 	ar6 = 0x06
-                           000005   582 	ar5 = 0x05
-                           000004   583 	ar4 = 0x04
-                           000003   584 	ar3 = 0x03
-                           000002   585 	ar2 = 0x02
-                           000001   586 	ar1 = 0x01
-                           000000   587 	ar0 = 0x00
-                           000000   588 	C$LatticeScreen.c$14$1_0$28 ==.
-                                    589 ;	LatticeScreen.c:14: P1M0|=0x3f;
-      000000 43 92 3F         [24]  590 	orl	_LS_Init_P1M0_65536_28,#0x3f
-                           000003   591 	C$LatticeScreen.c$15$1_0$28 ==.
-                                    592 ;	LatticeScreen.c:15: P1M1&=~0x3f;
-      000003 53 91 C0         [24]  593 	anl	_LS_Init_P1M1_65536_28,#0xc0
-                           000006   594 	C$LatticeScreen.c$18$1_0$28 ==.
-                                    595 ;	LatticeScreen.c:18: RCK=0;
-                                    596 ;	assignBit
-      000006 C2 94            [12]  597 	clr	_P1_4
-                           000008   598 	C$LatticeScreen.c$19$1_0$28 ==.
-                                    599 ;	LatticeScreen.c:19: SCK=0;
-                                    600 ;	assignBit
-      000008 C2 95            [12]  601 	clr	_P1_5
-                           00000A   602 	C$LatticeScreen.c$22$1_0$28 ==.
-                                    603 ;	LatticeScreen.c:22: SCLR=0;
-                                    604 ;	assignBit
-      00000A C2 90            [12]  605 	clr	_P1_0
-                           00000C   606 	C$LatticeScreen.c$23$1_0$28 ==.
-                                    607 ;	LatticeScreen.c:23: SCLR=1;
-                                    608 ;	assignBit
-      00000C D2 90            [12]  609 	setb	_P1_0
-                           00000E   610 	C$LatticeScreen.c$25$1_0$28 ==.
-                                    611 ;	LatticeScreen.c:25: OE=0;
-                                    612 ;	assignBit
-      00000E C2 91            [12]  613 	clr	_P1_1
-                           000010   614 	C$LatticeScreen.c$26$1_0$28 ==.
-                                    615 ;	LatticeScreen.c:26: }
-                           000010   616 	C$LatticeScreen.c$26$1_0$28 ==.
-                           000010   617 	XG$LS_Init$0$0 ==.
-      000010 22               [24]  618 	ret
-                                    619 ;------------------------------------------------------------
-                                    620 ;Allocation info for local variables in function 'LS_Deinit'
-                                    621 ;------------------------------------------------------------
-                                    622 ;P1M1                      Allocated with name '_LS_Deinit_P1M1_65536_29'
-                                    623 ;P1M0                      Allocated with name '_LS_Deinit_P1M0_65536_29'
-                                    624 ;------------------------------------------------------------
-                           000011   625 	G$LS_Deinit$0$0 ==.
-                           000011   626 	C$LatticeScreen.c$28$1_0$29 ==.
-                                    627 ;	LatticeScreen.c:28: void LS_Deinit()
-                                    628 ;	-----------------------------------------
-                                    629 ;	 function LS_Deinit
-                                    630 ;	-----------------------------------------
-      000011                        631 _LS_Deinit:
-                           000011   632 	C$LatticeScreen.c$34$1_0$29 ==.
-                                    633 ;	LatticeScreen.c:34: P1M0&=~0x3f;
-      000011 53 92 C0         [24]  634 	anl	_LS_Deinit_P1M0_65536_29,#0xc0
-                           000014   635 	C$LatticeScreen.c$35$1_0$29 ==.
-                                    636 ;	LatticeScreen.c:35: P1M1&=~0x3f;
-      000014 53 91 C0         [24]  637 	anl	_LS_Deinit_P1M1_65536_29,#0xc0
-                           000017   638 	C$LatticeScreen.c$38$1_0$29 ==.
-                                    639 ;	LatticeScreen.c:38: RCK=0;
-                                    640 ;	assignBit
-      000017 C2 94            [12]  641 	clr	_P1_4
-                           000019   642 	C$LatticeScreen.c$39$1_0$29 ==.
-                                    643 ;	LatticeScreen.c:39: SCK=0;
-                                    644 ;	assignBit
-      000019 C2 95            [12]  645 	clr	_P1_5
-                           00001B   646 	C$LatticeScreen.c$42$1_0$29 ==.
-                                    647 ;	LatticeScreen.c:42: SCLR=0;
-                                    648 ;	assignBit
-      00001B C2 90            [12]  649 	clr	_P1_0
-                           00001D   650 	C$LatticeScreen.c$44$1_0$29 ==.
-                                    651 ;	LatticeScreen.c:44: OE=1;
-                                    652 ;	assignBit
-      00001D D2 91            [12]  653 	setb	_P1_1
-                           00001F   654 	C$LatticeScreen.c$45$1_0$29 ==.
-                                    655 ;	LatticeScreen.c:45: }
-                           00001F   656 	C$LatticeScreen.c$45$1_0$29 ==.
-                           00001F   657 	XG$LS_Deinit$0$0 ==.
-      00001F 22               [24]  658 	ret
-                                    659 ;------------------------------------------------------------
-                                    660 ;Allocation info for local variables in function 'LS_595_DataOut'
-                                    661 ;------------------------------------------------------------
-                                    662 ;Col_Data                  Allocated with name '_LS_595_DataOut_PARM_2'
-                                    663 ;Row_Data                  Allocated to registers r7 
-                                    664 ;i                         Allocated to registers r6 
-                                    665 ;------------------------------------------------------------
-                           000020   666 	G$LS_595_DataOut$0$0 ==.
-                           000020   667 	C$LatticeScreen.c$47$1_0$31 ==.
-                                    668 ;	LatticeScreen.c:47: void LS_595_DataOut(unsigned char Row_Data,unsigned char Col_Data)//输出数据到595
-                                    669 ;	-----------------------------------------
-                                    670 ;	 function LS_595_DataOut
-                                    671 ;	-----------------------------------------
-      000020                        672 _LS_595_DataOut:
-      000020 AF 82            [24]  673 	mov	r7,dpl
-                           000022   674 	C$LatticeScreen.c$51$1_0$31 ==.
-                                    675 ;	LatticeScreen.c:51: RCK=0;
-                                    676 ;	assignBit
-      000022 C2 94            [12]  677 	clr	_P1_4
-                           000024   678 	C$LatticeScreen.c$52$1_0$31 ==.
-                                    679 ;	LatticeScreen.c:52: SCK=0;
-                                    680 ;	assignBit
-      000024 C2 95            [12]  681 	clr	_P1_5
-                           000026   682 	C$LatticeScreen.c$54$2_0$32 ==.
-                                    683 ;	LatticeScreen.c:54: for(i=0;i<8;i++)
-      000026 7E 00            [12]  684 	mov	r6,#0x00
-      000028                        685 00108$:
-                           000028   686 	C$LatticeScreen.c$56$3_0$33 ==.
-                                    687 ;	LatticeScreen.c:56: SCK=0;
-                                    688 ;	assignBit
-      000028 C2 95            [12]  689 	clr	_P1_5
-                           00002A   690 	C$LatticeScreen.c$57$3_0$33 ==.
-                                    691 ;	LatticeScreen.c:57: if(Row_Data & (1<<i))
-      00002A 8E F0            [24]  692 	mov	b,r6
-      00002C 05 F0            [12]  693 	inc	b
-      00002E 7C 01            [12]  694 	mov	r4,#0x01
-      000030 7D 00            [12]  695 	mov	r5,#0x00
-      000032 80 06            [24]  696 	sjmp	00129$
-      000034                        697 00128$:
-      000034 EC               [12]  698 	mov	a,r4
-      000035 2C               [12]  699 	add	a,r4
-      000036 FC               [12]  700 	mov	r4,a
-      000037 ED               [12]  701 	mov	a,r5
-      000038 33               [12]  702 	rlc	a
-      000039 FD               [12]  703 	mov	r5,a
-      00003A                        704 00129$:
-      00003A D5 F0 F7         [24]  705 	djnz	b,00128$
-      00003D 8F 02            [24]  706 	mov	ar2,r7
-      00003F 7B 00            [12]  707 	mov	r3,#0x00
-      000041 EA               [12]  708 	mov	a,r2
-      000042 52 04            [12]  709 	anl	ar4,a
-      000044 EB               [12]  710 	mov	a,r3
-      000045 52 05            [12]  711 	anl	ar5,a
-      000047 EC               [12]  712 	mov	a,r4
-      000048 4D               [12]  713 	orl	a,r5
-      000049 60 04            [24]  714 	jz	00102$
-                           00004B   715 	C$LatticeScreen.c$59$4_0$34 ==.
-                                    716 ;	LatticeScreen.c:59: ROW_IN=1;
-                                    717 ;	assignBit
-      00004B D2 92            [12]  718 	setb	_P1_2
-      00004D 80 02            [24]  719 	sjmp	00103$
-      00004F                        720 00102$:
-                           00004F   721 	C$LatticeScreen.c$63$4_0$35 ==.
-                                    722 ;	LatticeScreen.c:63: ROW_IN=0;
-                                    723 ;	assignBit
-      00004F C2 92            [12]  724 	clr	_P1_2
-      000051                        725 00103$:
-                           000051   726 	C$LatticeScreen.c$66$3_0$33 ==.
-                                    727 ;	LatticeScreen.c:66: if(Col_Data & (1<<i))
-      000051 8E F0            [24]  728 	mov	b,r6
-      000053 05 F0            [12]  729 	inc	b
-      000055 7C 01            [12]  730 	mov	r4,#0x01
-      000057 7D 00            [12]  731 	mov	r5,#0x00
-      000059 80 06            [24]  732 	sjmp	00132$
-      00005B                        733 00131$:
-      00005B EC               [12]  734 	mov	a,r4
-      00005C 2C               [12]  735 	add	a,r4
-      00005D FC               [12]  736 	mov	r4,a
-      00005E ED               [12]  737 	mov	a,r5
-      00005F 33               [12]  738 	rlc	a
-      000060 FD               [12]  739 	mov	r5,a
-      000061                        740 00132$:
-      000061 D5 F0 F7         [24]  741 	djnz	b,00131$
-      000064 AA*08            [24]  742 	mov	r2,_LS_595_DataOut_PARM_2
-      000066 7B 00            [12]  743 	mov	r3,#0x00
-      000068 EA               [12]  744 	mov	a,r2
-      000069 52 04            [12]  745 	anl	ar4,a
-      00006B EB               [12]  746 	mov	a,r3
-      00006C 52 05            [12]  747 	anl	ar5,a
-      00006E EC               [12]  748 	mov	a,r4
-      00006F 4D               [12]  749 	orl	a,r5
-      000070 60 04            [24]  750 	jz	00105$
-                           000072   751 	C$LatticeScreen.c$68$4_0$36 ==.
-                                    752 ;	LatticeScreen.c:68: COL_IN=1;
-                                    753 ;	assignBit
-      000072 D2 93            [12]  754 	setb	_P1_3
-      000074 80 02            [24]  755 	sjmp	00106$
-      000076                        756 00105$:
-                           000076   757 	C$LatticeScreen.c$72$4_0$37 ==.
-                                    758 ;	LatticeScreen.c:72: COL_IN=0;
-                                    759 ;	assignBit
-      000076 C2 93            [12]  760 	clr	_P1_3
-      000078                        761 00106$:
-                           000078   762 	C$LatticeScreen.c$75$3_0$33 ==.
-                                    763 ;	LatticeScreen.c:75: SCK=1;
-                                    764 ;	assignBit
-      000078 D2 95            [12]  765 	setb	_P1_5
-                           00007A   766 	C$LatticeScreen.c$54$2_0$32 ==.
-                                    767 ;	LatticeScreen.c:54: for(i=0;i<8;i++)
-      00007A 0E               [12]  768 	inc	r6
-      00007B BE 08 00         [24]  769 	cjne	r6,#0x08,00134$
-      00007E                        770 00134$:
-      00007E 40 A8            [24]  771 	jc	00108$
-                           000080   772 	C$LatticeScreen.c$78$1_0$31 ==.
-                                    773 ;	LatticeScreen.c:78: RCK=1;
+                                    566 ; Home
+                                    567 ;--------------------------------------------------------
+                                    568 	.area HOME    (CODE)
+                                    569 	.area HOME    (CODE)
+      000026                        570 __sdcc_program_startup:
+      000026 02r02rF9         [24]  571 	ljmp	_main
+                                    572 ;	return from main will return to caller
+                                    573 ;--------------------------------------------------------
+                                    574 ; code
+                                    575 ;--------------------------------------------------------
+                                    576 	.area CSEG    (CODE)
+                                    577 ;------------------------------------------------------------
+                                    578 ;Allocation info for local variables in function 'LS_Init'
+                                    579 ;------------------------------------------------------------
+                                    580 ;P1M1                      Allocated with name '_LS_Init_P1M1_65536_28'
+                                    581 ;P1M0                      Allocated with name '_LS_Init_P1M0_65536_28'
+                                    582 ;------------------------------------------------------------
+                           000000   583 	G$LS_Init$0$0 ==.
+                           000000   584 	C$LatticeScreen.c$7$0_0$28 ==.
+                                    585 ;	LatticeScreen.c:7: void LS_Init()
+                                    586 ;	-----------------------------------------
+                                    587 ;	 function LS_Init
+                                    588 ;	-----------------------------------------
+      000000                        589 _LS_Init:
+                           000007   590 	ar7 = 0x07
+                           000006   591 	ar6 = 0x06
+                           000005   592 	ar5 = 0x05
+                           000004   593 	ar4 = 0x04
+                           000003   594 	ar3 = 0x03
+                           000002   595 	ar2 = 0x02
+                           000001   596 	ar1 = 0x01
+                           000000   597 	ar0 = 0x00
+                           000000   598 	C$LatticeScreen.c$14$1_0$28 ==.
+                                    599 ;	LatticeScreen.c:14: P1M0|=0x3f;
+      000000 43 92 3F         [24]  600 	orl	_LS_Init_P1M0_65536_28,#0x3f
+                           000003   601 	C$LatticeScreen.c$15$1_0$28 ==.
+                                    602 ;	LatticeScreen.c:15: P1M1&=~0x3f;
+      000003 53 91 C0         [24]  603 	anl	_LS_Init_P1M1_65536_28,#0xc0
+                           000006   604 	C$LatticeScreen.c$18$1_0$28 ==.
+                                    605 ;	LatticeScreen.c:18: RCK=0;
+                                    606 ;	assignBit
+      000006 C2 94            [12]  607 	clr	_P1_4
+                           000008   608 	C$LatticeScreen.c$19$1_0$28 ==.
+                                    609 ;	LatticeScreen.c:19: SCK=0;
+                                    610 ;	assignBit
+      000008 C2 95            [12]  611 	clr	_P1_5
+                           00000A   612 	C$LatticeScreen.c$22$1_0$28 ==.
+                                    613 ;	LatticeScreen.c:22: SCLR=0;
+                                    614 ;	assignBit
+      00000A C2 90            [12]  615 	clr	_P1_0
+                           00000C   616 	C$LatticeScreen.c$23$1_0$28 ==.
+                                    617 ;	LatticeScreen.c:23: SCLR=1;
+                                    618 ;	assignBit
+      00000C D2 90            [12]  619 	setb	_P1_0
+                           00000E   620 	C$LatticeScreen.c$25$1_0$28 ==.
+                                    621 ;	LatticeScreen.c:25: OE=0;
+                                    622 ;	assignBit
+      00000E C2 91            [12]  623 	clr	_P1_1
+                           000010   624 	C$LatticeScreen.c$26$1_0$28 ==.
+                                    625 ;	LatticeScreen.c:26: }
+                           000010   626 	C$LatticeScreen.c$26$1_0$28 ==.
+                           000010   627 	XG$LS_Init$0$0 ==.
+      000010 22               [24]  628 	ret
+                                    629 ;------------------------------------------------------------
+                                    630 ;Allocation info for local variables in function 'LS_Deinit'
+                                    631 ;------------------------------------------------------------
+                                    632 ;P1M1                      Allocated with name '_LS_Deinit_P1M1_65536_29'
+                                    633 ;P1M0                      Allocated with name '_LS_Deinit_P1M0_65536_29'
+                                    634 ;------------------------------------------------------------
+                           000011   635 	G$LS_Deinit$0$0 ==.
+                           000011   636 	C$LatticeScreen.c$28$1_0$29 ==.
+                                    637 ;	LatticeScreen.c:28: void LS_Deinit()
+                                    638 ;	-----------------------------------------
+                                    639 ;	 function LS_Deinit
+                                    640 ;	-----------------------------------------
+      000011                        641 _LS_Deinit:
+                           000011   642 	C$LatticeScreen.c$34$1_0$29 ==.
+                                    643 ;	LatticeScreen.c:34: P1M0&=~0x3f;
+      000011 53 92 C0         [24]  644 	anl	_LS_Deinit_P1M0_65536_29,#0xc0
+                           000014   645 	C$LatticeScreen.c$35$1_0$29 ==.
+                                    646 ;	LatticeScreen.c:35: P1M1&=~0x3f;
+      000014 53 91 C0         [24]  647 	anl	_LS_Deinit_P1M1_65536_29,#0xc0
+                           000017   648 	C$LatticeScreen.c$38$1_0$29 ==.
+                                    649 ;	LatticeScreen.c:38: RCK=0;
+                                    650 ;	assignBit
+      000017 C2 94            [12]  651 	clr	_P1_4
+                           000019   652 	C$LatticeScreen.c$39$1_0$29 ==.
+                                    653 ;	LatticeScreen.c:39: SCK=0;
+                                    654 ;	assignBit
+      000019 C2 95            [12]  655 	clr	_P1_5
+                           00001B   656 	C$LatticeScreen.c$42$1_0$29 ==.
+                                    657 ;	LatticeScreen.c:42: SCLR=0;
+                                    658 ;	assignBit
+      00001B C2 90            [12]  659 	clr	_P1_0
+                           00001D   660 	C$LatticeScreen.c$44$1_0$29 ==.
+                                    661 ;	LatticeScreen.c:44: OE=1;
+                                    662 ;	assignBit
+      00001D D2 91            [12]  663 	setb	_P1_1
+                           00001F   664 	C$LatticeScreen.c$45$1_0$29 ==.
+                                    665 ;	LatticeScreen.c:45: }
+                           00001F   666 	C$LatticeScreen.c$45$1_0$29 ==.
+                           00001F   667 	XG$LS_Deinit$0$0 ==.
+      00001F 22               [24]  668 	ret
+                                    669 ;------------------------------------------------------------
+                                    670 ;Allocation info for local variables in function 'LS_595_DataOut'
+                                    671 ;------------------------------------------------------------
+                                    672 ;Col_Data                  Allocated with name '_LS_595_DataOut_PARM_2'
+                                    673 ;Row_Data                  Allocated to registers r7 
+                                    674 ;i                         Allocated to registers r6 
+                                    675 ;------------------------------------------------------------
+                           000020   676 	G$LS_595_DataOut$0$0 ==.
+                           000020   677 	C$LatticeScreen.c$47$1_0$31 ==.
+                                    678 ;	LatticeScreen.c:47: void LS_595_DataOut(unsigned char Row_Data,unsigned char Col_Data)//输出数据到595
+                                    679 ;	-----------------------------------------
+                                    680 ;	 function LS_595_DataOut
+                                    681 ;	-----------------------------------------
+      000020                        682 _LS_595_DataOut:
+      000020 AF 82            [24]  683 	mov	r7,dpl
+                           000022   684 	C$LatticeScreen.c$51$1_0$31 ==.
+                                    685 ;	LatticeScreen.c:51: RCK=0;
+                                    686 ;	assignBit
+      000022 C2 94            [12]  687 	clr	_P1_4
+                           000024   688 	C$LatticeScreen.c$52$1_0$31 ==.
+                                    689 ;	LatticeScreen.c:52: SCK=0;
+                                    690 ;	assignBit
+      000024 C2 95            [12]  691 	clr	_P1_5
+                           000026   692 	C$LatticeScreen.c$54$2_0$32 ==.
+                                    693 ;	LatticeScreen.c:54: for(i=0;i<8;i++)
+      000026 7E 00            [12]  694 	mov	r6,#0x00
+      000028                        695 00108$:
+                           000028   696 	C$LatticeScreen.c$56$3_0$33 ==.
+                                    697 ;	LatticeScreen.c:56: SCK=0;
+                                    698 ;	assignBit
+      000028 C2 95            [12]  699 	clr	_P1_5
+                           00002A   700 	C$LatticeScreen.c$57$3_0$33 ==.
+                                    701 ;	LatticeScreen.c:57: if(Row_Data & (1<<i))
+      00002A 8E F0            [24]  702 	mov	b,r6
+      00002C 05 F0            [12]  703 	inc	b
+      00002E 7C 01            [12]  704 	mov	r4,#0x01
+      000030 7D 00            [12]  705 	mov	r5,#0x00
+      000032 80 06            [24]  706 	sjmp	00129$
+      000034                        707 00128$:
+      000034 EC               [12]  708 	mov	a,r4
+      000035 2C               [12]  709 	add	a,r4
+      000036 FC               [12]  710 	mov	r4,a
+      000037 ED               [12]  711 	mov	a,r5
+      000038 33               [12]  712 	rlc	a
+      000039 FD               [12]  713 	mov	r5,a
+      00003A                        714 00129$:
+      00003A D5 F0 F7         [24]  715 	djnz	b,00128$
+      00003D 8F 02            [24]  716 	mov	ar2,r7
+      00003F 7B 00            [12]  717 	mov	r3,#0x00
+      000041 EA               [12]  718 	mov	a,r2
+      000042 52 04            [12]  719 	anl	ar4,a
+      000044 EB               [12]  720 	mov	a,r3
+      000045 52 05            [12]  721 	anl	ar5,a
+      000047 EC               [12]  722 	mov	a,r4
+      000048 4D               [12]  723 	orl	a,r5
+      000049 60 04            [24]  724 	jz	00102$
+                           00004B   725 	C$LatticeScreen.c$59$4_0$34 ==.
+                                    726 ;	LatticeScreen.c:59: ROW_IN=1;
+                                    727 ;	assignBit
+      00004B D2 92            [12]  728 	setb	_P1_2
+      00004D 80 02            [24]  729 	sjmp	00103$
+      00004F                        730 00102$:
+                           00004F   731 	C$LatticeScreen.c$63$4_0$35 ==.
+                                    732 ;	LatticeScreen.c:63: ROW_IN=0;
+                                    733 ;	assignBit
+      00004F C2 92            [12]  734 	clr	_P1_2
+      000051                        735 00103$:
+                           000051   736 	C$LatticeScreen.c$66$3_0$33 ==.
+                                    737 ;	LatticeScreen.c:66: if(Col_Data & (1<<i))
+      000051 8E F0            [24]  738 	mov	b,r6
+      000053 05 F0            [12]  739 	inc	b
+      000055 7C 01            [12]  740 	mov	r4,#0x01
+      000057 7D 00            [12]  741 	mov	r5,#0x00
+      000059 80 06            [24]  742 	sjmp	00132$
+      00005B                        743 00131$:
+      00005B EC               [12]  744 	mov	a,r4
+      00005C 2C               [12]  745 	add	a,r4
+      00005D FC               [12]  746 	mov	r4,a
+      00005E ED               [12]  747 	mov	a,r5
+      00005F 33               [12]  748 	rlc	a
+      000060 FD               [12]  749 	mov	r5,a
+      000061                        750 00132$:
+      000061 D5 F0 F7         [24]  751 	djnz	b,00131$
+      000064 AA*08            [24]  752 	mov	r2,_LS_595_DataOut_PARM_2
+      000066 7B 00            [12]  753 	mov	r3,#0x00
+      000068 EA               [12]  754 	mov	a,r2
+      000069 52 04            [12]  755 	anl	ar4,a
+      00006B EB               [12]  756 	mov	a,r3
+      00006C 52 05            [12]  757 	anl	ar5,a
+      00006E EC               [12]  758 	mov	a,r4
+      00006F 4D               [12]  759 	orl	a,r5
+      000070 60 04            [24]  760 	jz	00105$
+                           000072   761 	C$LatticeScreen.c$68$4_0$36 ==.
+                                    762 ;	LatticeScreen.c:68: COL_IN=1;
+                                    763 ;	assignBit
+      000072 D2 93            [12]  764 	setb	_P1_3
+      000074 80 02            [24]  765 	sjmp	00106$
+      000076                        766 00105$:
+                           000076   767 	C$LatticeScreen.c$72$4_0$37 ==.
+                                    768 ;	LatticeScreen.c:72: COL_IN=0;
+                                    769 ;	assignBit
+      000076 C2 93            [12]  770 	clr	_P1_3
+      000078                        771 00106$:
+                           000078   772 	C$LatticeScreen.c$75$3_0$33 ==.
+                                    773 ;	LatticeScreen.c:75: SCK=1;
                                     774 ;	assignBit
-      000080 D2 94            [12]  775 	setb	_P1_4
-                           000082   776 	C$LatticeScreen.c$80$1_0$31 ==.
-                                    777 ;	LatticeScreen.c:80: }
-                           000082   778 	C$LatticeScreen.c$80$1_0$31 ==.
-                           000082   779 	XG$LS_595_DataOut$0$0 ==.
-      000082 22               [24]  780 	ret
-                                    781 ;------------------------------------------------------------
-                                    782 ;Allocation info for local variables in function 'LS_DisplayOneRow'
-                                    783 ;------------------------------------------------------------
-                                    784 ;Col_Index                 Allocated with name '_LS_DisplayOneRow_PARM_2'
-                                    785 ;Row_Data                  Allocated to registers r7 
-                                    786 ;------------------------------------------------------------
-                           000083   787 	G$LS_DisplayOneRow$0$0 ==.
-                           000083   788 	C$LatticeScreen.c$83$1_0$39 ==.
-                                    789 ;	LatticeScreen.c:83: void LS_DisplayOneRow(unsigned char Row_Data,unsigned char Col_Index)
-                                    790 ;	-----------------------------------------
-                                    791 ;	 function LS_DisplayOneRow
-                                    792 ;	-----------------------------------------
-      000083                        793 _LS_DisplayOneRow:
-      000083 AF 82            [24]  794 	mov	r7,dpl
-                           000085   795 	C$LatticeScreen.c$85$1_0$39 ==.
-                                    796 ;	LatticeScreen.c:85: if(Col_Index < 8)
-      000085 74 F8            [12]  797 	mov	a,#0x100 - 0x08
-      000087 25*09            [12]  798 	add	a,_LS_DisplayOneRow_PARM_2
-      000089 40 17            [24]  799 	jc	00103$
-                           00008B   800 	C$LatticeScreen.c$87$2_0$40 ==.
-                                    801 ;	LatticeScreen.c:87: LS_595_DataOut(Row_Data,~(1<<Col_Index));	
-      00008B AE*09            [24]  802 	mov	r6,_LS_DisplayOneRow_PARM_2
-      00008D 8E F0            [24]  803 	mov	b,r6
-      00008F 05 F0            [12]  804 	inc	b
-      000091 74 01            [12]  805 	mov	a,#0x01
-      000093 80 02            [24]  806 	sjmp	00112$
-      000095                        807 00110$:
-      000095 25 E0            [12]  808 	add	a,acc
-      000097                        809 00112$:
-      000097 D5 F0 FB         [24]  810 	djnz	b,00110$
-      00009A F4               [12]  811 	cpl	a
-      00009B F5*08            [12]  812 	mov	_LS_595_DataOut_PARM_2,a
-      00009D 8F 82            [24]  813 	mov	dpl,r7
-      00009F 12r00r20         [24]  814 	lcall	_LS_595_DataOut
-      0000A2                        815 00103$:
-                           0000A2   816 	C$LatticeScreen.c$90$1_0$39 ==.
-                                    817 ;	LatticeScreen.c:90: }
-                           0000A2   818 	C$LatticeScreen.c$90$1_0$39 ==.
-                           0000A2   819 	XG$LS_DisplayOneRow$0$0 ==.
-      0000A2 22               [24]  820 	ret
-                                    821 ;------------------------------------------------------------
-                                    822 ;Allocation info for local variables in function 'LS_Refresh'
-                                    823 ;------------------------------------------------------------
-                                    824 ;i                         Allocated with name '_LS_Refresh_i_65536_41'
-                                    825 ;------------------------------------------------------------
-                           0000A3   826 	G$LS_Refresh$0$0 ==.
-                           0000A3   827 	C$LatticeScreen.c$92$1_0$41 ==.
-                                    828 ;	LatticeScreen.c:92: void LS_Refresh()
-                                    829 ;	-----------------------------------------
-                                    830 ;	 function LS_Refresh
-                                    831 ;	-----------------------------------------
-      0000A3                        832 _LS_Refresh:
-                           0000A3   833 	C$LatticeScreen.c$95$1_0$41 ==.
-                                    834 ;	LatticeScreen.c:95: LS_DisplayOneRow(LS_RAM[i],i++);
-      0000A3 E5*0A            [12]  835 	mov	a,_LS_Refresh_i_65536_41
-      0000A5 24r00            [12]  836 	add	a,#_LS_RAM
-      0000A7 F9               [12]  837 	mov	r1,a
-      0000A8 87 82            [24]  838 	mov	dpl,@r1
-      0000AA 85*0A*09         [24]  839 	mov	_LS_DisplayOneRow_PARM_2,_LS_Refresh_i_65536_41
-      0000AD 05*0A            [12]  840 	inc	_LS_Refresh_i_65536_41
-      0000AF 12r00r83         [24]  841 	lcall	_LS_DisplayOneRow
-                           0000B2   842 	C$LatticeScreen.c$96$1_0$41 ==.
-                                    843 ;	LatticeScreen.c:96: if(i>=8)
-      0000B2 74 F8            [12]  844 	mov	a,#0x100 - 0x08
-      0000B4 25*0A            [12]  845 	add	a,_LS_Refresh_i_65536_41
-      0000B6 50 03            [24]  846 	jnc	00103$
-                           0000B8   847 	C$LatticeScreen.c$97$1_0$41 ==.
-                                    848 ;	LatticeScreen.c:97: i=0;
-      0000B8 75*0A 00         [24]  849 	mov	_LS_Refresh_i_65536_41,#0x00
-      0000BB                        850 00103$:
-                           0000BB   851 	C$LatticeScreen.c$98$1_0$41 ==.
-                                    852 ;	LatticeScreen.c:98: }
-                           0000BB   853 	C$LatticeScreen.c$98$1_0$41 ==.
-                           0000BB   854 	XG$LS_Refresh$0$0 ==.
-      0000BB 22               [24]  855 	ret
-                                    856 ;------------------------------------------------------------
-                                    857 ;Allocation info for local variables in function 'systick_init'
-                                    858 ;------------------------------------------------------------
-                                    859 ;AUXR                      Allocated with name '_systick_init_AUXR_65536_42'
-                                    860 ;------------------------------------------------------------
-                           0000BC   861 	G$systick_init$0$0 ==.
-                           0000BC   862 	C$main.c$25$1_0$42 ==.
-                                    863 ;	main.c:25: void systick_init()
-                                    864 ;	-----------------------------------------
-                                    865 ;	 function systick_init
-                                    866 ;	-----------------------------------------
-      0000BC                        867 _systick_init:
-                           0000BC   868 	C$main.c$28$1_0$42 ==.
-                                    869 ;	main.c:28: AUXR |= 0x80;                   //定时器0为1T模式
-      0000BC 43 8E 80         [24]  870 	orl	_systick_init_AUXR_65536_42,#0x80
-                           0000BF   871 	C$main.c$29$1_0$42 ==.
-                                    872 ;	main.c:29: TMOD &= ~0x0f;                    //设置定时器为模式0(16位自动重装载)
-      0000BF 53 89 F0         [24]  873 	anl	_TMOD,#0xf0
-                           0000C2   874 	C$main.c$30$1_0$42 ==.
-                                    875 ;	main.c:30: TL0 = T1MS;                     //初始化计时值
-      0000C2 75 8A 67         [24]  876 	mov	_TL0,#0x67
-                           0000C5   877 	C$main.c$31$1_0$42 ==.
-                                    878 ;	main.c:31: TH0 = T1MS >> 8;
-      0000C5 75 8C 7E         [24]  879 	mov	_TH0,#0x7e
-                           0000C8   880 	C$main.c$32$1_0$42 ==.
-                                    881 ;	main.c:32: TR0 = 1;                        //定时器0开始计时
-                                    882 ;	assignBit
-      0000C8 D2 8C            [12]  883 	setb	_TR0
-                           0000CA   884 	C$main.c$33$1_0$42 ==.
-                                    885 ;	main.c:33: ET0 = 1;                        //使能定时器0中断
-                                    886 ;	assignBit
-      0000CA D2 A9            [12]  887 	setb	_ET0
-                           0000CC   888 	C$main.c$34$1_0$42 ==.
-                                    889 ;	main.c:34: EA = 1;
-                                    890 ;	assignBit
-      0000CC D2 AF            [12]  891 	setb	_EA
-                           0000CE   892 	C$main.c$35$1_0$42 ==.
-                                    893 ;	main.c:35: }
-                           0000CE   894 	C$main.c$35$1_0$42 ==.
-                           0000CE   895 	XG$systick_init$0$0 ==.
-      0000CE 22               [24]  896 	ret
-                                    897 ;------------------------------------------------------------
-                                    898 ;Allocation info for local variables in function 'systick_interrupt'
-                                    899 ;------------------------------------------------------------
-                                    900 ;sloc0                     Allocated with name '_systick_interrupt_sloc0_1_0'
-                                    901 ;------------------------------------------------------------
-                           0000CF   902 	G$systick_interrupt$0$0 ==.
-                           0000CF   903 	C$main.c$42$1_0$44 ==.
-                                    904 ;	main.c:42: void systick_interrupt() __interrupt (1) __using (1) 
-                                    905 ;	-----------------------------------------
-                                    906 ;	 function systick_interrupt
-                                    907 ;	-----------------------------------------
-      0000CF                        908 _systick_interrupt:
-                           00000F   909 	ar7 = 0x0f
-                           00000E   910 	ar6 = 0x0e
-                           00000D   911 	ar5 = 0x0d
-                           00000C   912 	ar4 = 0x0c
-                           00000B   913 	ar3 = 0x0b
-                           00000A   914 	ar2 = 0x0a
-                           000009   915 	ar1 = 0x09
-                           000008   916 	ar0 = 0x08
-      0000CF C0*00            [24]  917 	push	bits
-      0000D1 C0 E0            [24]  918 	push	acc
-      0000D3 C0 F0            [24]  919 	push	b
-      0000D5 C0 82            [24]  920 	push	dpl
-      0000D7 C0 83            [24]  921 	push	dph
-      0000D9 C0 07            [24]  922 	push	(0+7)
-      0000DB C0 06            [24]  923 	push	(0+6)
-      0000DD C0 05            [24]  924 	push	(0+5)
-      0000DF C0 04            [24]  925 	push	(0+4)
-      0000E1 C0 03            [24]  926 	push	(0+3)
-      0000E3 C0 02            [24]  927 	push	(0+2)
-      0000E5 C0 01            [24]  928 	push	(0+1)
-      0000E7 C0 00            [24]  929 	push	(0+0)
-      0000E9 C0 D0            [24]  930 	push	psw
-      0000EB 75 D0 08         [24]  931 	mov	psw,#0x08
-                           0000EE   932 	C$main.c$44$1_0$44 ==.
-                                    933 ;	main.c:44: systick++;
-      0000EE 78r00            [12]  934 	mov	r0,#_systick
-      0000F0 06               [12]  935 	inc	@r0
-      0000F1 B6 00 20         [24]  936 	cjne	@r0,#0x00,00115$
-      0000F4 08               [12]  937 	inc	r0
-      0000F5 06               [12]  938 	inc	@r0
-      0000F6 B6 00 1B         [24]  939 	cjne	@r0,#0x00,00115$
-      0000F9 08               [12]  940 	inc	r0
-      0000FA 06               [12]  941 	inc	@r0
-      0000FB B6 00 16         [24]  942 	cjne	@r0,#0x00,00115$
-      0000FE 08               [12]  943 	inc	r0
-      0000FF 06               [12]  944 	inc	@r0
-      000100 B6 00 11         [24]  945 	cjne	@r0,#0x00,00115$
-      000103 08               [12]  946 	inc	r0
-      000104 06               [12]  947 	inc	@r0
-      000105 B6 00 0C         [24]  948 	cjne	@r0,#0x00,00115$
-      000108 08               [12]  949 	inc	r0
-      000109 06               [12]  950 	inc	@r0
-      00010A B6 00 07         [24]  951 	cjne	@r0,#0x00,00115$
-      00010D 08               [12]  952 	inc	r0
-      00010E 06               [12]  953 	inc	@r0
-      00010F B6 00 02         [24]  954 	cjne	@r0,#0x00,00115$
-      000112 08               [12]  955 	inc	r0
-      000113 06               [12]  956 	inc	@r0
-      000114                        957 00115$:
-                           000114   958 	C$main.c$45$1_0$44 ==.
-                                    959 ;	main.c:45: if(Uart_Receive_Buff_Index!=0)
-      000114 78r48            [12]  960 	mov	r0,#_Uart_Receive_Buff_Index
-      000116 E6               [12]  961 	mov	a,@r0
-      000117 60 65            [24]  962 	jz	00104$
-                           000119   963 	C$main.c$47$2_0$45 ==.
-                                    964 ;	main.c:47: if(systick>Last_Receive_Tick+1)
-      000119 78r49            [12]  965 	mov	r0,#_Last_Receive_Tick
-      00011B 74 01            [12]  966 	mov	a,#0x01
-      00011D 26               [12]  967 	add	a,@r0
-      00011E F5*0B            [12]  968 	mov	_systick_interrupt_sloc0_1_0,a
-      000120 E4               [12]  969 	clr	a
-      000121 08               [12]  970 	inc	r0
-      000122 36               [12]  971 	addc	a,@r0
-      000123 F5*0C            [12]  972 	mov	(_systick_interrupt_sloc0_1_0 + 1),a
-      000125 E4               [12]  973 	clr	a
-      000126 08               [12]  974 	inc	r0
-      000127 36               [12]  975 	addc	a,@r0
-      000128 F5*0D            [12]  976 	mov	(_systick_interrupt_sloc0_1_0 + 2),a
-      00012A E4               [12]  977 	clr	a
-      00012B 08               [12]  978 	inc	r0
-      00012C 36               [12]  979 	addc	a,@r0
-      00012D F5*0E            [12]  980 	mov	(_systick_interrupt_sloc0_1_0 + 3),a
-      00012F E4               [12]  981 	clr	a
-      000130 08               [12]  982 	inc	r0
-      000131 36               [12]  983 	addc	a,@r0
-      000132 F5*0F            [12]  984 	mov	(_systick_interrupt_sloc0_1_0 + 4),a
-      000134 E4               [12]  985 	clr	a
-      000135 08               [12]  986 	inc	r0
-      000136 36               [12]  987 	addc	a,@r0
-      000137 F5*10            [12]  988 	mov	(_systick_interrupt_sloc0_1_0 + 5),a
-      000139 E4               [12]  989 	clr	a
-      00013A 08               [12]  990 	inc	r0
-      00013B 36               [12]  991 	addc	a,@r0
-      00013C F5*11            [12]  992 	mov	(_systick_interrupt_sloc0_1_0 + 6),a
-      00013E E4               [12]  993 	clr	a
-      00013F 08               [12]  994 	inc	r0
-      000140 36               [12]  995 	addc	a,@r0
-      000141 F5*12            [12]  996 	mov	(_systick_interrupt_sloc0_1_0 + 7),a
-      000143 78r00            [12]  997 	mov	r0,#_systick
-      000145 C3               [12]  998 	clr	c
-      000146 E5*0B            [12]  999 	mov	a,_systick_interrupt_sloc0_1_0
-      000148 96               [12] 1000 	subb	a,@r0
-      000149 E5*0C            [12] 1001 	mov	a,(_systick_interrupt_sloc0_1_0 + 1)
-      00014B 08               [12] 1002 	inc	r0
-      00014C 96               [12] 1003 	subb	a,@r0
-      00014D E5*0D            [12] 1004 	mov	a,(_systick_interrupt_sloc0_1_0 + 2)
-      00014F 08               [12] 1005 	inc	r0
-      000150 96               [12] 1006 	subb	a,@r0
-      000151 E5*0E            [12] 1007 	mov	a,(_systick_interrupt_sloc0_1_0 + 3)
-      000153 08               [12] 1008 	inc	r0
-      000154 96               [12] 1009 	subb	a,@r0
-      000155 E5*0F            [12] 1010 	mov	a,(_systick_interrupt_sloc0_1_0 + 4)
-      000157 08               [12] 1011 	inc	r0
-      000158 96               [12] 1012 	subb	a,@r0
-      000159 E5*10            [12] 1013 	mov	a,(_systick_interrupt_sloc0_1_0 + 5)
-      00015B 08               [12] 1014 	inc	r0
-      00015C 96               [12] 1015 	subb	a,@r0
-      00015D E5*11            [12] 1016 	mov	a,(_systick_interrupt_sloc0_1_0 + 6)
-      00015F 08               [12] 1017 	inc	r0
-      000160 96               [12] 1018 	subb	a,@r0
-      000161 E5*12            [12] 1019 	mov	a,(_systick_interrupt_sloc0_1_0 + 7)
-      000163 08               [12] 1020 	inc	r0
-      000164 96               [12] 1021 	subb	a,@r0
-      000165 50 17            [24] 1022 	jnc	00104$
-                           000167  1023 	C$main.c$49$3_0$46 ==.
-                                   1024 ;	main.c:49: On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
-      000167 78r48            [12] 1025 	mov	r0,#_Uart_Receive_Buff_Index
-      000169 86*13            [24] 1026 	mov	_On_Uart_Idle_PARM_2,@r0
-      00016B 75*14 00         [24] 1027 	mov	(_On_Uart_Idle_PARM_2 + 1),#0x00
-      00016E 75 82r08         [24] 1028 	mov	dpl,#_Uart_Receive_Buff
-      000171 75 D0 00         [24] 1029 	mov	psw,#0x00
-      000174 12r02r64         [24] 1030 	lcall	_On_Uart_Idle
-      000177 75 D0 08         [24] 1031 	mov	psw,#0x08
-                           00017A  1032 	C$main.c$50$3_0$46 ==.
-                                   1033 ;	main.c:50: Uart_Receive_Buff_Index=0;
-      00017A 78r48            [12] 1034 	mov	r0,#_Uart_Receive_Buff_Index
-      00017C 76 00            [12] 1035 	mov	@r0,#0x00
-      00017E                       1036 00104$:
-                           00017E  1037 	C$main.c$53$1_0$44 ==.
-                                   1038 ;	main.c:53: On_SysTick_Timer();
-      00017E 75 D0 00         [24] 1039 	mov	psw,#0x00
-      000181 12r02r60         [24] 1040 	lcall	_On_SysTick_Timer
-      000184 75 D0 08         [24] 1041 	mov	psw,#0x08
-                           000187  1042 	C$main.c$54$1_0$44 ==.
-                                   1043 ;	main.c:54: }
-      000187 D0 D0            [24] 1044 	pop	psw
-      000189 D0 00            [24] 1045 	pop	(0+0)
-      00018B D0 01            [24] 1046 	pop	(0+1)
-      00018D D0 02            [24] 1047 	pop	(0+2)
-      00018F D0 03            [24] 1048 	pop	(0+3)
-      000191 D0 04            [24] 1049 	pop	(0+4)
-      000193 D0 05            [24] 1050 	pop	(0+5)
-      000195 D0 06            [24] 1051 	pop	(0+6)
-      000197 D0 07            [24] 1052 	pop	(0+7)
-      000199 D0 83            [24] 1053 	pop	dph
-      00019B D0 82            [24] 1054 	pop	dpl
-      00019D D0 F0            [24] 1055 	pop	b
-      00019F D0 E0            [24] 1056 	pop	acc
-      0001A1 D0*00            [24] 1057 	pop	bits
-                           0001A3  1058 	C$main.c$54$1_0$44 ==.
-                           0001A3  1059 	XG$systick_interrupt$0$0 ==.
-      0001A3 32               [24] 1060 	reti
-                                   1061 ;------------------------------------------------------------
-                                   1062 ;Allocation info for local variables in function 'Uart_Init'
-                                   1063 ;------------------------------------------------------------
-                                   1064 ;AUXR                      Allocated with name '_Uart_Init_AUXR_65536_47'
-                                   1065 ;T2H                       Allocated with name '_Uart_Init_T2H_65536_47'
-                                   1066 ;T2L                       Allocated with name '_Uart_Init_T2L_65536_47'
-                                   1067 ;P_SW1                     Allocated with name '_Uart_Init_P_SW1_65536_47'
-                                   1068 ;------------------------------------------------------------
-                           0001A4  1069 	G$Uart_Init$0$0 ==.
-                           0001A4  1070 	C$main.c$68$1_0$47 ==.
-                                   1071 ;	main.c:68: void Uart_Init()
-                                   1072 ;	-----------------------------------------
-                                   1073 ;	 function Uart_Init
-                                   1074 ;	-----------------------------------------
-      0001A4                       1075 _Uart_Init:
-                           000007  1076 	ar7 = 0x07
-                           000006  1077 	ar6 = 0x06
-                           000005  1078 	ar5 = 0x05
-                           000004  1079 	ar4 = 0x04
-                           000003  1080 	ar3 = 0x03
-                           000002  1081 	ar2 = 0x02
-                           000001  1082 	ar1 = 0x01
-                           000000  1083 	ar0 = 0x00
-                           0001A4  1084 	C$main.c$74$1_0$47 ==.
-                                   1085 ;	main.c:74: ACC = P_SW1;
-      0001A4 85 A2 E0         [24] 1086 	mov	_ACC,_Uart_Init_P_SW1_65536_47
-                           0001A7  1087 	C$main.c$75$1_0$47 ==.
-                                   1088 ;	main.c:75: ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=0
-      0001A7 53 E0 3F         [24] 1089 	anl	_ACC,#0x3f
-                           0001AA  1090 	C$main.c$76$1_0$47 ==.
-                                   1091 ;	main.c:76: P_SW1 = ACC;                //(P3.0/RxD, P3.1/TxD)
-      0001AA 85 E0 A2         [24] 1092 	mov	_Uart_Init_P_SW1_65536_47,_ACC
-                           0001AD  1093 	C$main.c$88$1_0$47 ==.
-                                   1094 ;	main.c:88: SCON = 0x50;                //8位可变波特率
-      0001AD 75 98 50         [24] 1095 	mov	_SCON,#0x50
-                           0001B0  1096 	C$main.c$95$1_0$47 ==.
-                                   1097 ;	main.c:95: T2L = (65536 - (FOSC/4/BAUD)) & 0xff;   //设置波特率重装值
-      0001B0 75 D7 B8         [24] 1098 	mov	_Uart_Init_T2L_65536_47,#0xb8
-                           0001B3  1099 	C$main.c$96$1_0$47 ==.
-                                   1100 ;	main.c:96: T2H = (65536 - (FOSC/4/BAUD))>>8;
-      0001B3 75 D6 FF         [24] 1101 	mov	_Uart_Init_T2H_65536_47,#0xff
-                           0001B6  1102 	C$main.c$97$1_0$47 ==.
-                                   1103 ;	main.c:97: AUXR |= 0x14;                //T2为1T模式, 并启动定时器2
-      0001B6 43 8E 14         [24] 1104 	orl	_Uart_Init_AUXR_65536_47,#0x14
-                           0001B9  1105 	C$main.c$98$1_0$47 ==.
-                                   1106 ;	main.c:98: AUXR |= 0x01;               //选择定时器2为串口1的波特率发生器
-      0001B9 43 8E 01         [24] 1107 	orl	_Uart_Init_AUXR_65536_47,#0x01
-                           0001BC  1108 	C$main.c$99$1_0$47 ==.
-                                   1109 ;	main.c:99: ES = 1;                     //使能串口1中断
-                                   1110 ;	assignBit
-      0001BC D2 AC            [12] 1111 	setb	_ES
-                           0001BE  1112 	C$main.c$100$1_0$47 ==.
-                                   1113 ;	main.c:100: EA = 1;
-                                   1114 ;	assignBit
-      0001BE D2 AF            [12] 1115 	setb	_EA
-                           0001C0  1116 	C$main.c$101$1_0$47 ==.
-                                   1117 ;	main.c:101: }
-                           0001C0  1118 	C$main.c$101$1_0$47 ==.
-                           0001C0  1119 	XG$Uart_Init$0$0 ==.
-      0001C0 22               [24] 1120 	ret
-                                   1121 ;------------------------------------------------------------
-                                   1122 ;Allocation info for local variables in function 'Uart_Send'
-                                   1123 ;------------------------------------------------------------
-                                   1124 ;data                      Allocated to registers r7 
-                                   1125 ;------------------------------------------------------------
-                           0001C1  1126 	G$Uart_Send$0$0 ==.
-                           0001C1  1127 	C$main.c$102$1_0$49 ==.
-                                   1128 ;	main.c:102: void Uart_Send(uint8_t data)
-                                   1129 ;	-----------------------------------------
-                                   1130 ;	 function Uart_Send
-                                   1131 ;	-----------------------------------------
-      0001C1                       1132 _Uart_Send:
-      0001C1 AF 82            [24] 1133 	mov	r7,dpl
-                           0001C3  1134 	C$main.c$104$1_0$49 ==.
-                                   1135 ;	main.c:104: while(Tx_Busy);//串口发送忙标志
-      0001C3                       1136 00101$:
-      0001C3 20*00 FD         [24] 1137 	jb	_Tx_Busy,00101$
-                           0001C6  1138 	C$main.c$105$1_0$49 ==.
-                                   1139 ;	main.c:105: ACC = data;                  //获取校验位P (PSW.0)
-      0001C6 8F E0            [24] 1140 	mov	_ACC,r7
-                           0001C8  1141 	C$main.c$106$1_0$49 ==.
-                                   1142 ;	main.c:106: if (P)                      //根据P来设置校验位
-      0001C8 A2 D0            [12] 1143 	mov	c,_P
-                           0001CA  1144 	C$main.c$122$1_0$49 ==.
-                                   1145 ;	main.c:122: Tx_Busy = 1;
-                                   1146 ;	assignBit
-      0001CA D2*00            [12] 1147 	setb	_Tx_Busy
-                           0001CC  1148 	C$main.c$123$1_0$49 ==.
-                                   1149 ;	main.c:123: SBUF = ACC;                 //写数据到UART数据寄存器	
-      0001CC 85 E0 99         [24] 1150 	mov	_SBUF,_ACC
-                           0001CF  1151 	C$main.c$124$1_0$49 ==.
-                                   1152 ;	main.c:124: }
-                           0001CF  1153 	C$main.c$124$1_0$49 ==.
-                           0001CF  1154 	XG$Uart_Send$0$0 ==.
-      0001CF 22               [24] 1155 	ret
-                                   1156 ;------------------------------------------------------------
-                                   1157 ;Allocation info for local variables in function 'Uart_Interrupt'
-                                   1158 ;------------------------------------------------------------
-                           0001D0  1159 	G$Uart_Interrupt$0$0 ==.
-                           0001D0  1160 	C$main.c$128$1_0$53 ==.
-                                   1161 ;	main.c:128: void Uart_Interrupt() __interrupt(4)
-                                   1162 ;	-----------------------------------------
-                                   1163 ;	 function Uart_Interrupt
-                                   1164 ;	-----------------------------------------
-      0001D0                       1165 _Uart_Interrupt:
-      0001D0 C0*00            [24] 1166 	push	bits
-      0001D2 C0 E0            [24] 1167 	push	acc
-      0001D4 C0 F0            [24] 1168 	push	b
-      0001D6 C0 82            [24] 1169 	push	dpl
-      0001D8 C0 83            [24] 1170 	push	dph
-      0001DA C0 07            [24] 1171 	push	(0+7)
-      0001DC C0 06            [24] 1172 	push	(0+6)
-      0001DE C0 05            [24] 1173 	push	(0+5)
-      0001E0 C0 04            [24] 1174 	push	(0+4)
-      0001E2 C0 03            [24] 1175 	push	(0+3)
-      0001E4 C0 02            [24] 1176 	push	(0+2)
-      0001E6 C0 01            [24] 1177 	push	(0+1)
-      0001E8 C0 00            [24] 1178 	push	(0+0)
-      0001EA C0 D0            [24] 1179 	push	psw
-      0001EC 75 D0 00         [24] 1180 	mov	psw,#0x00
-                           0001EF  1181 	C$main.c$130$1_0$53 ==.
-                                   1182 ;	main.c:130: if(TI)
-                           0001EF  1183 	C$main.c$132$2_0$54 ==.
-                                   1184 ;	main.c:132: TI=0;
-                                   1185 ;	assignBit
-      0001EF 10 99 02         [24] 1186 	jbc	_TI,00121$
-      0001F2 80 02            [24] 1187 	sjmp	00102$
-      0001F4                       1188 00121$:
-                           0001F4  1189 	C$main.c$133$2_0$54 ==.
-                                   1190 ;	main.c:133: Tx_Busy=0;
-                                   1191 ;	assignBit
-      0001F4 C2*00            [12] 1192 	clr	_Tx_Busy
-      0001F6                       1193 00102$:
-                           0001F6  1194 	C$main.c$135$1_0$53 ==.
-                                   1195 ;	main.c:135: if(RI)
-      0001F6 30 98 4A         [24] 1196 	jnb	_RI,00107$
-                           0001F9  1197 	C$main.c$149$2_0$55 ==.
-                                   1198 ;	main.c:149: Uart_Receive_Buff[Uart_Receive_Buff_Index++]=SBUF;
-      0001F9 78r48            [12] 1199 	mov	r0,#_Uart_Receive_Buff_Index
-      0001FB 86 07            [24] 1200 	mov	ar7,@r0
-      0001FD 78r48            [12] 1201 	mov	r0,#_Uart_Receive_Buff_Index
-      0001FF EF               [12] 1202 	mov	a,r7
-      000200 04               [12] 1203 	inc	a
-      000201 F6               [12] 1204 	mov	@r0,a
-      000202 EF               [12] 1205 	mov	a,r7
-      000203 24r08            [12] 1206 	add	a,#_Uart_Receive_Buff
-      000205 F8               [12] 1207 	mov	r0,a
-      000206 A6 99            [24] 1208 	mov	@r0,_SBUF
-                           000208  1209 	C$main.c$150$2_0$55 ==.
-                                   1210 ;	main.c:150: if(Uart_Receive_Buff_Index>=sizeof(Uart_Receive_Buff))
-      000208 78r48            [12] 1211 	mov	r0,#_Uart_Receive_Buff_Index
-      00020A B6 40 00         [24] 1212 	cjne	@r0,#0x40,00123$
-      00020D                       1213 00123$:
-      00020D 40 10            [24] 1214 	jc	00104$
-                           00020F  1215 	C$main.c$152$3_0$56 ==.
-                                   1216 ;	main.c:152: On_Uart_Buff_Full(Uart_Receive_Buff,sizeof(Uart_Receive_Buff));
-      00020F 75*15 40         [24] 1217 	mov	_On_Uart_Buff_Full_PARM_2,#0x40
-      000212 75*16 00         [24] 1218 	mov	(_On_Uart_Buff_Full_PARM_2 + 1),#0x00
-      000215 75 82r08         [24] 1219 	mov	dpl,#_Uart_Receive_Buff
-      000218 12r02r87         [24] 1220 	lcall	_On_Uart_Buff_Full
-                           00021B  1221 	C$main.c$153$3_0$56 ==.
-                                   1222 ;	main.c:153: Uart_Receive_Buff_Index=0;
-      00021B 78r48            [12] 1223 	mov	r0,#_Uart_Receive_Buff_Index
-      00021D 76 00            [12] 1224 	mov	@r0,#0x00
-      00021F                       1225 00104$:
-                           00021F  1226 	C$main.c$155$2_0$55 ==.
-                                   1227 ;	main.c:155: Last_Receive_Tick=systick;
-      00021F 78r00            [12] 1228 	mov	r0,#_systick
-      000221 79r49            [12] 1229 	mov	r1,#_Last_Receive_Tick
-      000223 E6               [12] 1230 	mov	a,@r0
-      000224 F7               [12] 1231 	mov	@r1,a
-      000225 08               [12] 1232 	inc	r0
-      000226 09               [12] 1233 	inc	r1
-      000227 E6               [12] 1234 	mov	a,@r0
-      000228 F7               [12] 1235 	mov	@r1,a
-      000229 08               [12] 1236 	inc	r0
-      00022A 09               [12] 1237 	inc	r1
-      00022B E6               [12] 1238 	mov	a,@r0
-      00022C F7               [12] 1239 	mov	@r1,a
-      00022D 08               [12] 1240 	inc	r0
-      00022E 09               [12] 1241 	inc	r1
-      00022F E6               [12] 1242 	mov	a,@r0
-      000230 F7               [12] 1243 	mov	@r1,a
-      000231 08               [12] 1244 	inc	r0
-      000232 09               [12] 1245 	inc	r1
-      000233 E6               [12] 1246 	mov	a,@r0
-      000234 F7               [12] 1247 	mov	@r1,a
-      000235 08               [12] 1248 	inc	r0
-      000236 09               [12] 1249 	inc	r1
-      000237 E6               [12] 1250 	mov	a,@r0
-      000238 F7               [12] 1251 	mov	@r1,a
-      000239 08               [12] 1252 	inc	r0
-      00023A 09               [12] 1253 	inc	r1
-      00023B E6               [12] 1254 	mov	a,@r0
-      00023C F7               [12] 1255 	mov	@r1,a
-      00023D 08               [12] 1256 	inc	r0
-      00023E 09               [12] 1257 	inc	r1
-      00023F E6               [12] 1258 	mov	a,@r0
-      000240 F7               [12] 1259 	mov	@r1,a
-                           000241  1260 	C$main.c$156$2_0$55 ==.
-                                   1261 ;	main.c:156: RI=0;
-                                   1262 ;	assignBit
-      000241 C2 98            [12] 1263 	clr	_RI
-      000243                       1264 00107$:
-                           000243  1265 	C$main.c$158$1_0$53 ==.
-                                   1266 ;	main.c:158: }
-      000243 D0 D0            [24] 1267 	pop	psw
-      000245 D0 00            [24] 1268 	pop	(0+0)
-      000247 D0 01            [24] 1269 	pop	(0+1)
-      000249 D0 02            [24] 1270 	pop	(0+2)
-      00024B D0 03            [24] 1271 	pop	(0+3)
-      00024D D0 04            [24] 1272 	pop	(0+4)
-      00024F D0 05            [24] 1273 	pop	(0+5)
-      000251 D0 06            [24] 1274 	pop	(0+6)
-      000253 D0 07            [24] 1275 	pop	(0+7)
-      000255 D0 83            [24] 1276 	pop	dph
-      000257 D0 82            [24] 1277 	pop	dpl
-      000259 D0 F0            [24] 1278 	pop	b
-      00025B D0 E0            [24] 1279 	pop	acc
-      00025D D0*00            [24] 1280 	pop	bits
-                           00025F  1281 	C$main.c$158$1_0$53 ==.
-                           00025F  1282 	XG$Uart_Interrupt$0$0 ==.
-      00025F 32               [24] 1283 	reti
-                                   1284 ;------------------------------------------------------------
-                                   1285 ;Allocation info for local variables in function 'On_SysTick_Timer'
-                                   1286 ;------------------------------------------------------------
-                           000260  1287 	G$On_SysTick_Timer$0$0 ==.
-                           000260  1288 	C$main.c$161$1_0$57 ==.
-                                   1289 ;	main.c:161: void On_SysTick_Timer()//系统的毫秒级定时器
-                                   1290 ;	-----------------------------------------
-                                   1291 ;	 function On_SysTick_Timer
-                                   1292 ;	-----------------------------------------
-      000260                       1293 _On_SysTick_Timer:
-                           000260  1294 	C$main.c$163$1_0$57 ==.
-                                   1295 ;	main.c:163: LS_Refresh();//刷新点阵屏	
-      000260 12r00rA3         [24] 1296 	lcall	_LS_Refresh
-                           000263  1297 	C$main.c$164$1_0$57 ==.
-                                   1298 ;	main.c:164: }
-                           000263  1299 	C$main.c$164$1_0$57 ==.
-                           000263  1300 	XG$On_SysTick_Timer$0$0 ==.
-      000263 22               [24] 1301 	ret
-                                   1302 ;------------------------------------------------------------
-                                   1303 ;Allocation info for local variables in function 'On_Uart_Idle'
-                                   1304 ;------------------------------------------------------------
-                                   1305 ;length                    Allocated with name '_On_Uart_Idle_PARM_2'
-                                   1306 ;buff                      Allocated to registers r7 
-                                   1307 ;i                         Allocated to registers r6 
-                                   1308 ;------------------------------------------------------------
-                           000264  1309 	G$On_Uart_Idle$0$0 ==.
-                           000264  1310 	C$main.c$166$1_0$59 ==.
-                                   1311 ;	main.c:166: void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
-                                   1312 ;	-----------------------------------------
-                                   1313 ;	 function On_Uart_Idle
+      000078 D2 95            [12]  775 	setb	_P1_5
+                           00007A   776 	C$LatticeScreen.c$54$2_0$32 ==.
+                                    777 ;	LatticeScreen.c:54: for(i=0;i<8;i++)
+      00007A 0E               [12]  778 	inc	r6
+      00007B BE 08 00         [24]  779 	cjne	r6,#0x08,00134$
+      00007E                        780 00134$:
+      00007E 40 A8            [24]  781 	jc	00108$
+                           000080   782 	C$LatticeScreen.c$78$1_0$31 ==.
+                                    783 ;	LatticeScreen.c:78: RCK=1;
+                                    784 ;	assignBit
+      000080 D2 94            [12]  785 	setb	_P1_4
+                           000082   786 	C$LatticeScreen.c$80$1_0$31 ==.
+                                    787 ;	LatticeScreen.c:80: }
+                           000082   788 	C$LatticeScreen.c$80$1_0$31 ==.
+                           000082   789 	XG$LS_595_DataOut$0$0 ==.
+      000082 22               [24]  790 	ret
+                                    791 ;------------------------------------------------------------
+                                    792 ;Allocation info for local variables in function 'LS_DisplayOneRow'
+                                    793 ;------------------------------------------------------------
+                                    794 ;Col_Index                 Allocated with name '_LS_DisplayOneRow_PARM_2'
+                                    795 ;Row_Data                  Allocated to registers r7 
+                                    796 ;------------------------------------------------------------
+                           000083   797 	G$LS_DisplayOneRow$0$0 ==.
+                           000083   798 	C$LatticeScreen.c$83$1_0$39 ==.
+                                    799 ;	LatticeScreen.c:83: void LS_DisplayOneRow(unsigned char Row_Data,unsigned char Col_Index)
+                                    800 ;	-----------------------------------------
+                                    801 ;	 function LS_DisplayOneRow
+                                    802 ;	-----------------------------------------
+      000083                        803 _LS_DisplayOneRow:
+      000083 AF 82            [24]  804 	mov	r7,dpl
+                           000085   805 	C$LatticeScreen.c$85$1_0$39 ==.
+                                    806 ;	LatticeScreen.c:85: if(Col_Index < 8)
+      000085 74 F8            [12]  807 	mov	a,#0x100 - 0x08
+      000087 25*09            [12]  808 	add	a,_LS_DisplayOneRow_PARM_2
+      000089 40 17            [24]  809 	jc	00103$
+                           00008B   810 	C$LatticeScreen.c$87$2_0$40 ==.
+                                    811 ;	LatticeScreen.c:87: LS_595_DataOut(Row_Data,~(1<<Col_Index));	
+      00008B AE*09            [24]  812 	mov	r6,_LS_DisplayOneRow_PARM_2
+      00008D 8E F0            [24]  813 	mov	b,r6
+      00008F 05 F0            [12]  814 	inc	b
+      000091 74 01            [12]  815 	mov	a,#0x01
+      000093 80 02            [24]  816 	sjmp	00112$
+      000095                        817 00110$:
+      000095 25 E0            [12]  818 	add	a,acc
+      000097                        819 00112$:
+      000097 D5 F0 FB         [24]  820 	djnz	b,00110$
+      00009A F4               [12]  821 	cpl	a
+      00009B F5*08            [12]  822 	mov	_LS_595_DataOut_PARM_2,a
+      00009D 8F 82            [24]  823 	mov	dpl,r7
+      00009F 12r00r20         [24]  824 	lcall	_LS_595_DataOut
+      0000A2                        825 00103$:
+                           0000A2   826 	C$LatticeScreen.c$90$1_0$39 ==.
+                                    827 ;	LatticeScreen.c:90: }
+                           0000A2   828 	C$LatticeScreen.c$90$1_0$39 ==.
+                           0000A2   829 	XG$LS_DisplayOneRow$0$0 ==.
+      0000A2 22               [24]  830 	ret
+                                    831 ;------------------------------------------------------------
+                                    832 ;Allocation info for local variables in function 'LS_Refresh'
+                                    833 ;------------------------------------------------------------
+                                    834 ;i                         Allocated with name '_LS_Refresh_i_65536_41'
+                                    835 ;------------------------------------------------------------
+                           0000A3   836 	G$LS_Refresh$0$0 ==.
+                           0000A3   837 	C$LatticeScreen.c$92$1_0$41 ==.
+                                    838 ;	LatticeScreen.c:92: void LS_Refresh()
+                                    839 ;	-----------------------------------------
+                                    840 ;	 function LS_Refresh
+                                    841 ;	-----------------------------------------
+      0000A3                        842 _LS_Refresh:
+                           0000A3   843 	C$LatticeScreen.c$95$1_0$41 ==.
+                                    844 ;	LatticeScreen.c:95: LS_DisplayOneRow(LS_RAM[i],i++);
+      0000A3 E5*0A            [12]  845 	mov	a,_LS_Refresh_i_65536_41
+      0000A5 24r00            [12]  846 	add	a,#_LS_RAM
+      0000A7 F9               [12]  847 	mov	r1,a
+      0000A8 87 82            [24]  848 	mov	dpl,@r1
+      0000AA 85*0A*09         [24]  849 	mov	_LS_DisplayOneRow_PARM_2,_LS_Refresh_i_65536_41
+      0000AD 05*0A            [12]  850 	inc	_LS_Refresh_i_65536_41
+      0000AF 12r00r83         [24]  851 	lcall	_LS_DisplayOneRow
+                           0000B2   852 	C$LatticeScreen.c$96$1_0$41 ==.
+                                    853 ;	LatticeScreen.c:96: if(i>=8)
+      0000B2 74 F8            [12]  854 	mov	a,#0x100 - 0x08
+      0000B4 25*0A            [12]  855 	add	a,_LS_Refresh_i_65536_41
+      0000B6 50 03            [24]  856 	jnc	00103$
+                           0000B8   857 	C$LatticeScreen.c$97$1_0$41 ==.
+                                    858 ;	LatticeScreen.c:97: i=0;
+      0000B8 75*0A 00         [24]  859 	mov	_LS_Refresh_i_65536_41,#0x00
+      0000BB                        860 00103$:
+                           0000BB   861 	C$LatticeScreen.c$98$1_0$41 ==.
+                                    862 ;	LatticeScreen.c:98: }
+                           0000BB   863 	C$LatticeScreen.c$98$1_0$41 ==.
+                           0000BB   864 	XG$LS_Refresh$0$0 ==.
+      0000BB 22               [24]  865 	ret
+                                    866 ;------------------------------------------------------------
+                                    867 ;Allocation info for local variables in function 'systick_init'
+                                    868 ;------------------------------------------------------------
+                                    869 ;AUXR                      Allocated with name '_systick_init_AUXR_65536_42'
+                                    870 ;P3M1                      Allocated with name '_systick_init_P3M1_65537_43'
+                                    871 ;P3M0                      Allocated with name '_systick_init_P3M0_65537_43'
+                                    872 ;------------------------------------------------------------
+                           0000BC   873 	G$systick_init$0$0 ==.
+                           0000BC   874 	C$main.c$25$1_0$42 ==.
+                                    875 ;	main.c:25: void systick_init()
+                                    876 ;	-----------------------------------------
+                                    877 ;	 function systick_init
+                                    878 ;	-----------------------------------------
+      0000BC                        879 _systick_init:
+                           0000BC   880 	C$main.c$28$1_0$42 ==.
+                                    881 ;	main.c:28: AUXR |= 0x80;                   //定时器0为1T模式
+      0000BC 43 8E 80         [24]  882 	orl	_systick_init_AUXR_65536_42,#0x80
+                           0000BF   883 	C$main.c$29$1_0$42 ==.
+                                    884 ;	main.c:29: TMOD &= ~0x0f;                    //设置定时器为模式0(16位自动重装载)
+      0000BF 53 89 F0         [24]  885 	anl	_TMOD,#0xf0
+                           0000C2   886 	C$main.c$30$1_0$42 ==.
+                                    887 ;	main.c:30: TL0 = T1MS;                     //初始化计时值
+      0000C2 75 8A 67         [24]  888 	mov	_TL0,#0x67
+                           0000C5   889 	C$main.c$31$1_0$42 ==.
+                                    890 ;	main.c:31: TH0 = T1MS >> 8;
+      0000C5 75 8C 7E         [24]  891 	mov	_TH0,#0x7e
+                           0000C8   892 	C$main.c$32$1_0$42 ==.
+                                    893 ;	main.c:32: TR0 = 1;                        //定时器0开始计时
+                                    894 ;	assignBit
+      0000C8 D2 8C            [12]  895 	setb	_TR0
+                           0000CA   896 	C$main.c$33$1_0$42 ==.
+                                    897 ;	main.c:33: ET0 = 1;                        //使能定时器0中断
+                                    898 ;	assignBit
+      0000CA D2 A9            [12]  899 	setb	_ET0
+                           0000CC   900 	C$main.c$34$1_0$42 ==.
+                                    901 ;	main.c:34: EA = 1;
+                                    902 ;	assignBit
+      0000CC D2 AF            [12]  903 	setb	_EA
+                           0000CE   904 	C$main.c$39$1_1$43 ==.
+                                    905 ;	main.c:39: P3M1&=~(1<<3);
+      0000CE 53 B1 F7         [24]  906 	anl	_systick_init_P3M1_65537_43,#0xf7
+                           0000D1   907 	C$main.c$40$1_1$43 ==.
+                                    908 ;	main.c:40: P3M0|=(1<<3);
+      0000D1 43 B2 08         [24]  909 	orl	_systick_init_P3M0_65537_43,#0x08
+                           0000D4   910 	C$main.c$42$1_1$42 ==.
+                                    911 ;	main.c:42: }
+                           0000D4   912 	C$main.c$42$1_1$42 ==.
+                           0000D4   913 	XG$systick_init$0$0 ==.
+      0000D4 22               [24]  914 	ret
+                                    915 ;------------------------------------------------------------
+                                    916 ;Allocation info for local variables in function 'systick_interrupt'
+                                    917 ;------------------------------------------------------------
+                                    918 ;sloc0                     Allocated with name '_systick_interrupt_sloc0_1_0'
+                                    919 ;------------------------------------------------------------
+                           0000D5   920 	G$systick_interrupt$0$0 ==.
+                           0000D5   921 	C$main.c$49$1_1$45 ==.
+                                    922 ;	main.c:49: void systick_interrupt() __interrupt (1) __using (1) 
+                                    923 ;	-----------------------------------------
+                                    924 ;	 function systick_interrupt
+                                    925 ;	-----------------------------------------
+      0000D5                        926 _systick_interrupt:
+                           00000F   927 	ar7 = 0x0f
+                           00000E   928 	ar6 = 0x0e
+                           00000D   929 	ar5 = 0x0d
+                           00000C   930 	ar4 = 0x0c
+                           00000B   931 	ar3 = 0x0b
+                           00000A   932 	ar2 = 0x0a
+                           000009   933 	ar1 = 0x09
+                           000008   934 	ar0 = 0x08
+      0000D5 C0*00            [24]  935 	push	bits
+      0000D7 C0 E0            [24]  936 	push	acc
+      0000D9 C0 F0            [24]  937 	push	b
+      0000DB C0 82            [24]  938 	push	dpl
+      0000DD C0 83            [24]  939 	push	dph
+      0000DF C0 07            [24]  940 	push	(0+7)
+      0000E1 C0 06            [24]  941 	push	(0+6)
+      0000E3 C0 05            [24]  942 	push	(0+5)
+      0000E5 C0 04            [24]  943 	push	(0+4)
+      0000E7 C0 03            [24]  944 	push	(0+3)
+      0000E9 C0 02            [24]  945 	push	(0+2)
+      0000EB C0 01            [24]  946 	push	(0+1)
+      0000ED C0 00            [24]  947 	push	(0+0)
+      0000EF C0 D0            [24]  948 	push	psw
+      0000F1 75 D0 08         [24]  949 	mov	psw,#0x08
+                           0000F4   950 	C$main.c$51$1_0$45 ==.
+                                    951 ;	main.c:51: systick++;
+      0000F4 78r00            [12]  952 	mov	r0,#_systick
+      0000F6 06               [12]  953 	inc	@r0
+      0000F7 B6 00 20         [24]  954 	cjne	@r0,#0x00,00115$
+      0000FA 08               [12]  955 	inc	r0
+      0000FB 06               [12]  956 	inc	@r0
+      0000FC B6 00 1B         [24]  957 	cjne	@r0,#0x00,00115$
+      0000FF 08               [12]  958 	inc	r0
+      000100 06               [12]  959 	inc	@r0
+      000101 B6 00 16         [24]  960 	cjne	@r0,#0x00,00115$
+      000104 08               [12]  961 	inc	r0
+      000105 06               [12]  962 	inc	@r0
+      000106 B6 00 11         [24]  963 	cjne	@r0,#0x00,00115$
+      000109 08               [12]  964 	inc	r0
+      00010A 06               [12]  965 	inc	@r0
+      00010B B6 00 0C         [24]  966 	cjne	@r0,#0x00,00115$
+      00010E 08               [12]  967 	inc	r0
+      00010F 06               [12]  968 	inc	@r0
+      000110 B6 00 07         [24]  969 	cjne	@r0,#0x00,00115$
+      000113 08               [12]  970 	inc	r0
+      000114 06               [12]  971 	inc	@r0
+      000115 B6 00 02         [24]  972 	cjne	@r0,#0x00,00115$
+      000118 08               [12]  973 	inc	r0
+      000119 06               [12]  974 	inc	@r0
+      00011A                        975 00115$:
+                           00011A   976 	C$main.c$52$1_0$45 ==.
+                                    977 ;	main.c:52: if(Uart_Receive_Buff_Index!=0)
+      00011A 78r48            [12]  978 	mov	r0,#_Uart_Receive_Buff_Index
+      00011C E6               [12]  979 	mov	a,@r0
+      00011D 60 65            [24]  980 	jz	00104$
+                           00011F   981 	C$main.c$54$2_0$46 ==.
+                                    982 ;	main.c:54: if(systick>Last_Receive_Tick+1)
+      00011F 78r49            [12]  983 	mov	r0,#_Last_Receive_Tick
+      000121 74 01            [12]  984 	mov	a,#0x01
+      000123 26               [12]  985 	add	a,@r0
+      000124 F5*0B            [12]  986 	mov	_systick_interrupt_sloc0_1_0,a
+      000126 E4               [12]  987 	clr	a
+      000127 08               [12]  988 	inc	r0
+      000128 36               [12]  989 	addc	a,@r0
+      000129 F5*0C            [12]  990 	mov	(_systick_interrupt_sloc0_1_0 + 1),a
+      00012B E4               [12]  991 	clr	a
+      00012C 08               [12]  992 	inc	r0
+      00012D 36               [12]  993 	addc	a,@r0
+      00012E F5*0D            [12]  994 	mov	(_systick_interrupt_sloc0_1_0 + 2),a
+      000130 E4               [12]  995 	clr	a
+      000131 08               [12]  996 	inc	r0
+      000132 36               [12]  997 	addc	a,@r0
+      000133 F5*0E            [12]  998 	mov	(_systick_interrupt_sloc0_1_0 + 3),a
+      000135 E4               [12]  999 	clr	a
+      000136 08               [12] 1000 	inc	r0
+      000137 36               [12] 1001 	addc	a,@r0
+      000138 F5*0F            [12] 1002 	mov	(_systick_interrupt_sloc0_1_0 + 4),a
+      00013A E4               [12] 1003 	clr	a
+      00013B 08               [12] 1004 	inc	r0
+      00013C 36               [12] 1005 	addc	a,@r0
+      00013D F5*10            [12] 1006 	mov	(_systick_interrupt_sloc0_1_0 + 5),a
+      00013F E4               [12] 1007 	clr	a
+      000140 08               [12] 1008 	inc	r0
+      000141 36               [12] 1009 	addc	a,@r0
+      000142 F5*11            [12] 1010 	mov	(_systick_interrupt_sloc0_1_0 + 6),a
+      000144 E4               [12] 1011 	clr	a
+      000145 08               [12] 1012 	inc	r0
+      000146 36               [12] 1013 	addc	a,@r0
+      000147 F5*12            [12] 1014 	mov	(_systick_interrupt_sloc0_1_0 + 7),a
+      000149 78r00            [12] 1015 	mov	r0,#_systick
+      00014B C3               [12] 1016 	clr	c
+      00014C E5*0B            [12] 1017 	mov	a,_systick_interrupt_sloc0_1_0
+      00014E 96               [12] 1018 	subb	a,@r0
+      00014F E5*0C            [12] 1019 	mov	a,(_systick_interrupt_sloc0_1_0 + 1)
+      000151 08               [12] 1020 	inc	r0
+      000152 96               [12] 1021 	subb	a,@r0
+      000153 E5*0D            [12] 1022 	mov	a,(_systick_interrupt_sloc0_1_0 + 2)
+      000155 08               [12] 1023 	inc	r0
+      000156 96               [12] 1024 	subb	a,@r0
+      000157 E5*0E            [12] 1025 	mov	a,(_systick_interrupt_sloc0_1_0 + 3)
+      000159 08               [12] 1026 	inc	r0
+      00015A 96               [12] 1027 	subb	a,@r0
+      00015B E5*0F            [12] 1028 	mov	a,(_systick_interrupt_sloc0_1_0 + 4)
+      00015D 08               [12] 1029 	inc	r0
+      00015E 96               [12] 1030 	subb	a,@r0
+      00015F E5*10            [12] 1031 	mov	a,(_systick_interrupt_sloc0_1_0 + 5)
+      000161 08               [12] 1032 	inc	r0
+      000162 96               [12] 1033 	subb	a,@r0
+      000163 E5*11            [12] 1034 	mov	a,(_systick_interrupt_sloc0_1_0 + 6)
+      000165 08               [12] 1035 	inc	r0
+      000166 96               [12] 1036 	subb	a,@r0
+      000167 E5*12            [12] 1037 	mov	a,(_systick_interrupt_sloc0_1_0 + 7)
+      000169 08               [12] 1038 	inc	r0
+      00016A 96               [12] 1039 	subb	a,@r0
+      00016B 50 17            [24] 1040 	jnc	00104$
+                           00016D  1041 	C$main.c$56$3_0$47 ==.
+                                   1042 ;	main.c:56: On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
+      00016D 78r48            [12] 1043 	mov	r0,#_Uart_Receive_Buff_Index
+      00016F 86*13            [24] 1044 	mov	_On_Uart_Idle_PARM_2,@r0
+      000171 75*14 00         [24] 1045 	mov	(_On_Uart_Idle_PARM_2 + 1),#0x00
+      000174 75 82r08         [24] 1046 	mov	dpl,#_Uart_Receive_Buff
+      000177 75 D0 00         [24] 1047 	mov	psw,#0x00
+      00017A 12r02rD5         [24] 1048 	lcall	_On_Uart_Idle
+      00017D 75 D0 08         [24] 1049 	mov	psw,#0x08
+                           000180  1050 	C$main.c$57$3_0$47 ==.
+                                   1051 ;	main.c:57: Uart_Receive_Buff_Index=0;
+      000180 78r48            [12] 1052 	mov	r0,#_Uart_Receive_Buff_Index
+      000182 76 00            [12] 1053 	mov	@r0,#0x00
+      000184                       1054 00104$:
+                           000184  1055 	C$main.c$61$1_0$45 ==.
+                                   1056 ;	main.c:61: P3_3=!P3_3;
+      000184 B2 B3            [12] 1057 	cpl	_P3_3
+                           000186  1058 	C$main.c$63$1_0$45 ==.
+                                   1059 ;	main.c:63: On_SysTick_Timer();
+      000186 75 D0 00         [24] 1060 	mov	psw,#0x00
+      000189 12r02rD1         [24] 1061 	lcall	_On_SysTick_Timer
+      00018C 75 D0 08         [24] 1062 	mov	psw,#0x08
+                           00018F  1063 	C$main.c$64$1_0$45 ==.
+                                   1064 ;	main.c:64: }
+      00018F D0 D0            [24] 1065 	pop	psw
+      000191 D0 00            [24] 1066 	pop	(0+0)
+      000193 D0 01            [24] 1067 	pop	(0+1)
+      000195 D0 02            [24] 1068 	pop	(0+2)
+      000197 D0 03            [24] 1069 	pop	(0+3)
+      000199 D0 04            [24] 1070 	pop	(0+4)
+      00019B D0 05            [24] 1071 	pop	(0+5)
+      00019D D0 06            [24] 1072 	pop	(0+6)
+      00019F D0 07            [24] 1073 	pop	(0+7)
+      0001A1 D0 83            [24] 1074 	pop	dph
+      0001A3 D0 82            [24] 1075 	pop	dpl
+      0001A5 D0 F0            [24] 1076 	pop	b
+      0001A7 D0 E0            [24] 1077 	pop	acc
+      0001A9 D0*00            [24] 1078 	pop	bits
+                           0001AB  1079 	C$main.c$64$1_0$45 ==.
+                           0001AB  1080 	XG$systick_interrupt$0$0 ==.
+      0001AB 32               [24] 1081 	reti
+                                   1082 ;------------------------------------------------------------
+                                   1083 ;Allocation info for local variables in function 'Uart_Init'
+                                   1084 ;------------------------------------------------------------
+                                   1085 ;AUXR                      Allocated with name '_Uart_Init_AUXR_65536_48'
+                                   1086 ;T2H                       Allocated with name '_Uart_Init_T2H_65536_48'
+                                   1087 ;T2L                       Allocated with name '_Uart_Init_T2L_65536_48'
+                                   1088 ;P_SW1                     Allocated with name '_Uart_Init_P_SW1_65536_48'
+                                   1089 ;------------------------------------------------------------
+                           0001AC  1090 	G$Uart_Init$0$0 ==.
+                           0001AC  1091 	C$main.c$78$1_0$48 ==.
+                                   1092 ;	main.c:78: void Uart_Init()
+                                   1093 ;	-----------------------------------------
+                                   1094 ;	 function Uart_Init
+                                   1095 ;	-----------------------------------------
+      0001AC                       1096 _Uart_Init:
+                           000007  1097 	ar7 = 0x07
+                           000006  1098 	ar6 = 0x06
+                           000005  1099 	ar5 = 0x05
+                           000004  1100 	ar4 = 0x04
+                           000003  1101 	ar3 = 0x03
+                           000002  1102 	ar2 = 0x02
+                           000001  1103 	ar1 = 0x01
+                           000000  1104 	ar0 = 0x00
+                           0001AC  1105 	C$main.c$84$1_0$48 ==.
+                                   1106 ;	main.c:84: ACC = P_SW1;
+      0001AC 85 A2 E0         [24] 1107 	mov	_ACC,_Uart_Init_P_SW1_65536_48
+                           0001AF  1108 	C$main.c$85$1_0$48 ==.
+                                   1109 ;	main.c:85: ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=0
+      0001AF 53 E0 3F         [24] 1110 	anl	_ACC,#0x3f
+                           0001B2  1111 	C$main.c$86$1_0$48 ==.
+                                   1112 ;	main.c:86: P_SW1 = ACC;                //(P3.0/RxD, P3.1/TxD)
+      0001B2 85 E0 A2         [24] 1113 	mov	_Uart_Init_P_SW1_65536_48,_ACC
+                           0001B5  1114 	C$main.c$98$1_0$48 ==.
+                                   1115 ;	main.c:98: SCON = 0x50;                //8位可变波特率
+      0001B5 75 98 50         [24] 1116 	mov	_SCON,#0x50
+                           0001B8  1117 	C$main.c$105$1_0$48 ==.
+                                   1118 ;	main.c:105: T2L = (65536 - (FOSC/4/BAUD)) & 0xff;   //设置波特率重装值
+      0001B8 75 D7 B8         [24] 1119 	mov	_Uart_Init_T2L_65536_48,#0xb8
+                           0001BB  1120 	C$main.c$106$1_0$48 ==.
+                                   1121 ;	main.c:106: T2H = (65536 - (FOSC/4/BAUD))>>8;
+      0001BB 75 D6 FF         [24] 1122 	mov	_Uart_Init_T2H_65536_48,#0xff
+                           0001BE  1123 	C$main.c$107$1_0$48 ==.
+                                   1124 ;	main.c:107: AUXR |= 0x14;                //T2为1T模式, 并启动定时器2
+      0001BE 43 8E 14         [24] 1125 	orl	_Uart_Init_AUXR_65536_48,#0x14
+                           0001C1  1126 	C$main.c$108$1_0$48 ==.
+                                   1127 ;	main.c:108: AUXR |= 0x01;               //选择定时器2为串口1的波特率发生器
+      0001C1 43 8E 01         [24] 1128 	orl	_Uart_Init_AUXR_65536_48,#0x01
+                           0001C4  1129 	C$main.c$109$1_0$48 ==.
+                                   1130 ;	main.c:109: ES = 1;                     //使能串口1中断
+                                   1131 ;	assignBit
+      0001C4 D2 AC            [12] 1132 	setb	_ES
+                           0001C6  1133 	C$main.c$110$1_0$48 ==.
+                                   1134 ;	main.c:110: EA = 1;
+                                   1135 ;	assignBit
+      0001C6 D2 AF            [12] 1136 	setb	_EA
+                           0001C8  1137 	C$main.c$111$1_0$48 ==.
+                                   1138 ;	main.c:111: }
+                           0001C8  1139 	C$main.c$111$1_0$48 ==.
+                           0001C8  1140 	XG$Uart_Init$0$0 ==.
+      0001C8 22               [24] 1141 	ret
+                                   1142 ;------------------------------------------------------------
+                                   1143 ;Allocation info for local variables in function 'Uart_Send'
+                                   1144 ;------------------------------------------------------------
+                                   1145 ;data                      Allocated to registers r7 
+                                   1146 ;------------------------------------------------------------
+                           0001C9  1147 	G$Uart_Send$0$0 ==.
+                           0001C9  1148 	C$main.c$112$1_0$50 ==.
+                                   1149 ;	main.c:112: void Uart_Send(uint8_t data)
+                                   1150 ;	-----------------------------------------
+                                   1151 ;	 function Uart_Send
+                                   1152 ;	-----------------------------------------
+      0001C9                       1153 _Uart_Send:
+      0001C9 AF 82            [24] 1154 	mov	r7,dpl
+                           0001CB  1155 	C$main.c$114$1_0$50 ==.
+                                   1156 ;	main.c:114: while(Tx_Busy);//串口发送忙标志
+      0001CB                       1157 00101$:
+      0001CB 20*00 FD         [24] 1158 	jb	_Tx_Busy,00101$
+                           0001CE  1159 	C$main.c$115$1_0$50 ==.
+                                   1160 ;	main.c:115: ACC = data;                  //获取校验位P (PSW.0)
+      0001CE 8F E0            [24] 1161 	mov	_ACC,r7
+                           0001D0  1162 	C$main.c$116$1_0$50 ==.
+                                   1163 ;	main.c:116: if (P)                      //根据P来设置校验位
+      0001D0 A2 D0            [12] 1164 	mov	c,_P
+                           0001D2  1165 	C$main.c$132$1_0$50 ==.
+                                   1166 ;	main.c:132: Tx_Busy = 1;
+                                   1167 ;	assignBit
+      0001D2 D2*00            [12] 1168 	setb	_Tx_Busy
+                           0001D4  1169 	C$main.c$133$1_0$50 ==.
+                                   1170 ;	main.c:133: SBUF = ACC;                 //写数据到UART数据寄存器	
+      0001D4 85 E0 99         [24] 1171 	mov	_SBUF,_ACC
+                           0001D7  1172 	C$main.c$134$1_0$50 ==.
+                                   1173 ;	main.c:134: }
+                           0001D7  1174 	C$main.c$134$1_0$50 ==.
+                           0001D7  1175 	XG$Uart_Send$0$0 ==.
+      0001D7 22               [24] 1176 	ret
+                                   1177 ;------------------------------------------------------------
+                                   1178 ;Allocation info for local variables in function 'Uart_Interrupt'
+                                   1179 ;------------------------------------------------------------
+                           0001D8  1180 	G$Uart_Interrupt$0$0 ==.
+                           0001D8  1181 	C$main.c$138$1_0$54 ==.
+                                   1182 ;	main.c:138: void Uart_Interrupt() __interrupt(4)
+                                   1183 ;	-----------------------------------------
+                                   1184 ;	 function Uart_Interrupt
+                                   1185 ;	-----------------------------------------
+      0001D8                       1186 _Uart_Interrupt:
+      0001D8 C0*00            [24] 1187 	push	bits
+      0001DA C0 E0            [24] 1188 	push	acc
+      0001DC C0 F0            [24] 1189 	push	b
+      0001DE C0 82            [24] 1190 	push	dpl
+      0001E0 C0 83            [24] 1191 	push	dph
+      0001E2 C0 07            [24] 1192 	push	(0+7)
+      0001E4 C0 06            [24] 1193 	push	(0+6)
+      0001E6 C0 05            [24] 1194 	push	(0+5)
+      0001E8 C0 04            [24] 1195 	push	(0+4)
+      0001EA C0 03            [24] 1196 	push	(0+3)
+      0001EC C0 02            [24] 1197 	push	(0+2)
+      0001EE C0 01            [24] 1198 	push	(0+1)
+      0001F0 C0 00            [24] 1199 	push	(0+0)
+      0001F2 C0 D0            [24] 1200 	push	psw
+      0001F4 75 D0 00         [24] 1201 	mov	psw,#0x00
+                           0001F7  1202 	C$main.c$140$1_0$54 ==.
+                                   1203 ;	main.c:140: if(TI)
+                           0001F7  1204 	C$main.c$142$2_0$55 ==.
+                                   1205 ;	main.c:142: TI=0;
+                                   1206 ;	assignBit
+      0001F7 10 99 02         [24] 1207 	jbc	_TI,00121$
+      0001FA 80 02            [24] 1208 	sjmp	00102$
+      0001FC                       1209 00121$:
+                           0001FC  1210 	C$main.c$143$2_0$55 ==.
+                                   1211 ;	main.c:143: Tx_Busy=0;
+                                   1212 ;	assignBit
+      0001FC C2*00            [12] 1213 	clr	_Tx_Busy
+      0001FE                       1214 00102$:
+                           0001FE  1215 	C$main.c$145$1_0$54 ==.
+                                   1216 ;	main.c:145: if(RI)
+      0001FE 30 98 4A         [24] 1217 	jnb	_RI,00107$
+                           000201  1218 	C$main.c$159$2_0$56 ==.
+                                   1219 ;	main.c:159: Uart_Receive_Buff[Uart_Receive_Buff_Index++]=SBUF;
+      000201 78r48            [12] 1220 	mov	r0,#_Uart_Receive_Buff_Index
+      000203 86 07            [24] 1221 	mov	ar7,@r0
+      000205 78r48            [12] 1222 	mov	r0,#_Uart_Receive_Buff_Index
+      000207 EF               [12] 1223 	mov	a,r7
+      000208 04               [12] 1224 	inc	a
+      000209 F6               [12] 1225 	mov	@r0,a
+      00020A EF               [12] 1226 	mov	a,r7
+      00020B 24r08            [12] 1227 	add	a,#_Uart_Receive_Buff
+      00020D F8               [12] 1228 	mov	r0,a
+      00020E A6 99            [24] 1229 	mov	@r0,_SBUF
+                           000210  1230 	C$main.c$160$2_0$56 ==.
+                                   1231 ;	main.c:160: if(Uart_Receive_Buff_Index>=sizeof(Uart_Receive_Buff))
+      000210 78r48            [12] 1232 	mov	r0,#_Uart_Receive_Buff_Index
+      000212 B6 40 00         [24] 1233 	cjne	@r0,#0x40,00123$
+      000215                       1234 00123$:
+      000215 40 10            [24] 1235 	jc	00104$
+                           000217  1236 	C$main.c$162$3_0$57 ==.
+                                   1237 ;	main.c:162: On_Uart_Buff_Full(Uart_Receive_Buff,sizeof(Uart_Receive_Buff));
+      000217 75*15 40         [24] 1238 	mov	_On_Uart_Buff_Full_PARM_2,#0x40
+      00021A 75*16 00         [24] 1239 	mov	(_On_Uart_Buff_Full_PARM_2 + 1),#0x00
+      00021D 75 82r08         [24] 1240 	mov	dpl,#_Uart_Receive_Buff
+      000220 12r02rF8         [24] 1241 	lcall	_On_Uart_Buff_Full
+                           000223  1242 	C$main.c$163$3_0$57 ==.
+                                   1243 ;	main.c:163: Uart_Receive_Buff_Index=0;
+      000223 78r48            [12] 1244 	mov	r0,#_Uart_Receive_Buff_Index
+      000225 76 00            [12] 1245 	mov	@r0,#0x00
+      000227                       1246 00104$:
+                           000227  1247 	C$main.c$165$2_0$56 ==.
+                                   1248 ;	main.c:165: Last_Receive_Tick=systick;
+      000227 78r00            [12] 1249 	mov	r0,#_systick
+      000229 79r49            [12] 1250 	mov	r1,#_Last_Receive_Tick
+      00022B E6               [12] 1251 	mov	a,@r0
+      00022C F7               [12] 1252 	mov	@r1,a
+      00022D 08               [12] 1253 	inc	r0
+      00022E 09               [12] 1254 	inc	r1
+      00022F E6               [12] 1255 	mov	a,@r0
+      000230 F7               [12] 1256 	mov	@r1,a
+      000231 08               [12] 1257 	inc	r0
+      000232 09               [12] 1258 	inc	r1
+      000233 E6               [12] 1259 	mov	a,@r0
+      000234 F7               [12] 1260 	mov	@r1,a
+      000235 08               [12] 1261 	inc	r0
+      000236 09               [12] 1262 	inc	r1
+      000237 E6               [12] 1263 	mov	a,@r0
+      000238 F7               [12] 1264 	mov	@r1,a
+      000239 08               [12] 1265 	inc	r0
+      00023A 09               [12] 1266 	inc	r1
+      00023B E6               [12] 1267 	mov	a,@r0
+      00023C F7               [12] 1268 	mov	@r1,a
+      00023D 08               [12] 1269 	inc	r0
+      00023E 09               [12] 1270 	inc	r1
+      00023F E6               [12] 1271 	mov	a,@r0
+      000240 F7               [12] 1272 	mov	@r1,a
+      000241 08               [12] 1273 	inc	r0
+      000242 09               [12] 1274 	inc	r1
+      000243 E6               [12] 1275 	mov	a,@r0
+      000244 F7               [12] 1276 	mov	@r1,a
+      000245 08               [12] 1277 	inc	r0
+      000246 09               [12] 1278 	inc	r1
+      000247 E6               [12] 1279 	mov	a,@r0
+      000248 F7               [12] 1280 	mov	@r1,a
+                           000249  1281 	C$main.c$166$2_0$56 ==.
+                                   1282 ;	main.c:166: RI=0;
+                                   1283 ;	assignBit
+      000249 C2 98            [12] 1284 	clr	_RI
+      00024B                       1285 00107$:
+                           00024B  1286 	C$main.c$168$1_0$54 ==.
+                                   1287 ;	main.c:168: }
+      00024B D0 D0            [24] 1288 	pop	psw
+      00024D D0 00            [24] 1289 	pop	(0+0)
+      00024F D0 01            [24] 1290 	pop	(0+1)
+      000251 D0 02            [24] 1291 	pop	(0+2)
+      000253 D0 03            [24] 1292 	pop	(0+3)
+      000255 D0 04            [24] 1293 	pop	(0+4)
+      000257 D0 05            [24] 1294 	pop	(0+5)
+      000259 D0 06            [24] 1295 	pop	(0+6)
+      00025B D0 07            [24] 1296 	pop	(0+7)
+      00025D D0 83            [24] 1297 	pop	dph
+      00025F D0 82            [24] 1298 	pop	dpl
+      000261 D0 F0            [24] 1299 	pop	b
+      000263 D0 E0            [24] 1300 	pop	acc
+      000265 D0*00            [24] 1301 	pop	bits
+                           000267  1302 	C$main.c$168$1_0$54 ==.
+                           000267  1303 	XG$Uart_Interrupt$0$0 ==.
+      000267 32               [24] 1304 	reti
+                                   1305 ;------------------------------------------------------------
+                                   1306 ;Allocation info for local variables in function 'Clk_In_Init'
+                                   1307 ;------------------------------------------------------------
+                                   1308 ;P3M1                      Allocated with name '_Clk_In_Init_P3M1_65536_58'
+                                   1309 ;P3M0                      Allocated with name '_Clk_In_Init_P3M0_65536_58'
+                                   1310 ;------------------------------------------------------------
+                           000268  1311 	G$Clk_In_Init$0$0 ==.
+                           000268  1312 	C$main.c$170$1_0$58 ==.
+                                   1313 ;	main.c:170: void Clk_In_Init()
                                    1314 ;	-----------------------------------------
-      000264                       1315 _On_Uart_Idle:
-      000264 AF 82            [24] 1316 	mov	r7,dpl
-                           000266  1317 	C$main.c$168$1_0$59 ==.
-                                   1318 ;	main.c:168: if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
-      000266 74 08            [12] 1319 	mov	a,#0x08
-      000268 B5*13 06         [24] 1320 	cjne	a,_On_Uart_Idle_PARM_2,00116$
-      00026B E4               [12] 1321 	clr	a
-      00026C B5*14 02         [24] 1322 	cjne	a,(_On_Uart_Idle_PARM_2 + 1),00116$
-      00026F 80 02            [24] 1323 	sjmp	00117$
-      000271                       1324 00116$:
-      000271 80 13            [24] 1325 	sjmp	00106$
-      000273                       1326 00117$:
-                           000273  1327 	C$main.c$171$3_0$61 ==.
-                                   1328 ;	main.c:171: for(i=0;i<8;i++)
-      000273 7E 00            [12] 1329 	mov	r6,#0x00
-      000275                       1330 00104$:
-                           000275  1331 	C$main.c$173$4_0$62 ==.
-                                   1332 ;	main.c:173: LS_RAM[i]=buff[i];
-      000275 EE               [12] 1333 	mov	a,r6
-      000276 24r00            [12] 1334 	add	a,#_LS_RAM
-      000278 F9               [12] 1335 	mov	r1,a
-      000279 EE               [12] 1336 	mov	a,r6
-      00027A 2F               [12] 1337 	add	a,r7
-      00027B F8               [12] 1338 	mov	r0,a
-      00027C 86 05            [24] 1339 	mov	ar5,@r0
-      00027E A7 05            [24] 1340 	mov	@r1,ar5
-                           000280  1341 	C$main.c$171$3_0$61 ==.
-                                   1342 ;	main.c:171: for(i=0;i<8;i++)
-      000280 0E               [12] 1343 	inc	r6
-      000281 BE 08 00         [24] 1344 	cjne	r6,#0x08,00118$
-      000284                       1345 00118$:
-      000284 40 EF            [24] 1346 	jc	00104$
-      000286                       1347 00106$:
-                           000286  1348 	C$main.c$176$1_0$59 ==.
-                                   1349 ;	main.c:176: }
-                           000286  1350 	C$main.c$176$1_0$59 ==.
-                           000286  1351 	XG$On_Uart_Idle$0$0 ==.
-      000286 22               [24] 1352 	ret
-                                   1353 ;------------------------------------------------------------
-                                   1354 ;Allocation info for local variables in function 'On_Uart_Buff_Full'
-                                   1355 ;------------------------------------------------------------
-                                   1356 ;length                    Allocated with name '_On_Uart_Buff_Full_PARM_2'
-                                   1357 ;buff                      Allocated to registers 
-                                   1358 ;------------------------------------------------------------
-                           000287  1359 	G$On_Uart_Buff_Full$0$0 ==.
-                           000287  1360 	C$main.c$177$1_0$64 ==.
-                                   1361 ;	main.c:177: void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
-                                   1362 ;	-----------------------------------------
-                                   1363 ;	 function On_Uart_Buff_Full
-                                   1364 ;	-----------------------------------------
-      000287                       1365 _On_Uart_Buff_Full:
-                           000287  1366 	C$main.c$180$1_0$64 ==.
-                                   1367 ;	main.c:180: UNUSED(length);
-                           000287  1368 	C$main.c$182$1_0$64 ==.
-                                   1369 ;	main.c:182: }
-                           000287  1370 	C$main.c$182$1_0$64 ==.
-                           000287  1371 	XG$On_Uart_Buff_Full$0$0 ==.
-      000287 22               [24] 1372 	ret
-                                   1373 ;------------------------------------------------------------
-                                   1374 ;Allocation info for local variables in function 'main'
-                                   1375 ;------------------------------------------------------------
-                           000288  1376 	G$main$0$0 ==.
-                           000288  1377 	C$main.c$184$1_0$65 ==.
-                                   1378 ;	main.c:184: void main()
-                                   1379 ;	-----------------------------------------
-                                   1380 ;	 function main
-                                   1381 ;	-----------------------------------------
-      000288                       1382 _main:
-                           000288  1383 	C$main.c$186$1_0$65 ==.
-                                   1384 ;	main.c:186: systick_init();//初始化主时间
-      000288 12r00rBC         [24] 1385 	lcall	_systick_init
-                           00028B  1386 	C$main.c$187$1_0$65 ==.
-                                   1387 ;	main.c:187: Uart_Init();//初始化串口
-      00028B 12r01rA4         [24] 1388 	lcall	_Uart_Init
-                           00028E  1389 	C$main.c$188$1_0$65 ==.
-                                   1390 ;	main.c:188: LS_Init();//初始化点阵屏
-      00028E 12r00r00         [24] 1391 	lcall	_LS_Init
-                           000291  1392 	C$main.c$190$1_0$65 ==.
-                                   1393 ;	main.c:190: while(1)
-      000291                       1394 00102$:
-      000291 80 FE            [24] 1395 	sjmp	00102$
-                           000293  1396 	C$main.c$205$1_0$65 ==.
-                                   1397 ;	main.c:205: }
-                           000293  1398 	C$main.c$205$1_0$65 ==.
-                           000293  1399 	XG$main$0$0 ==.
-      000293 22               [24] 1400 	ret
-                                   1401 	.area CSEG    (CODE)
-                                   1402 	.area CONST   (CODE)
-                                   1403 	.area XINIT   (CODE)
-                                   1404 	.area CABS    (ABS,CODE)
+                                   1315 ;	 function Clk_In_Init
+                                   1316 ;	-----------------------------------------
+      000268                       1317 _Clk_In_Init:
+                           000268  1318 	C$main.c$175$1_0$58 ==.
+                                   1319 ;	main.c:175: P3M1&=~(1<<2);
+      000268 53 B1 FB         [24] 1320 	anl	_Clk_In_Init_P3M1_65536_58,#0xfb
+                           00026B  1321 	C$main.c$176$1_0$58 ==.
+                                   1322 ;	main.c:176: P3M0&=~(1<<2);
+      00026B 53 B2 FB         [24] 1323 	anl	_Clk_In_Init_P3M0_65536_58,#0xfb
+                           00026E  1324 	C$main.c$178$1_0$58 ==.
+                                   1325 ;	main.c:178: P3_2=1;//准双向口输出高电平
+                                   1326 ;	assignBit
+      00026E D2 B2            [12] 1327 	setb	_P3_2
+                           000270  1328 	C$main.c$180$1_0$58 ==.
+                                   1329 ;	main.c:180: INT0 = 1;
+                                   1330 ;	assignBit
+      000270 D2 B2            [12] 1331 	setb	_INT0
+                           000272  1332 	C$main.c$181$1_0$58 ==.
+                                   1333 ;	main.c:181: IT0 = 0;                    //设置INT0的中断类型 (1:仅下降沿 0:上升沿和下降沿)
+                                   1334 ;	assignBit
+      000272 C2 88            [12] 1335 	clr	_IT0
+                           000274  1336 	C$main.c$182$1_0$58 ==.
+                                   1337 ;	main.c:182: EX0 = 1;                    //使能INT0中断
+                                   1338 ;	assignBit
+      000274 D2 A8            [12] 1339 	setb	_EX0
+                           000276  1340 	C$main.c$183$1_0$58 ==.
+                                   1341 ;	main.c:183: EA = 1;
+                                   1342 ;	assignBit
+      000276 D2 AF            [12] 1343 	setb	_EA
+                           000278  1344 	C$main.c$185$1_0$58 ==.
+                                   1345 ;	main.c:185: }
+                           000278  1346 	C$main.c$185$1_0$58 ==.
+                           000278  1347 	XG$Clk_In_Init$0$0 ==.
+      000278 22               [24] 1348 	ret
+                                   1349 ;------------------------------------------------------------
+                                   1350 ;Allocation info for local variables in function 'Clk_In_Interrupt'
+                                   1351 ;------------------------------------------------------------
+                           000279  1352 	G$Clk_In_Interrupt$0$0 ==.
+                           000279  1353 	C$main.c$187$1_0$59 ==.
+                                   1354 ;	main.c:187: void Clk_In_Interrupt() __interrupt (0)
+                                   1355 ;	-----------------------------------------
+                                   1356 ;	 function Clk_In_Interrupt
+                                   1357 ;	-----------------------------------------
+      000279                       1358 _Clk_In_Interrupt:
+      000279 C0*00            [24] 1359 	push	bits
+      00027B C0 E0            [24] 1360 	push	acc
+      00027D C0 F0            [24] 1361 	push	b
+      00027F C0 82            [24] 1362 	push	dpl
+      000281 C0 83            [24] 1363 	push	dph
+      000283 C0 07            [24] 1364 	push	(0+7)
+      000285 C0 06            [24] 1365 	push	(0+6)
+      000287 C0 05            [24] 1366 	push	(0+5)
+      000289 C0 04            [24] 1367 	push	(0+4)
+      00028B C0 03            [24] 1368 	push	(0+3)
+      00028D C0 02            [24] 1369 	push	(0+2)
+      00028F C0 01            [24] 1370 	push	(0+1)
+      000291 C0 00            [24] 1371 	push	(0+0)
+      000293 C0 D0            [24] 1372 	push	psw
+      000295 75 D0 00         [24] 1373 	mov	psw,#0x00
+                           000298  1374 	C$main.c$189$1_0$59 ==.
+                                   1375 ;	main.c:189: if(TR0)//当T0作为系统主时间时，停止T0,重置系统主时间
+                           000298  1376 	C$main.c$191$2_0$60 ==.
+                                   1377 ;	main.c:191: TR0=0;//关闭定时器0
+                                   1378 ;	assignBit
+      000298 10 8C 02         [24] 1379 	jbc	_TR0,00109$
+      00029B 80 14            [24] 1380 	sjmp	00102$
+      00029D                       1381 00109$:
+                           00029D  1382 	C$main.c$192$2_0$60 ==.
+                                   1383 ;	main.c:192: ET0=0;//关闭定时器0中断
+                                   1384 ;	assignBit
+      00029D C2 A9            [12] 1385 	clr	_ET0
+                           00029F  1386 	C$main.c$193$2_0$60 ==.
+                                   1387 ;	main.c:193: systick=0;//清零系统主时间
+      00029F 78r00            [12] 1388 	mov	r0,#_systick
+      0002A1 E4               [12] 1389 	clr	a
+      0002A2 F6               [12] 1390 	mov	@r0,a
+      0002A3 08               [12] 1391 	inc	r0
+      0002A4 F6               [12] 1392 	mov	@r0,a
+      0002A5 08               [12] 1393 	inc	r0
+      0002A6 F6               [12] 1394 	mov	@r0,a
+      0002A7 08               [12] 1395 	inc	r0
+      0002A8 F6               [12] 1396 	mov	@r0,a
+      0002A9 08               [12] 1397 	inc	r0
+      0002AA F6               [12] 1398 	mov	@r0,a
+      0002AB 08               [12] 1399 	inc	r0
+      0002AC F6               [12] 1400 	mov	@r0,a
+      0002AD 08               [12] 1401 	inc	r0
+      0002AE F6               [12] 1402 	mov	@r0,a
+      0002AF 08               [12] 1403 	inc	r0
+      0002B0 F6               [12] 1404 	mov	@r0,a
+      0002B1                       1405 00102$:
+                           0002B1  1406 	C$main.c$195$1_0$59 ==.
+                                   1407 ;	main.c:195: systick_interrupt();//调用中断函数
+      0002B1 12r00rD5         [24] 1408 	lcall	_systick_interrupt
+                           0002B4  1409 	C$main.c$196$1_0$59 ==.
+                                   1410 ;	main.c:196: }
+      0002B4 D0 D0            [24] 1411 	pop	psw
+      0002B6 D0 00            [24] 1412 	pop	(0+0)
+      0002B8 D0 01            [24] 1413 	pop	(0+1)
+      0002BA D0 02            [24] 1414 	pop	(0+2)
+      0002BC D0 03            [24] 1415 	pop	(0+3)
+      0002BE D0 04            [24] 1416 	pop	(0+4)
+      0002C0 D0 05            [24] 1417 	pop	(0+5)
+      0002C2 D0 06            [24] 1418 	pop	(0+6)
+      0002C4 D0 07            [24] 1419 	pop	(0+7)
+      0002C6 D0 83            [24] 1420 	pop	dph
+      0002C8 D0 82            [24] 1421 	pop	dpl
+      0002CA D0 F0            [24] 1422 	pop	b
+      0002CC D0 E0            [24] 1423 	pop	acc
+      0002CE D0*00            [24] 1424 	pop	bits
+                           0002D0  1425 	C$main.c$196$1_0$59 ==.
+                           0002D0  1426 	XG$Clk_In_Interrupt$0$0 ==.
+      0002D0 32               [24] 1427 	reti
+                                   1428 ;------------------------------------------------------------
+                                   1429 ;Allocation info for local variables in function 'On_SysTick_Timer'
+                                   1430 ;------------------------------------------------------------
+                           0002D1  1431 	G$On_SysTick_Timer$0$0 ==.
+                           0002D1  1432 	C$main.c$200$1_0$61 ==.
+                                   1433 ;	main.c:200: void On_SysTick_Timer()//系统的毫秒级定时器
+                                   1434 ;	-----------------------------------------
+                                   1435 ;	 function On_SysTick_Timer
+                                   1436 ;	-----------------------------------------
+      0002D1                       1437 _On_SysTick_Timer:
+                           0002D1  1438 	C$main.c$202$1_0$61 ==.
+                                   1439 ;	main.c:202: LS_Refresh();//刷新点阵屏	
+      0002D1 12r00rA3         [24] 1440 	lcall	_LS_Refresh
+                           0002D4  1441 	C$main.c$203$1_0$61 ==.
+                                   1442 ;	main.c:203: }
+                           0002D4  1443 	C$main.c$203$1_0$61 ==.
+                           0002D4  1444 	XG$On_SysTick_Timer$0$0 ==.
+      0002D4 22               [24] 1445 	ret
+                                   1446 ;------------------------------------------------------------
+                                   1447 ;Allocation info for local variables in function 'On_Uart_Idle'
+                                   1448 ;------------------------------------------------------------
+                                   1449 ;length                    Allocated with name '_On_Uart_Idle_PARM_2'
+                                   1450 ;buff                      Allocated to registers r7 
+                                   1451 ;i                         Allocated to registers r6 
+                                   1452 ;------------------------------------------------------------
+                           0002D5  1453 	G$On_Uart_Idle$0$0 ==.
+                           0002D5  1454 	C$main.c$205$1_0$63 ==.
+                                   1455 ;	main.c:205: void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
+                                   1456 ;	-----------------------------------------
+                                   1457 ;	 function On_Uart_Idle
+                                   1458 ;	-----------------------------------------
+      0002D5                       1459 _On_Uart_Idle:
+      0002D5 AF 82            [24] 1460 	mov	r7,dpl
+                           0002D7  1461 	C$main.c$207$1_0$63 ==.
+                                   1462 ;	main.c:207: if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
+      0002D7 74 08            [12] 1463 	mov	a,#0x08
+      0002D9 B5*13 06         [24] 1464 	cjne	a,_On_Uart_Idle_PARM_2,00116$
+      0002DC E4               [12] 1465 	clr	a
+      0002DD B5*14 02         [24] 1466 	cjne	a,(_On_Uart_Idle_PARM_2 + 1),00116$
+      0002E0 80 02            [24] 1467 	sjmp	00117$
+      0002E2                       1468 00116$:
+      0002E2 80 13            [24] 1469 	sjmp	00106$
+      0002E4                       1470 00117$:
+                           0002E4  1471 	C$main.c$210$3_0$65 ==.
+                                   1472 ;	main.c:210: for(i=0;i<8;i++)
+      0002E4 7E 00            [12] 1473 	mov	r6,#0x00
+      0002E6                       1474 00104$:
+                           0002E6  1475 	C$main.c$212$4_0$66 ==.
+                                   1476 ;	main.c:212: LS_RAM[i]=buff[i];
+      0002E6 EE               [12] 1477 	mov	a,r6
+      0002E7 24r00            [12] 1478 	add	a,#_LS_RAM
+      0002E9 F9               [12] 1479 	mov	r1,a
+      0002EA EE               [12] 1480 	mov	a,r6
+      0002EB 2F               [12] 1481 	add	a,r7
+      0002EC F8               [12] 1482 	mov	r0,a
+      0002ED 86 05            [24] 1483 	mov	ar5,@r0
+      0002EF A7 05            [24] 1484 	mov	@r1,ar5
+                           0002F1  1485 	C$main.c$210$3_0$65 ==.
+                                   1486 ;	main.c:210: for(i=0;i<8;i++)
+      0002F1 0E               [12] 1487 	inc	r6
+      0002F2 BE 08 00         [24] 1488 	cjne	r6,#0x08,00118$
+      0002F5                       1489 00118$:
+      0002F5 40 EF            [24] 1490 	jc	00104$
+      0002F7                       1491 00106$:
+                           0002F7  1492 	C$main.c$215$1_0$63 ==.
+                                   1493 ;	main.c:215: }
+                           0002F7  1494 	C$main.c$215$1_0$63 ==.
+                           0002F7  1495 	XG$On_Uart_Idle$0$0 ==.
+      0002F7 22               [24] 1496 	ret
+                                   1497 ;------------------------------------------------------------
+                                   1498 ;Allocation info for local variables in function 'On_Uart_Buff_Full'
+                                   1499 ;------------------------------------------------------------
+                                   1500 ;length                    Allocated with name '_On_Uart_Buff_Full_PARM_2'
+                                   1501 ;buff                      Allocated to registers 
+                                   1502 ;------------------------------------------------------------
+                           0002F8  1503 	G$On_Uart_Buff_Full$0$0 ==.
+                           0002F8  1504 	C$main.c$216$1_0$68 ==.
+                                   1505 ;	main.c:216: void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
+                                   1506 ;	-----------------------------------------
+                                   1507 ;	 function On_Uart_Buff_Full
+                                   1508 ;	-----------------------------------------
+      0002F8                       1509 _On_Uart_Buff_Full:
+                           0002F8  1510 	C$main.c$219$1_0$68 ==.
+                                   1511 ;	main.c:219: UNUSED(length);
+                           0002F8  1512 	C$main.c$221$1_0$68 ==.
+                                   1513 ;	main.c:221: }
+                           0002F8  1514 	C$main.c$221$1_0$68 ==.
+                           0002F8  1515 	XG$On_Uart_Buff_Full$0$0 ==.
+      0002F8 22               [24] 1516 	ret
+                                   1517 ;------------------------------------------------------------
+                                   1518 ;Allocation info for local variables in function 'main'
+                                   1519 ;------------------------------------------------------------
+                           0002F9  1520 	G$main$0$0 ==.
+                           0002F9  1521 	C$main.c$223$1_0$69 ==.
+                                   1522 ;	main.c:223: void main()
+                                   1523 ;	-----------------------------------------
+                                   1524 ;	 function main
+                                   1525 ;	-----------------------------------------
+      0002F9                       1526 _main:
+                           0002F9  1527 	C$main.c$225$1_0$69 ==.
+                                   1528 ;	main.c:225: systick_init();//初始化主时间
+      0002F9 12r00rBC         [24] 1529 	lcall	_systick_init
+                           0002FC  1530 	C$main.c$226$1_0$69 ==.
+                                   1531 ;	main.c:226: Clk_In_Init();//初始化外部中断
+      0002FC 12r02r68         [24] 1532 	lcall	_Clk_In_Init
+                           0002FF  1533 	C$main.c$227$1_0$69 ==.
+                                   1534 ;	main.c:227: Uart_Init();//初始化串口
+      0002FF 12r01rAC         [24] 1535 	lcall	_Uart_Init
+                           000302  1536 	C$main.c$228$1_0$69 ==.
+                                   1537 ;	main.c:228: LS_Init();//初始化点阵屏
+      000302 12r00r00         [24] 1538 	lcall	_LS_Init
+                           000305  1539 	C$main.c$230$1_0$69 ==.
+                                   1540 ;	main.c:230: while(1)
+      000305                       1541 00102$:
+      000305 80 FE            [24] 1542 	sjmp	00102$
+                           000307  1543 	C$main.c$245$1_0$69 ==.
+                                   1544 ;	main.c:245: }
+                           000307  1545 	C$main.c$245$1_0$69 ==.
+                           000307  1546 	XG$main$0$0 ==.
+      000307 22               [24] 1547 	ret
+                                   1548 	.area CSEG    (CODE)
+                                   1549 	.area CONST   (CODE)
+                                   1550 	.area XINIT   (CODE)
+                                   1551 	.area CABS    (ABS,CODE)

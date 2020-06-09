@@ -32,6 +32,13 @@ TH0 = T1MS >> 8;
 TR0 = 1;                        //定时器0开始计时
 ET0 = 1;                        //使能定时器0中断
 EA = 1;
+
+//P3.3输出引脚设置为推挽输出
+volatile static __sfr __at(0xb1) P3M1 ;
+volatile static __sfr __at(0xb2) P3M0 ;
+P3M1&=~(1<<3);
+P3M0|=(1<<3);
+
 }
 
 void On_SysTick_Timer();//系统的毫秒级定时器
@@ -50,6 +57,9 @@ void systick_interrupt() __interrupt (1) __using (1)
 		   Uart_Receive_Buff_Index=0;
 		}
 	}
+	//翻转P3_3
+	P3_3=!P3_3;
+	
 	On_SysTick_Timer();
 }
 
@@ -156,6 +166,35 @@ if(RI)
 	RI=0;
 }
 }
+//外部中断0作为系统时钟设置
+void Clk_In_Init()
+{
+//P3.2输出引脚设置为准双向口
+volatile static __sfr __at(0xb1) P3M1 ;
+volatile static __sfr __at(0xb2) P3M0 ;
+P3M1&=~(1<<2);
+P3M0&=~(1<<2);
+
+P3_2=1;//准双向口输出高电平
+
+INT0 = 1;
+IT0 = 0;                    //设置INT0的中断类型 (1:仅下降沿 0:上升沿和下降沿)
+EX0 = 1;                    //使能INT0中断
+EA = 1;
+
+}
+
+void Clk_In_Interrupt() __interrupt (0)
+{
+	if(TR0)//当T0作为系统主时间时，停止T0,重置系统主时间
+	{
+		TR0=0;//关闭定时器0
+		ET0=0;//关闭定时器0中断
+		systick=0;//清零系统主时间
+	}
+	systick_interrupt();//调用中断函数
+}
+
 
 //一些函数,供用户修改
 void On_SysTick_Timer()//系统的毫秒级定时器
@@ -184,6 +223,7 @@ UNUSED(length);
 void main()
 {	
 	systick_init();//初始化主时间
+	Clk_In_Init();//初始化外部中断
 	Uart_Init();//初始化串口
 	LS_Init();//初始化点阵屏
 
