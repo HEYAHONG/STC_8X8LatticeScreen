@@ -1,6 +1,6 @@
 #include "8051.h"
 #include "stdint.h"
-
+#include "stdlib.h"
 //使用STC时需要定义此宏定义
 #ifndef USING_STC15
 #define USING_STC15
@@ -18,7 +18,7 @@
 
 
 //主时间定时器
-uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
+__idata uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
 void systick_init()
 {
 volatile static __sfr __at(0x8e) AUXR;
@@ -32,10 +32,20 @@ EA = 1;
 }
 
 void On_SysTick_Timer();//系统的毫秒级定时器
-
+extern __idata uint64_t Last_Receive_Tick;
+extern __idata uint8_t Uart_Receive_Buff[];
+extern __idata uint8_t Uart_Receive_Buff_Index;
+void On_Uart_Idle(uint8_t * buff,size_t length);
 void systick_interrupt() __interrupt (1) __using (1) 
 {
 	systick++;
+	if(Uart_Receive_Buff_Index!=0)
+	{//检查串口数据
+		if(systick>Last_Receive_Tick+1)
+		{
+		   On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
+		}
+	}
 	On_SysTick_Timer();
 }
 
@@ -108,6 +118,9 @@ void Uart_Send(uint8_t data)
     Tx_Busy = 1;
     SBUF = ACC;                 //写数据到UART数据寄存器	
 }
+__idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0;
+__idata uint64_t Last_Receive_Tick=0;
+void On_Uart_Buff_Full(uint8_t * buff,size_t length);
 void Uart_Interrupt() __interrupt(4)
 {
 if(TI)
@@ -129,6 +142,13 @@ if(RI)
 			i=0;
 		}
 	} */
+	Uart_Receive_Buff[Uart_Receive_Buff_Index++]=SBUF;
+	if(Uart_Receive_Buff_Index>=sizeof(Uart_Receive_Buff))
+	{
+		On_Uart_Buff_Full(Uart_Receive_Buff,sizeof(Uart_Receive_Buff));
+		Uart_Receive_Buff_Index=0;
+	}
+	Last_Receive_Tick=systick;
 	RI=0;
 }
 }
@@ -137,6 +157,15 @@ if(RI)
 void On_SysTick_Timer()//系统的毫秒级定时器
 {
 	LS_Refresh();//刷新点阵屏	
+}
+
+void On_Uart_Idle(uint8_t * buff,size_t length)//串口空闲的函数
+{
+	
+}
+void On_Uart_Buff_Full(uint8_t * buff,size_t length)//串口缓冲满
+{
+
 }
 
 void main()
