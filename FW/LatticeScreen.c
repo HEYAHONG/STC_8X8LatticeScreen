@@ -1,6 +1,6 @@
 #include "LatticeScreen.h"
 
-unsigned char LS_RAM[8]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};//默认显示数据
+unsigned char LS_RAM[8]={0x0,0x10,0x38,0x54,0x10,0x10,0x10,0x0};//默认显示数据，向上的箭头
 
 
 
@@ -8,8 +8,8 @@ void LS_Init()
 {
 
 #ifdef USING_STC15
-volatile __sfr __at(0x91)  P1M1;
-volatile __sfr __at(0x92)  P1M0;
+volatile static __sfr __at(0x91)  P1M1;
+volatile static __sfr __at(0x92)  P1M0;
 //初始化74HC595IO口模式为推挽输出
 P1M0|=0x3f;
 P1M1&=~0x3f;
@@ -28,8 +28,8 @@ P1M1&=~0x3f;
 void LS_Deinit()
 {
 #ifdef USING_STC15
-volatile __sfr __at(0x91)  P1M1;
-volatile __sfr __at(0x92)  P1M0;
+volatile static __sfr __at(0x91)  P1M1;
+volatile static __sfr __at(0x92)  P1M0;
 //初始化74HC595IO口模式为准双向口
 P1M0&=~0x3f;
 P1M1&=~0x3f;

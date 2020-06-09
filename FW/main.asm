@@ -9,6 +9,9 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
+	.globl _Uart_Interrupt
+	.globl _Uart_Send
+	.globl _Uart_Init
 	.globl _systick_interrupt
 	.globl _systick_init
 	.globl _LS_DisplayOneRow
@@ -109,6 +112,7 @@
 	.globl _DPL
 	.globl _SP
 	.globl _P0
+	.globl _Tx_Busy
 	.globl _systick
 	.globl _LS_DisplayOneRow_PARM_2
 	.globl _LS_595_DataOut_PARM_2
@@ -116,6 +120,7 @@
 	.globl _LS_Init
 	.globl _LS_Deinit
 	.globl _LS_Refresh
+	.globl _On_SysTick_Timer
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -173,6 +178,14 @@ Lmain.LS_Deinit$P1M0$1_0$2 == 0x0092
 _LS_Deinit_P1M0_65536_2	=	0x0092
 Lmain.systick_init$AUXR$1_0$15 == 0x008e
 _systick_init_AUXR_65536_15	=	0x008e
+Lmain.Uart_Init$AUXR$1_0$17 == 0x008e
+_Uart_Init_AUXR_65536_17	=	0x008e
+Lmain.Uart_Init$T2H$1_0$17 == 0x00d6
+_Uart_Init_T2H_65536_17	=	0x00d6
+Lmain.Uart_Init$T2L$1_0$17 == 0x00d7
+_Uart_Init_T2L_65536_17	=	0x00d7
+Lmain.Uart_Init$P_SW1$1_0$17 == 0x00a2
+_Uart_Init_P_SW1_65536_17	=	0x00a2
 ;--------------------------------------------------------
 ; special function bits
 ;--------------------------------------------------------
@@ -394,6 +407,9 @@ __start__stack:
 ; bit data
 ;--------------------------------------------------------
 	.area BSEG    (BIT)
+G$Tx_Busy$0_0$0==.
+_Tx_Busy::
+	.ds 1
 ;--------------------------------------------------------
 ; paged external ram data
 ;--------------------------------------------------------
@@ -429,6 +445,12 @@ __interrupt_vect:
 	reti
 	.ds	7
 	ljmp	_systick_interrupt
+	.ds	5
+	reti
+	.ds	7
+	reti
+	.ds	7
+	ljmp	_Uart_Interrupt
 ;--------------------------------------------------------
 ; global & static initialisations
 ;--------------------------------------------------------
@@ -451,18 +473,18 @@ __interrupt_vect:
 	C$LatticeScreen.c$94$1_0$14 ==.
 ;	LatticeScreen.c:94: static unsigned char i=0;
 	mov	_LS_Refresh_i_65536_14,#0x00
-	C$LatticeScreen.c$3$1_0$17 ==.
-;	LatticeScreen.c:3: unsigned char LS_RAM[8]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};//默认显示数据
-	mov	_LS_RAM,#0xff
-	mov	(_LS_RAM + 0x0001),#0xff
-	mov	(_LS_RAM + 0x0002),#0xff
-	mov	(_LS_RAM + 0x0003),#0xff
-	mov	(_LS_RAM + 0x0004),#0xff
-	mov	(_LS_RAM + 0x0005),#0xff
-	mov	(_LS_RAM + 0x0006),#0xff
-	mov	(_LS_RAM + 0x0007),#0xff
-	C$main.c$19$1_0$17 ==.
-;	main.c:19: uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
+	C$LatticeScreen.c$3$1_0$26 ==.
+;	LatticeScreen.c:3: unsigned char LS_RAM[8]={0x0,0x10,0x38,0x54,0x10,0x10,0x10,0x0};//默认显示数据，向上的箭头
+	mov	_LS_RAM,#0x00
+	mov	(_LS_RAM + 0x0001),#0x10
+	mov	(_LS_RAM + 0x0002),#0x38
+	mov	(_LS_RAM + 0x0003),#0x54
+	mov	(_LS_RAM + 0x0004),#0x10
+	mov	(_LS_RAM + 0x0005),#0x10
+	mov	(_LS_RAM + 0x0006),#0x10
+	mov	(_LS_RAM + 0x0007),#0x00
+	C$main.c$21$1_0$26 ==.
+;	main.c:21: uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
 	clr	a
 	mov	_systick,a
 	mov	(_systick + 1),a
@@ -472,6 +494,10 @@ __interrupt_vect:
 	mov	(_systick + 5),a
 	mov	(_systick + 6),a
 	mov	(_systick + 7),a
+	C$main.c$53$1_0$26 ==.
+;	main.c:53: __bit Tx_Busy=0;//串口发送忙标志
+;	assignBit
+	clr	_Tx_Busy
 	.area GSFINAL (CODE)
 	ljmp	__sdcc_program_startup
 ;--------------------------------------------------------
@@ -781,47 +807,47 @@ _LS_Refresh:
 ;AUXR                      Allocated with name '_systick_init_AUXR_65536_15'
 ;------------------------------------------------------------
 	G$systick_init$0$0 ==.
-	C$main.c$20$1_0$15 ==.
-;	main.c:20: void systick_init()
+	C$main.c$22$1_0$15 ==.
+;	main.c:22: void systick_init()
 ;	-----------------------------------------
 ;	 function systick_init
 ;	-----------------------------------------
 _systick_init:
-	C$main.c$23$1_0$15 ==.
-;	main.c:23: AUXR |= 0x80;                   //定时器0为1T模式
-	orl	_systick_init_AUXR_65536_15,#0x80
-	C$main.c$24$1_0$15 ==.
-;	main.c:24: TMOD &= ~0x0f;                    //设置定时器为模式0(16位自动重装载)
-	anl	_TMOD,#0xf0
 	C$main.c$25$1_0$15 ==.
-;	main.c:25: TL0 = T1MS;                     //初始化计时值
-	mov	_TL0,#0x67
+;	main.c:25: AUXR |= 0x80;                   //定时器0为1T模式
+	orl	_systick_init_AUXR_65536_15,#0x80
 	C$main.c$26$1_0$15 ==.
-;	main.c:26: TH0 = T1MS >> 8;
-	mov	_TH0,#0x7e
+;	main.c:26: TMOD &= ~0x0f;                    //设置定时器为模式0(16位自动重装载)
+	anl	_TMOD,#0xf0
 	C$main.c$27$1_0$15 ==.
-;	main.c:27: TR0 = 1;                        //定时器0开始计时
+;	main.c:27: TL0 = T1MS;                     //初始化计时值
+	mov	_TL0,#0x67
+	C$main.c$28$1_0$15 ==.
+;	main.c:28: TH0 = T1MS >> 8;
+	mov	_TH0,#0x7e
+	C$main.c$29$1_0$15 ==.
+;	main.c:29: TR0 = 1;                        //定时器0开始计时
 ;	assignBit
 	setb	_TR0
-	C$main.c$28$1_0$15 ==.
-;	main.c:28: ET0 = 1;                        //使能定时器0中断
+	C$main.c$30$1_0$15 ==.
+;	main.c:30: ET0 = 1;                        //使能定时器0中断
 ;	assignBit
 	setb	_ET0
-	C$main.c$29$1_0$15 ==.
-;	main.c:29: EA = 1;
+	C$main.c$31$1_0$15 ==.
+;	main.c:31: EA = 1;
 ;	assignBit
 	setb	_EA
-	C$main.c$30$1_0$15 ==.
-;	main.c:30: }
-	C$main.c$30$1_0$15 ==.
+	C$main.c$32$1_0$15 ==.
+;	main.c:32: }
+	C$main.c$32$1_0$15 ==.
 	XG$systick_init$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'systick_interrupt'
 ;------------------------------------------------------------
 	G$systick_interrupt$0$0 ==.
-	C$main.c$31$1_0$16 ==.
-;	main.c:31: void systick_interrupt() __interrupt (1) __using (1) 
+	C$main.c$36$1_0$16 ==.
+;	main.c:36: void systick_interrupt() __interrupt (1) __using (1) 
 ;	-----------------------------------------
 ;	 function systick_interrupt
 ;	-----------------------------------------
@@ -849,8 +875,8 @@ _systick_interrupt:
 	push	(0+0)
 	push	psw
 	mov	psw,#0x08
-	C$main.c$33$1_0$16 ==.
-;	main.c:33: systick++;
+	C$main.c$38$1_0$16 ==.
+;	main.c:38: systick++;
 	inc	_systick
 	clr	a
 	cjne	a,_systick,00103$
@@ -868,13 +894,13 @@ _systick_interrupt:
 	cjne	a,(_systick + 6),00103$
 	inc	(_systick + 7)
 00103$:
-	C$main.c$34$1_0$16 ==.
-;	main.c:34: LS_Refresh();//刷新点阵屏
+	C$main.c$39$1_0$16 ==.
+;	main.c:39: On_SysTick_Timer();
 	mov	psw,#0x00
-	lcall	_LS_Refresh
+	lcall	_On_SysTick_Timer
 	mov	psw,#0x08
-	C$main.c$35$1_0$16 ==.
-;	main.c:35: }
+	C$main.c$40$1_0$16 ==.
+;	main.c:40: }
 	pop	psw
 	pop	(0+0)
 	pop	(0+1)
@@ -889,23 +915,24 @@ _systick_interrupt:
 	pop	b
 	pop	acc
 	pop	bits
-	C$main.c$35$1_0$16 ==.
+	C$main.c$40$1_0$16 ==.
 	XG$systick_interrupt$0$0 ==.
 	reti
 ;------------------------------------------------------------
-;Allocation info for local variables in function 'main'
+;Allocation info for local variables in function 'Uart_Init'
 ;------------------------------------------------------------
-;i                         Allocated to registers r7 
-;t_s                       Allocated to registers r7 
-;sloc0                     Allocated with name '_main_sloc0_1_0'
+;AUXR                      Allocated with name '_Uart_Init_AUXR_65536_17'
+;T2H                       Allocated with name '_Uart_Init_T2H_65536_17'
+;T2L                       Allocated with name '_Uart_Init_T2L_65536_17'
+;P_SW1                     Allocated with name '_Uart_Init_P_SW1_65536_17'
 ;------------------------------------------------------------
-	G$main$0$0 ==.
-	C$main.c$39$1_0$17 ==.
-;	main.c:39: void main()
+	G$Uart_Init$0$0 ==.
+	C$main.c$54$1_0$17 ==.
+;	main.c:54: void Uart_Init()
 ;	-----------------------------------------
-;	 function main
+;	 function Uart_Init
 ;	-----------------------------------------
-_main:
+_Uart_Init:
 	ar7 = 0x07
 	ar6 = 0x06
 	ar5 = 0x05
@@ -914,17 +941,167 @@ _main:
 	ar2 = 0x02
 	ar1 = 0x01
 	ar0 = 0x00
-	C$main.c$41$1_0$17 ==.
-;	main.c:41: systick_init();//初始化主时间
-	lcall	_systick_init
-	C$main.c$42$1_0$17 ==.
-;	main.c:42: LS_Init();//初始化点阵屏
-	lcall	_LS_Init
-	C$main.c$44$1_0$17 ==.
-;	main.c:44: while(1)
+	C$main.c$60$1_0$17 ==.
+;	main.c:60: ACC = P_SW1;
+	mov	_ACC,_Uart_Init_P_SW1_65536_17
+	C$main.c$61$1_0$17 ==.
+;	main.c:61: ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=0
+	anl	_ACC,#0x3f
+	C$main.c$62$1_0$17 ==.
+;	main.c:62: P_SW1 = ACC;                //(P3.0/RxD, P3.1/TxD)
+	mov	_Uart_Init_P_SW1_65536_17,_ACC
+	C$main.c$74$1_0$17 ==.
+;	main.c:74: SCON = 0x50;                //8位可变波特率
+	mov	_SCON,#0x50
+	C$main.c$81$1_0$17 ==.
+;	main.c:81: T2L = (65536 - (FOSC/4/BAUD)) & 0xff;   //设置波特率重装值
+	mov	_Uart_Init_T2L_65536_17,#0xb8
+	C$main.c$82$1_0$17 ==.
+;	main.c:82: T2H = (65536 - (FOSC/4/BAUD))>>8;
+	mov	_Uart_Init_T2H_65536_17,#0xff
+	C$main.c$83$1_0$17 ==.
+;	main.c:83: AUXR |= 0x14;                //T2为1T模式, 并启动定时器2
+	orl	_Uart_Init_AUXR_65536_17,#0x14
+	C$main.c$84$1_0$17 ==.
+;	main.c:84: AUXR |= 0x01;               //选择定时器2为串口1的波特率发生器
+	orl	_Uart_Init_AUXR_65536_17,#0x01
+	C$main.c$85$1_0$17 ==.
+;	main.c:85: ES = 1;                     //使能串口1中断
+;	assignBit
+	setb	_ES
+	C$main.c$86$1_0$17 ==.
+;	main.c:86: EA = 1;
+;	assignBit
+	setb	_EA
+	C$main.c$87$1_0$17 ==.
+;	main.c:87: }
+	C$main.c$87$1_0$17 ==.
+	XG$Uart_Init$0$0 ==.
+	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'Uart_Send'
+;------------------------------------------------------------
+;data                      Allocated to registers r7 
+;------------------------------------------------------------
+	G$Uart_Send$0$0 ==.
+	C$main.c$88$1_0$19 ==.
+;	main.c:88: void Uart_Send(uint8_t data)
+;	-----------------------------------------
+;	 function Uart_Send
+;	-----------------------------------------
+_Uart_Send:
+	mov	r7,dpl
+	C$main.c$90$1_0$19 ==.
+;	main.c:90: while(Tx_Busy);//串口发送忙标志
+00101$:
+	jb	_Tx_Busy,00101$
+	C$main.c$91$1_0$19 ==.
+;	main.c:91: ACC = data;                  //获取校验位P (PSW.0)
+	mov	_ACC,r7
+	C$main.c$92$1_0$19 ==.
+;	main.c:92: if (P)                      //根据P来设置校验位
+	mov	c,_P
+	C$main.c$108$1_0$19 ==.
+;	main.c:108: Tx_Busy = 1;
+;	assignBit
+	setb	_Tx_Busy
+	C$main.c$109$1_0$19 ==.
+;	main.c:109: SBUF = ACC;                 //写数据到UART数据寄存器	
+	mov	_SBUF,_ACC
+	C$main.c$110$1_0$19 ==.
+;	main.c:110: }
+	C$main.c$110$1_0$19 ==.
+	XG$Uart_Send$0$0 ==.
+	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'Uart_Interrupt'
+;------------------------------------------------------------
+	G$Uart_Interrupt$0$0 ==.
+	C$main.c$111$1_0$22 ==.
+;	main.c:111: void Uart_Interrupt() __interrupt(4)
+;	-----------------------------------------
+;	 function Uart_Interrupt
+;	-----------------------------------------
+_Uart_Interrupt:
+	C$main.c$113$1_0$22 ==.
+;	main.c:113: if(TI)
+	C$main.c$115$2_0$23 ==.
+;	main.c:115: TI=0;
+;	assignBit
+	jbc	_TI,00115$
+	sjmp	00102$
+00115$:
+	C$main.c$116$2_0$23 ==.
+;	main.c:116: Tx_Busy=0;
+;	assignBit
+	clr	_Tx_Busy
+00102$:
+	C$main.c$118$1_0$22 ==.
+;	main.c:118: if(RI)
+	C$main.c$132$2_0$24 ==.
+;	main.c:132: RI=0;
+;	assignBit
+	jbc	_RI,00116$
+	sjmp	00105$
+00116$:
 00105$:
-	C$main.c$48$1_0$17 ==.
-;	main.c:48: if(systick%1000==0)
+	C$main.c$134$1_0$22 ==.
+;	main.c:134: }
+	C$main.c$134$1_0$22 ==.
+	XG$Uart_Interrupt$0$0 ==.
+	reti
+;	eliminated unneeded mov psw,# (no regs used in bank)
+;	eliminated unneeded push/pop psw
+;	eliminated unneeded push/pop dpl
+;	eliminated unneeded push/pop dph
+;	eliminated unneeded push/pop b
+;	eliminated unneeded push/pop acc
+;------------------------------------------------------------
+;Allocation info for local variables in function 'On_SysTick_Timer'
+;------------------------------------------------------------
+	G$On_SysTick_Timer$0$0 ==.
+	C$main.c$137$1_0$25 ==.
+;	main.c:137: void On_SysTick_Timer()//系统的毫秒级定时器
+;	-----------------------------------------
+;	 function On_SysTick_Timer
+;	-----------------------------------------
+_On_SysTick_Timer:
+	C$main.c$139$1_0$25 ==.
+;	main.c:139: LS_Refresh();//刷新点阵屏	
+	lcall	_LS_Refresh
+	C$main.c$140$1_0$25 ==.
+;	main.c:140: }
+	C$main.c$140$1_0$25 ==.
+	XG$On_SysTick_Timer$0$0 ==.
+	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'main'
+;------------------------------------------------------------
+;i                         Allocated to registers r7 
+;t_s                       Allocated to registers r7 
+;sloc0                     Allocated with name '_main_sloc0_1_0'
+;------------------------------------------------------------
+	G$main$0$0 ==.
+	C$main.c$142$1_0$26 ==.
+;	main.c:142: void main()
+;	-----------------------------------------
+;	 function main
+;	-----------------------------------------
+_main:
+	C$main.c$144$1_0$26 ==.
+;	main.c:144: systick_init();//初始化主时间
+	lcall	_systick_init
+	C$main.c$145$1_0$26 ==.
+;	main.c:145: Uart_Init();//初始化串口
+	lcall	_Uart_Init
+	C$main.c$146$1_0$26 ==.
+;	main.c:146: LS_Init();//初始化点阵屏
+	lcall	_LS_Init
+	C$main.c$148$1_0$26 ==.
+;	main.c:148: while(1)
+00106$:
+	C$main.c$152$1_0$26 ==.
+;	main.c:152: if(systick%1000==0 && systick>=64000l)
 	mov	__modulonglong_PARM_2,#0xe8
 	mov	(__modulonglong_PARM_2 + 1),#0x03
 	clr	a
@@ -959,27 +1136,43 @@ _main:
 	orl	a,(_main_sloc0_1_0 + 5)
 	orl	a,(_main_sloc0_1_0 + 6)
 	orl	a,(_main_sloc0_1_0 + 7)
-	C$main.c$51$4_0$20 ==.
-;	main.c:51: for(i=0;i<8;i++)
-	jnz	00105$
-	mov	r7,a
-00107$:
-	C$main.c$52$4_0$20 ==.
-;	main.c:52: LS_RAM[i]=0xff;
+	jnz	00106$
+	clr	c
+	mov	a,(_systick + 1)
+	subb	a,#0xfa
+	mov	a,(_systick + 2)
+	subb	a,#0x00
+	mov	a,(_systick + 3)
+	subb	a,#0x00
+	mov	a,(_systick + 4)
+	subb	a,#0x00
+	mov	a,(_systick + 5)
+	subb	a,#0x00
+	mov	a,(_systick + 6)
+	subb	a,#0x00
+	mov	a,(_systick + 7)
+	subb	a,#0x00
+	jc	00106$
+	C$main.c$155$4_0$29 ==.
+;	main.c:155: for(i=0;i<8;i++)
+	mov	r7,#0x00
+00108$:
+	C$main.c$156$4_0$29 ==.
+;	main.c:156: LS_RAM[i]=0xff;
 	mov	a,r7
 	add	a,#_LS_RAM
 	mov	r0,a
 	mov	@r0,#0xff
-	C$main.c$51$4_0$20 ==.
-;	main.c:51: for(i=0;i<8;i++)
+	C$main.c$155$4_0$29 ==.
+;	main.c:155: for(i=0;i<8;i++)
 	inc	r7
 	clr	c
 	mov	a,r7
 	xrl	a,#0x80
 	subb	a,#0x88
-	jc	00107$
-	C$main.c$54$1_0$17 ==.
-;	main.c:54: uint8_t t_s=(systick/1000)%64;
+	jc	00108$
+	C$main.c$158$1_0$26 ==.
+;	main.c:158: uint8_t t_s=(systick/1000)%64;
 	mov	__divulonglong_PARM_2,#0xe8
 	mov	(__divulonglong_PARM_2 + 1),#0x03
 	clr	a
@@ -1015,8 +1208,8 @@ _main:
 	mov	(_main_sloc0_1_0 + 6),#0x00
 	mov	(_main_sloc0_1_0 + 7),#0x00
 	mov	r7,_main_sloc0_1_0
-	C$main.c$55$3_1$21 ==.
-;	main.c:55: LS_RAM[t_s/8]&=~(1<<(t_s%8));
+	C$main.c$159$3_1$30 ==.
+;	main.c:159: LS_RAM[t_s/8]&=~(1<<(t_s%8));
 	mov	r6,#0x00
 	mov	__divsint_PARM_2,#0x08
 ;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
@@ -1038,19 +1231,19 @@ _main:
 	mov	b,r7
 	inc	b
 	mov	a,#0x01
-	sjmp	00131$
-00129$:
+	sjmp	00137$
+00135$:
 	add	a,acc
-00131$:
-	djnz	b,00129$
+00137$:
+	djnz	b,00135$
 	cpl	a
 	mov	r7,a
 	anl	a,r5
 	mov	@r1,a
-	ljmp	00105$
-	C$main.c$58$1_0$17 ==.
-;	main.c:58: }
-	C$main.c$58$1_0$17 ==.
+	ljmp	00106$
+	C$main.c$163$1_0$26 ==.
+;	main.c:163: }
+	C$main.c$163$1_0$26 ==.
 	XG$main$0$0 ==.
 	ret
 	.area CSEG    (CODE)

@@ -7,6 +7,10 @@ F:G$LS_Refresh$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$LS_Refresh$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$systick_init$0_0$0({2}DF,SV:S),C,0,0,0,0,0
 F:G$systick_interrupt$0_0$0({2}DF,SV:S),C,0,0,1,1,1
+F:G$Uart_Init$0_0$0({2}DF,SV:S),C,0,0,0,0,0
+F:G$Uart_Send$0_0$0({2}DF,SV:S),C,0,0,0,0,0
+F:G$Uart_Interrupt$0_0$0({2}DF,SV:S),C,0,0,1,4,0
+F:G$On_SysTick_Timer$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$main$0_0$0({2}DF,SV:S),C,0,0,0,0,0
 S:G$LS_RAM$0_0$0({8}DA8d,SC:U),E,0,0
 S:Lmain.LS_595_DataOut$Col_Data$1_0$3({1}SC:U),E,0,0
@@ -16,9 +20,11 @@ S:Lmain.LS_DisplayOneRow$Col_Index$1_0$11({1}SC:U),E,0,0
 S:Lmain.LS_DisplayOneRow$Row_Data$1_0$11({1}SC:U),R,0,0,[r7]
 S:Lmain.LS_Refresh$i$1_0$14({1}SC:U),E,0,0
 S:G$systick$0_0$0({8}SI:U),E,0,0
-S:Lmain.main$i$3_0$19({1}SC:S),R,0,0,[r7]
-S:Lmain.main$t_s$3_1$21({1}SC:U),R,0,0,[r7]
+S:Lmain.Uart_Send$data$1_0$18({1}SC:U),R,0,0,[r7]
+S:Lmain.main$i$3_0$28({1}SC:S),R,0,0,[r7]
+S:Lmain.main$t_s$3_1$30({1}SC:U),R,0,0,[r7]
 S:Lmain.main$sloc0$0_1$0({8}SI:U),E,0,0
+S:G$Tx_Busy$0_0$0({1}SB0$1:U),H,0,0
 S:G$P0$0_0$0({1}SC:U),I,0,0
 S:G$SP$0_0$0({1}SC:U),I,0,0
 S:G$DPL$0_0$0({1}SC:U),I,0,0
@@ -45,6 +51,10 @@ S:Lmain.LS_Init$P1M0$1_0$1({1}SC:U),I,0,0
 S:Lmain.LS_Deinit$P1M1$1_0$2({1}SC:U),I,0,0
 S:Lmain.LS_Deinit$P1M0$1_0$2({1}SC:U),I,0,0
 S:Lmain.systick_init$AUXR$1_0$15({1}SC:U),I,0,0
+S:Lmain.Uart_Init$AUXR$1_0$17({1}SC:U),I,0,0
+S:Lmain.Uart_Init$T2H$1_0$17({1}SC:U),I,0,0
+S:Lmain.Uart_Init$T2L$1_0$17({1}SC:U),I,0,0
+S:Lmain.Uart_Init$P_SW1$1_0$17({1}SC:U),I,0,0
 S:G$P0_0$0_0$0({1}SX:U),J,0,0
 S:G$P0_1$0_0$0({1}SX:U),J,0,0
 S:G$P0_2$0_0$0({1}SX:U),J,0,0
@@ -124,4 +134,7 @@ S:G$LS_595_DataOut$0_0$0({2}DF,SV:S),C,0,0
 S:G$LS_DisplayOneRow$0_0$0({2}DF,SV:S),C,0,0
 S:G$systick_init$0_0$0({2}DF,SV:S),C,0,0
 S:G$systick_interrupt$0_0$0({2}DF,SV:S),C,0,0
+S:G$Uart_Init$0_0$0({2}DF,SV:S),C,0,0
+S:G$Uart_Send$0_0$0({2}DF,SV:S),C,0,0
+S:G$Uart_Interrupt$0_0$0({2}DF,SV:S),C,0,0
 S:G$main$0_0$0({2}DF,SV:S),C,0,0
