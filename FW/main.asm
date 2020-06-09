@@ -8,6 +8,7 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
+	.globl _Font5x7
 	.globl _main
 	.globl _Clk_In_Interrupt
 	.globl _Clk_In_Init
@@ -119,14 +120,15 @@
 	.globl _Uart_Receive_Buff_Index
 	.globl _Uart_Receive_Buff
 	.globl _systick
+	.globl _LS_RAM
 	.globl _On_Uart_Buff_Full_PARM_2
 	.globl _On_Uart_Idle_PARM_2
 	.globl _LS_DisplayOneRow_PARM_2
 	.globl _LS_595_DataOut_PARM_2
-	.globl _LS_RAM
 	.globl _LS_Init
 	.globl _LS_Deinit
 	.globl _LS_Refresh
+	.globl _LS_Show_Char_Font5x7
 	.globl _On_SysTick_Timer
 	.globl _On_Uart_Idle
 	.globl _On_Uart_Buff_Full
@@ -177,32 +179,32 @@ G$ACC$0_0$0 == 0x00e0
 _ACC	=	0x00e0
 G$B$0_0$0 == 0x00f0
 _B	=	0x00f0
-Lmain.LS_Init$P1M1$1_0$28 == 0x0091
-_LS_Init_P1M1_65536_28	=	0x0091
-Lmain.LS_Init$P1M0$1_0$28 == 0x0092
-_LS_Init_P1M0_65536_28	=	0x0092
-Lmain.LS_Deinit$P1M1$1_0$29 == 0x0091
-_LS_Deinit_P1M1_65536_29	=	0x0091
-Lmain.LS_Deinit$P1M0$1_0$29 == 0x0092
-_LS_Deinit_P1M0_65536_29	=	0x0092
-Lmain.systick_init$AUXR$1_0$42 == 0x008e
-_systick_init_AUXR_65536_42	=	0x008e
-Lmain.systick_init$P3M1$1_1$43 == 0x00b1
-_systick_init_P3M1_65537_43	=	0x00b1
-Lmain.systick_init$P3M0$1_1$43 == 0x00b2
-_systick_init_P3M0_65537_43	=	0x00b2
-Lmain.Uart_Init$AUXR$1_0$48 == 0x008e
-_Uart_Init_AUXR_65536_48	=	0x008e
-Lmain.Uart_Init$T2H$1_0$48 == 0x00d6
-_Uart_Init_T2H_65536_48	=	0x00d6
-Lmain.Uart_Init$T2L$1_0$48 == 0x00d7
-_Uart_Init_T2L_65536_48	=	0x00d7
-Lmain.Uart_Init$P_SW1$1_0$48 == 0x00a2
-_Uart_Init_P_SW1_65536_48	=	0x00a2
-Lmain.Clk_In_Init$P3M1$1_0$58 == 0x00b1
-_Clk_In_Init_P3M1_65536_58	=	0x00b1
-Lmain.Clk_In_Init$P3M0$1_0$58 == 0x00b2
-_Clk_In_Init_P3M0_65536_58	=	0x00b2
+Lmain.LS_Init$P1M1$1_0$29 == 0x0091
+_LS_Init_P1M1_65536_29	=	0x0091
+Lmain.LS_Init$P1M0$1_0$29 == 0x0092
+_LS_Init_P1M0_65536_29	=	0x0092
+Lmain.LS_Deinit$P1M1$1_0$30 == 0x0091
+_LS_Deinit_P1M1_65536_30	=	0x0091
+Lmain.LS_Deinit$P1M0$1_0$30 == 0x0092
+_LS_Deinit_P1M0_65536_30	=	0x0092
+Lmain.systick_init$AUXR$1_0$49 == 0x008e
+_systick_init_AUXR_65536_49	=	0x008e
+Lmain.systick_init$P3M1$1_1$50 == 0x00b1
+_systick_init_P3M1_65537_50	=	0x00b1
+Lmain.systick_init$P3M0$1_1$50 == 0x00b2
+_systick_init_P3M0_65537_50	=	0x00b2
+Lmain.Uart_Init$AUXR$1_0$55 == 0x008e
+_Uart_Init_AUXR_65536_55	=	0x008e
+Lmain.Uart_Init$T2H$1_0$55 == 0x00d6
+_Uart_Init_T2H_65536_55	=	0x00d6
+Lmain.Uart_Init$T2L$1_0$55 == 0x00d7
+_Uart_Init_T2L_65536_55	=	0x00d7
+Lmain.Uart_Init$P_SW1$1_0$55 == 0x00a2
+_Uart_Init_P_SW1_65536_55	=	0x00a2
+Lmain.Clk_In_Init$P3M1$1_0$65 == 0x00b1
+_Clk_In_Init_P3M1_65536_65	=	0x00b1
+Lmain.Clk_In_Init$P3M0$1_0$65 == 0x00b2
+_Clk_In_Init_P3M0_65536_65	=	0x00b2
 ;--------------------------------------------------------
 ; special function bits
 ;--------------------------------------------------------
@@ -383,27 +385,24 @@ bits:
 ; internal ram data
 ;--------------------------------------------------------
 	.area DSEG    (DATA)
-G$LS_RAM$0_0$0==.
-_LS_RAM::
-	.ds 8
-Lmain.LS_595_DataOut$Col_Data$1_0$30==.
+Lmain.LS_595_DataOut$Col_Data$1_0$31==.
 _LS_595_DataOut_PARM_2:
 	.ds 1
-Lmain.LS_DisplayOneRow$Col_Index$1_0$38==.
+Lmain.LS_DisplayOneRow$Col_Index$1_0$39==.
 _LS_DisplayOneRow_PARM_2:
-	.ds 1
-Lmain.LS_Refresh$i$1_0$41==.
-_LS_Refresh_i_65536_41:
 	.ds 1
 Lmain.systick_interrupt$sloc0$0_1$0==.
 _systick_interrupt_sloc0_1_0:
 	.ds 8
-Lmain.On_Uart_Idle$length$1_0$62==.
+Lmain.On_Uart_Idle$length$1_0$69==.
 _On_Uart_Idle_PARM_2:
 	.ds 2
-Lmain.On_Uart_Buff_Full$length$1_0$67==.
+Lmain.On_Uart_Buff_Full$length$1_0$74==.
 _On_Uart_Buff_Full_PARM_2:
 	.ds 2
+Lmain.main$sloc0$0_1$0==.
+_main_sloc0_1_0:
+	.ds 8
 ;--------------------------------------------------------
 ; overlayable items in internal ram 
 ;--------------------------------------------------------
@@ -418,6 +417,12 @@ __start__stack:
 ; indirectly addressable internal ram data
 ;--------------------------------------------------------
 	.area ISEG    (DATA)
+G$LS_RAM$0_0$0==.
+_LS_RAM::
+	.ds 8
+Fmain$LS_Current_Index$0_0$0==.
+_LS_Current_Index:
+	.ds 1
 G$systick$0_0$0==.
 _systick::
 	.ds 8
@@ -496,26 +501,29 @@ __interrupt_vect:
 	.globl __mcs51_genXINIT
 	.globl __mcs51_genXRAMCLEAR
 	.globl __mcs51_genRAMCLEAR
-;------------------------------------------------------------
-;Allocation info for local variables in function 'LS_Refresh'
-;------------------------------------------------------------
-;i                         Allocated with name '_LS_Refresh_i_65536_41'
-;------------------------------------------------------------
-	G$LS_Refresh$0$0 ==.
-	C$LatticeScreen.c$94$1_0$41 ==.
-;	LatticeScreen.c:94: static unsigned char i=0;
-	mov	_LS_Refresh_i_65536_41,#0x00
-	C$LatticeScreen.c$3$1_0$69 ==.
-;	LatticeScreen.c:3: unsigned char LS_RAM[8]={0x0,0x10,0x38,0x54,0x10,0x10,0x10,0x0};//默认显示数据，向上的箭头
-	mov	_LS_RAM,#0x00
-	mov	(_LS_RAM + 0x0001),#0x10
-	mov	(_LS_RAM + 0x0002),#0x38
-	mov	(_LS_RAM + 0x0003),#0x54
-	mov	(_LS_RAM + 0x0004),#0x10
-	mov	(_LS_RAM + 0x0005),#0x10
-	mov	(_LS_RAM + 0x0006),#0x10
-	mov	(_LS_RAM + 0x0007),#0x00
-	C$main.c$24$1_0$69 ==.
+	C$LatticeScreen.c$3$1_0$76 ==.
+;	LatticeScreen.c:3: unsigned char __idata LS_RAM[8]={0x0,0x10,0x38,0x54,0x10,0x10,0x10,0x0};//默认显示数据，向左的箭头
+	mov	r0,#_LS_RAM
+	mov	@r0,#0x00
+	mov	r0,#(_LS_RAM + 0x0001)
+	mov	@r0,#0x10
+	mov	r0,#(_LS_RAM + 0x0002)
+	mov	@r0,#0x38
+	mov	r0,#(_LS_RAM + 0x0003)
+	mov	@r0,#0x54
+	mov	r0,#(_LS_RAM + 0x0004)
+	mov	@r0,#0x10
+	mov	r0,#(_LS_RAM + 0x0005)
+	mov	@r0,#0x10
+	mov	r0,#(_LS_RAM + 0x0006)
+	mov	@r0,#0x10
+	mov	r0,#(_LS_RAM + 0x0007)
+	mov	@r0,#0x00
+	C$LatticeScreen.c$94$1_0$76 ==.
+;	LatticeScreen.c:94: static unsigned __idata char LS_Current_Index=0;
+	mov	r0,#_LS_Current_Index
+	mov	@r0,#0x00
+	C$main.c$24$1_0$76 ==.
 ;	main.c:24: __idata uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
 	mov	r0,#_systick
 	clr	a
@@ -534,11 +542,11 @@ __interrupt_vect:
 	mov	@r0,a
 	inc	r0
 	mov	@r0,a
-	C$main.c$135$1_0$69 ==.
+	C$main.c$135$1_0$76 ==.
 ;	main.c:135: __idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	@r0,#0x00
-	C$main.c$136$1_0$69 ==.
+	C$main.c$136$1_0$76 ==.
 ;	main.c:136: __idata uint64_t Last_Receive_Tick=0;
 	mov	r0,#_Last_Receive_Tick
 	mov	@r0,a
@@ -556,7 +564,7 @@ __interrupt_vect:
 	mov	@r0,a
 	inc	r0
 	mov	@r0,a
-	C$main.c$77$1_0$69 ==.
+	C$main.c$77$1_0$76 ==.
 ;	main.c:77: __bit Tx_Busy=0;//串口发送忙标志
 ;	assignBit
 	clr	_Tx_Busy
@@ -577,12 +585,12 @@ __sdcc_program_startup:
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'LS_Init'
 ;------------------------------------------------------------
-;P1M1                      Allocated with name '_LS_Init_P1M1_65536_28'
-;P1M0                      Allocated with name '_LS_Init_P1M0_65536_28'
+;P1M1                      Allocated with name '_LS_Init_P1M1_65536_29'
+;P1M0                      Allocated with name '_LS_Init_P1M0_65536_29'
 ;------------------------------------------------------------
 	G$LS_Init$0$0 ==.
-	C$LatticeScreen.c$7$0_0$28 ==.
-;	LatticeScreen.c:7: void LS_Init()
+	C$LatticeScreen.c$9$0_0$29 ==.
+;	LatticeScreen.c:9: void LS_Init()
 ;	-----------------------------------------
 ;	 function LS_Init
 ;	-----------------------------------------
@@ -595,75 +603,75 @@ _LS_Init:
 	ar2 = 0x02
 	ar1 = 0x01
 	ar0 = 0x00
-	C$LatticeScreen.c$14$1_0$28 ==.
-;	LatticeScreen.c:14: P1M0|=0x3f;
-	orl	_LS_Init_P1M0_65536_28,#0x3f
-	C$LatticeScreen.c$15$1_0$28 ==.
-;	LatticeScreen.c:15: P1M1&=~0x3f;
-	anl	_LS_Init_P1M1_65536_28,#0xc0
-	C$LatticeScreen.c$18$1_0$28 ==.
-;	LatticeScreen.c:18: RCK=0;
+	C$LatticeScreen.c$16$1_0$29 ==.
+;	LatticeScreen.c:16: P1M0|=0x3f;
+	orl	_LS_Init_P1M0_65536_29,#0x3f
+	C$LatticeScreen.c$17$1_0$29 ==.
+;	LatticeScreen.c:17: P1M1&=~0x3f;
+	anl	_LS_Init_P1M1_65536_29,#0xc0
+	C$LatticeScreen.c$20$1_0$29 ==.
+;	LatticeScreen.c:20: RCK=0;
 ;	assignBit
 	clr	_P1_4
-	C$LatticeScreen.c$19$1_0$28 ==.
-;	LatticeScreen.c:19: SCK=0;
+	C$LatticeScreen.c$21$1_0$29 ==.
+;	LatticeScreen.c:21: SCK=0;
 ;	assignBit
 	clr	_P1_5
-	C$LatticeScreen.c$22$1_0$28 ==.
-;	LatticeScreen.c:22: SCLR=0;
+	C$LatticeScreen.c$24$1_0$29 ==.
+;	LatticeScreen.c:24: SCLR=0;
 ;	assignBit
 	clr	_P1_0
-	C$LatticeScreen.c$23$1_0$28 ==.
-;	LatticeScreen.c:23: SCLR=1;
+	C$LatticeScreen.c$25$1_0$29 ==.
+;	LatticeScreen.c:25: SCLR=1;
 ;	assignBit
 	setb	_P1_0
-	C$LatticeScreen.c$25$1_0$28 ==.
-;	LatticeScreen.c:25: OE=0;
+	C$LatticeScreen.c$27$1_0$29 ==.
+;	LatticeScreen.c:27: OE=0;
 ;	assignBit
 	clr	_P1_1
-	C$LatticeScreen.c$26$1_0$28 ==.
-;	LatticeScreen.c:26: }
-	C$LatticeScreen.c$26$1_0$28 ==.
+	C$LatticeScreen.c$28$1_0$29 ==.
+;	LatticeScreen.c:28: }
+	C$LatticeScreen.c$28$1_0$29 ==.
 	XG$LS_Init$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'LS_Deinit'
 ;------------------------------------------------------------
-;P1M1                      Allocated with name '_LS_Deinit_P1M1_65536_29'
-;P1M0                      Allocated with name '_LS_Deinit_P1M0_65536_29'
+;P1M1                      Allocated with name '_LS_Deinit_P1M1_65536_30'
+;P1M0                      Allocated with name '_LS_Deinit_P1M0_65536_30'
 ;------------------------------------------------------------
 	G$LS_Deinit$0$0 ==.
-	C$LatticeScreen.c$28$1_0$29 ==.
-;	LatticeScreen.c:28: void LS_Deinit()
+	C$LatticeScreen.c$30$1_0$30 ==.
+;	LatticeScreen.c:30: void LS_Deinit()
 ;	-----------------------------------------
 ;	 function LS_Deinit
 ;	-----------------------------------------
 _LS_Deinit:
-	C$LatticeScreen.c$34$1_0$29 ==.
-;	LatticeScreen.c:34: P1M0&=~0x3f;
-	anl	_LS_Deinit_P1M0_65536_29,#0xc0
-	C$LatticeScreen.c$35$1_0$29 ==.
-;	LatticeScreen.c:35: P1M1&=~0x3f;
-	anl	_LS_Deinit_P1M1_65536_29,#0xc0
-	C$LatticeScreen.c$38$1_0$29 ==.
-;	LatticeScreen.c:38: RCK=0;
+	C$LatticeScreen.c$36$1_0$30 ==.
+;	LatticeScreen.c:36: P1M0&=~0x3f;
+	anl	_LS_Deinit_P1M0_65536_30,#0xc0
+	C$LatticeScreen.c$37$1_0$30 ==.
+;	LatticeScreen.c:37: P1M1&=~0x3f;
+	anl	_LS_Deinit_P1M1_65536_30,#0xc0
+	C$LatticeScreen.c$40$1_0$30 ==.
+;	LatticeScreen.c:40: RCK=0;
 ;	assignBit
 	clr	_P1_4
-	C$LatticeScreen.c$39$1_0$29 ==.
-;	LatticeScreen.c:39: SCK=0;
+	C$LatticeScreen.c$41$1_0$30 ==.
+;	LatticeScreen.c:41: SCK=0;
 ;	assignBit
 	clr	_P1_5
-	C$LatticeScreen.c$42$1_0$29 ==.
-;	LatticeScreen.c:42: SCLR=0;
+	C$LatticeScreen.c$44$1_0$30 ==.
+;	LatticeScreen.c:44: SCLR=0;
 ;	assignBit
 	clr	_P1_0
-	C$LatticeScreen.c$44$1_0$29 ==.
-;	LatticeScreen.c:44: OE=1;
+	C$LatticeScreen.c$46$1_0$30 ==.
+;	LatticeScreen.c:46: OE=1;
 ;	assignBit
 	setb	_P1_1
-	C$LatticeScreen.c$45$1_0$29 ==.
-;	LatticeScreen.c:45: }
-	C$LatticeScreen.c$45$1_0$29 ==.
+	C$LatticeScreen.c$47$1_0$30 ==.
+;	LatticeScreen.c:47: }
+	C$LatticeScreen.c$47$1_0$30 ==.
 	XG$LS_Deinit$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -674,31 +682,31 @@ _LS_Deinit:
 ;i                         Allocated to registers r6 
 ;------------------------------------------------------------
 	G$LS_595_DataOut$0$0 ==.
-	C$LatticeScreen.c$47$1_0$31 ==.
-;	LatticeScreen.c:47: void LS_595_DataOut(unsigned char Row_Data,unsigned char Col_Data)//输出数据到595
+	C$LatticeScreen.c$49$1_0$32 ==.
+;	LatticeScreen.c:49: void LS_595_DataOut(unsigned char Row_Data,unsigned char Col_Data)//输出数据到595
 ;	-----------------------------------------
 ;	 function LS_595_DataOut
 ;	-----------------------------------------
 _LS_595_DataOut:
 	mov	r7,dpl
-	C$LatticeScreen.c$51$1_0$31 ==.
-;	LatticeScreen.c:51: RCK=0;
+	C$LatticeScreen.c$53$1_0$32 ==.
+;	LatticeScreen.c:53: RCK=0;
 ;	assignBit
 	clr	_P1_4
-	C$LatticeScreen.c$52$1_0$31 ==.
-;	LatticeScreen.c:52: SCK=0;
+	C$LatticeScreen.c$54$1_0$32 ==.
+;	LatticeScreen.c:54: SCK=0;
 ;	assignBit
 	clr	_P1_5
-	C$LatticeScreen.c$54$2_0$32 ==.
-;	LatticeScreen.c:54: for(i=0;i<8;i++)
+	C$LatticeScreen.c$56$2_0$33 ==.
+;	LatticeScreen.c:56: for(i=0;i<8;i++)
 	mov	r6,#0x00
 00108$:
-	C$LatticeScreen.c$56$3_0$33 ==.
-;	LatticeScreen.c:56: SCK=0;
+	C$LatticeScreen.c$58$3_0$34 ==.
+;	LatticeScreen.c:58: SCK=0;
 ;	assignBit
 	clr	_P1_5
-	C$LatticeScreen.c$57$3_0$33 ==.
-;	LatticeScreen.c:57: if(Row_Data & (1<<i))
+	C$LatticeScreen.c$59$3_0$34 ==.
+;	LatticeScreen.c:59: if(Row_Data & (1<<i))
 	mov	b,r6
 	inc	b
 	mov	r4,#0x01
@@ -722,19 +730,19 @@ _LS_595_DataOut:
 	mov	a,r4
 	orl	a,r5
 	jz	00102$
-	C$LatticeScreen.c$59$4_0$34 ==.
-;	LatticeScreen.c:59: ROW_IN=1;
+	C$LatticeScreen.c$61$4_0$35 ==.
+;	LatticeScreen.c:61: ROW_IN=1;
 ;	assignBit
 	setb	_P1_2
 	sjmp	00103$
 00102$:
-	C$LatticeScreen.c$63$4_0$35 ==.
-;	LatticeScreen.c:63: ROW_IN=0;
+	C$LatticeScreen.c$65$4_0$36 ==.
+;	LatticeScreen.c:65: ROW_IN=0;
 ;	assignBit
 	clr	_P1_2
 00103$:
-	C$LatticeScreen.c$66$3_0$33 ==.
-;	LatticeScreen.c:66: if(Col_Data & (1<<i))
+	C$LatticeScreen.c$68$3_0$34 ==.
+;	LatticeScreen.c:68: if(Col_Data & (1<<i))
 	mov	b,r6
 	inc	b
 	mov	r4,#0x01
@@ -758,34 +766,34 @@ _LS_595_DataOut:
 	mov	a,r4
 	orl	a,r5
 	jz	00105$
-	C$LatticeScreen.c$68$4_0$36 ==.
-;	LatticeScreen.c:68: COL_IN=1;
+	C$LatticeScreen.c$70$4_0$37 ==.
+;	LatticeScreen.c:70: COL_IN=1;
 ;	assignBit
 	setb	_P1_3
 	sjmp	00106$
 00105$:
-	C$LatticeScreen.c$72$4_0$37 ==.
-;	LatticeScreen.c:72: COL_IN=0;
+	C$LatticeScreen.c$74$4_0$38 ==.
+;	LatticeScreen.c:74: COL_IN=0;
 ;	assignBit
 	clr	_P1_3
 00106$:
-	C$LatticeScreen.c$75$3_0$33 ==.
-;	LatticeScreen.c:75: SCK=1;
+	C$LatticeScreen.c$77$3_0$34 ==.
+;	LatticeScreen.c:77: SCK=1;
 ;	assignBit
 	setb	_P1_5
-	C$LatticeScreen.c$54$2_0$32 ==.
-;	LatticeScreen.c:54: for(i=0;i<8;i++)
+	C$LatticeScreen.c$56$2_0$33 ==.
+;	LatticeScreen.c:56: for(i=0;i<8;i++)
 	inc	r6
 	cjne	r6,#0x08,00134$
 00134$:
 	jc	00108$
-	C$LatticeScreen.c$78$1_0$31 ==.
-;	LatticeScreen.c:78: RCK=1;
+	C$LatticeScreen.c$80$1_0$32 ==.
+;	LatticeScreen.c:80: RCK=1;
 ;	assignBit
 	setb	_P1_4
-	C$LatticeScreen.c$80$1_0$31 ==.
-;	LatticeScreen.c:80: }
-	C$LatticeScreen.c$80$1_0$31 ==.
+	C$LatticeScreen.c$82$1_0$32 ==.
+;	LatticeScreen.c:82: }
+	C$LatticeScreen.c$82$1_0$32 ==.
 	XG$LS_595_DataOut$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -795,20 +803,20 @@ _LS_595_DataOut:
 ;Row_Data                  Allocated to registers r7 
 ;------------------------------------------------------------
 	G$LS_DisplayOneRow$0$0 ==.
-	C$LatticeScreen.c$83$1_0$39 ==.
-;	LatticeScreen.c:83: void LS_DisplayOneRow(unsigned char Row_Data,unsigned char Col_Index)
+	C$LatticeScreen.c$85$1_0$40 ==.
+;	LatticeScreen.c:85: void LS_DisplayOneRow(unsigned char Row_Data,unsigned char Col_Index)
 ;	-----------------------------------------
 ;	 function LS_DisplayOneRow
 ;	-----------------------------------------
 _LS_DisplayOneRow:
 	mov	r7,dpl
-	C$LatticeScreen.c$85$1_0$39 ==.
-;	LatticeScreen.c:85: if(Col_Index < 8)
+	C$LatticeScreen.c$87$1_0$40 ==.
+;	LatticeScreen.c:87: if(Col_Index < 8)
 	mov	a,#0x100 - 0x08
 	add	a,_LS_DisplayOneRow_PARM_2
 	jc	00103$
-	C$LatticeScreen.c$87$2_0$40 ==.
-;	LatticeScreen.c:87: LS_595_DataOut(Row_Data,~(1<<Col_Index));	
+	C$LatticeScreen.c$89$2_0$41 ==.
+;	LatticeScreen.c:89: LS_595_DataOut(Row_Data,~(1<<Col_Index));
 	mov	r6,_LS_DisplayOneRow_PARM_2
 	mov	b,r6
 	inc	b
@@ -823,93 +831,188 @@ _LS_DisplayOneRow:
 	mov	dpl,r7
 	lcall	_LS_595_DataOut
 00103$:
-	C$LatticeScreen.c$90$1_0$39 ==.
-;	LatticeScreen.c:90: }
-	C$LatticeScreen.c$90$1_0$39 ==.
+	C$LatticeScreen.c$92$1_0$40 ==.
+;	LatticeScreen.c:92: }
+	C$LatticeScreen.c$92$1_0$40 ==.
 	XG$LS_DisplayOneRow$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'LS_Refresh'
 ;------------------------------------------------------------
-;i                         Allocated with name '_LS_Refresh_i_65536_41'
-;------------------------------------------------------------
 	G$LS_Refresh$0$0 ==.
-	C$LatticeScreen.c$92$1_0$41 ==.
-;	LatticeScreen.c:92: void LS_Refresh()
+	C$LatticeScreen.c$96$1_0$42 ==.
+;	LatticeScreen.c:96: void LS_Refresh()
 ;	-----------------------------------------
 ;	 function LS_Refresh
 ;	-----------------------------------------
 _LS_Refresh:
-	C$LatticeScreen.c$95$1_0$41 ==.
-;	LatticeScreen.c:95: LS_DisplayOneRow(LS_RAM[i],i++);
-	mov	a,_LS_Refresh_i_65536_41
+	C$LatticeScreen.c$99$1_0$42 ==.
+;	LatticeScreen.c:99: LS_DisplayOneRow(LS_RAM[LS_Current_Index],LS_Current_Index++);
+	mov	r0,#_LS_Current_Index
+	mov	a,@r0
 	add	a,#_LS_RAM
 	mov	r1,a
 	mov	dpl,@r1
-	mov	_LS_DisplayOneRow_PARM_2,_LS_Refresh_i_65536_41
-	inc	_LS_Refresh_i_65536_41
+	mov	r0,#_LS_Current_Index
+	mov	ar7,@r0
+	mov	r0,#_LS_Current_Index
+	mov	a,r7
+	inc	a
+	mov	@r0,a
+	mov	_LS_DisplayOneRow_PARM_2,r7
 	lcall	_LS_DisplayOneRow
-	C$LatticeScreen.c$96$1_0$41 ==.
-;	LatticeScreen.c:96: if(i>=8)
-	mov	a,#0x100 - 0x08
-	add	a,_LS_Refresh_i_65536_41
-	jnc	00103$
-	C$LatticeScreen.c$97$1_0$41 ==.
-;	LatticeScreen.c:97: i=0;
-	mov	_LS_Refresh_i_65536_41,#0x00
+	C$LatticeScreen.c$100$1_0$42 ==.
+;	LatticeScreen.c:100: if(LS_Current_Index>=8)
+	mov	r0,#_LS_Current_Index
+	cjne	@r0,#0x08,00109$
+00109$:
+	jc	00103$
+	C$LatticeScreen.c$102$2_0$43 ==.
+;	LatticeScreen.c:102: LS_Current_Index=0;
+	mov	r0,#_LS_Current_Index
+	mov	@r0,#0x00
 00103$:
-	C$LatticeScreen.c$98$1_0$41 ==.
-;	LatticeScreen.c:98: }
-	C$LatticeScreen.c$98$1_0$41 ==.
+	C$LatticeScreen.c$105$1_0$42 ==.
+;	LatticeScreen.c:105: }
+	C$LatticeScreen.c$105$1_0$42 ==.
 	XG$LS_Refresh$0$0 ==.
+	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'LS_Show_Char_Font5x7'
+;------------------------------------------------------------
+;c                         Allocated to registers r7 
+;i                         Allocated to registers r5 
+;font_pos                  Allocated to registers r6 r7 
+;------------------------------------------------------------
+	G$LS_Show_Char_Font5x7$0$0 ==.
+	C$LatticeScreen.c$208$1_0$45 ==.
+;	LatticeScreen.c:208: void LS_Show_Char_Font5x7(char c)//显示5x7字体
+;	-----------------------------------------
+;	 function LS_Show_Char_Font5x7
+;	-----------------------------------------
+_LS_Show_Char_Font5x7:
+	mov	r7,dpl
+	C$LatticeScreen.c$211$1_0$45 ==.
+;	LatticeScreen.c:211: if(c<' ')//不可显示字符，单8x8点阵不做处理
+	cjne	r7,#0x20,00116$
+00116$:
+	C$LatticeScreen.c$212$1_0$45 ==.
+;	LatticeScreen.c:212: return;
+	jc	00106$
+	C$LatticeScreen.c$214$1_0$45 ==.
+;	LatticeScreen.c:214: LS_RAM[0]=0x00;
+	mov	r0,#_LS_RAM
+	mov	@r0,#0x00
+	C$LatticeScreen.c$215$1_0$45 ==.
+;	LatticeScreen.c:215: LS_RAM[1]=0x00;
+	mov	r0,#(_LS_RAM + 0x0001)
+	mov	@r0,#0x00
+	C$LatticeScreen.c$216$1_0$45 ==.
+;	LatticeScreen.c:216: LS_RAM[7]=0x00;
+	mov	r0,#(_LS_RAM + 0x0007)
+	C$LatticeScreen.c$218$1_1$46 ==.
+;	LatticeScreen.c:218: uint16_t font_pos=(((uint16_t)c-0x20)*5);
+	clr	a
+	mov	@r0,a
+	mov	r6,a
+	mov	a,r7
+	add	a,#0xe0
+	mov	__mulint_PARM_2,a
+	mov	a,r6
+	addc	a,#0xff
+	mov	(__mulint_PARM_2 + 1),a
+	mov	dptr,#0x0005
+	lcall	__mulint
+	mov	r6,dpl
+	mov	r7,dph
+	C$LatticeScreen.c$219$2_1$47 ==.
+;	LatticeScreen.c:219: for(i=0;i<5;i++)
+	mov	r5,#0x00
+00104$:
+	C$LatticeScreen.c$221$3_1$48 ==.
+;	LatticeScreen.c:221: LS_RAM[i+2]=Font5x7[font_pos+i];
+	mov	ar4,r5
+	mov	a,#0x02
+	add	a,r4
+	add	a,#_LS_RAM
+	mov	r1,a
+	mov	ar3,r5
+	mov	r4,#0x00
+	mov	a,r3
+	add	a,r6
+	mov	r3,a
+	mov	a,r4
+	addc	a,r7
+	mov	r4,a
+	mov	a,r3
+	add	a,#_Font5x7
+	mov	dpl,a
+	mov	a,r4
+	addc	a,#(_Font5x7 >> 8)
+	mov	dph,a
+	clr	a
+	movc	a,@a+dptr
+	mov	r4,a
+	mov	@r1,a
+	C$LatticeScreen.c$219$2_1$47 ==.
+;	LatticeScreen.c:219: for(i=0;i<5;i++)
+	inc	r5
+	cjne	r5,#0x05,00118$
+00118$:
+	jc	00104$
+00106$:
+	C$LatticeScreen.c$224$2_1$45 ==.
+;	LatticeScreen.c:224: }
+	C$LatticeScreen.c$224$2_1$45 ==.
+	XG$LS_Show_Char_Font5x7$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'systick_init'
 ;------------------------------------------------------------
-;AUXR                      Allocated with name '_systick_init_AUXR_65536_42'
-;P3M1                      Allocated with name '_systick_init_P3M1_65537_43'
-;P3M0                      Allocated with name '_systick_init_P3M0_65537_43'
+;AUXR                      Allocated with name '_systick_init_AUXR_65536_49'
+;P3M1                      Allocated with name '_systick_init_P3M1_65537_50'
+;P3M0                      Allocated with name '_systick_init_P3M0_65537_50'
 ;------------------------------------------------------------
 	G$systick_init$0$0 ==.
-	C$main.c$25$1_0$42 ==.
+	C$main.c$25$2_1$49 ==.
 ;	main.c:25: void systick_init()
 ;	-----------------------------------------
 ;	 function systick_init
 ;	-----------------------------------------
 _systick_init:
-	C$main.c$28$1_0$42 ==.
+	C$main.c$28$1_0$49 ==.
 ;	main.c:28: AUXR |= 0x80;                   //定时器0为1T模式
-	orl	_systick_init_AUXR_65536_42,#0x80
-	C$main.c$29$1_0$42 ==.
+	orl	_systick_init_AUXR_65536_49,#0x80
+	C$main.c$29$1_0$49 ==.
 ;	main.c:29: TMOD &= ~0x0f;                    //设置定时器为模式0(16位自动重装载)
 	anl	_TMOD,#0xf0
-	C$main.c$30$1_0$42 ==.
+	C$main.c$30$1_0$49 ==.
 ;	main.c:30: TL0 = T1MS;                     //初始化计时值
 	mov	_TL0,#0x67
-	C$main.c$31$1_0$42 ==.
+	C$main.c$31$1_0$49 ==.
 ;	main.c:31: TH0 = T1MS >> 8;
 	mov	_TH0,#0x7e
-	C$main.c$32$1_0$42 ==.
+	C$main.c$32$1_0$49 ==.
 ;	main.c:32: TR0 = 1;                        //定时器0开始计时
 ;	assignBit
 	setb	_TR0
-	C$main.c$33$1_0$42 ==.
+	C$main.c$33$1_0$49 ==.
 ;	main.c:33: ET0 = 1;                        //使能定时器0中断
 ;	assignBit
 	setb	_ET0
-	C$main.c$34$1_0$42 ==.
+	C$main.c$34$1_0$49 ==.
 ;	main.c:34: EA = 1;
 ;	assignBit
 	setb	_EA
-	C$main.c$39$1_1$43 ==.
+	C$main.c$39$1_1$50 ==.
 ;	main.c:39: P3M1&=~(1<<3);
-	anl	_systick_init_P3M1_65537_43,#0xf7
-	C$main.c$40$1_1$43 ==.
+	anl	_systick_init_P3M1_65537_50,#0xf7
+	C$main.c$40$1_1$50 ==.
 ;	main.c:40: P3M0|=(1<<3);
-	orl	_systick_init_P3M0_65537_43,#0x08
-	C$main.c$42$1_1$42 ==.
+	orl	_systick_init_P3M0_65537_50,#0x08
+	C$main.c$42$1_1$49 ==.
 ;	main.c:42: }
-	C$main.c$42$1_1$42 ==.
+	C$main.c$42$1_1$49 ==.
 	XG$systick_init$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -918,7 +1021,7 @@ _systick_init:
 ;sloc0                     Allocated with name '_systick_interrupt_sloc0_1_0'
 ;------------------------------------------------------------
 	G$systick_interrupt$0$0 ==.
-	C$main.c$49$1_1$45 ==.
+	C$main.c$49$1_1$52 ==.
 ;	main.c:49: void systick_interrupt() __interrupt (1) __using (1) 
 ;	-----------------------------------------
 ;	 function systick_interrupt
@@ -947,7 +1050,7 @@ _systick_interrupt:
 	push	(0+0)
 	push	psw
 	mov	psw,#0x08
-	C$main.c$51$1_0$45 ==.
+	C$main.c$51$1_0$52 ==.
 ;	main.c:51: systick++;
 	mov	r0,#_systick
 	inc	@r0
@@ -973,12 +1076,12 @@ _systick_interrupt:
 	inc	r0
 	inc	@r0
 00115$:
-	C$main.c$52$1_0$45 ==.
+	C$main.c$52$1_0$52 ==.
 ;	main.c:52: if(Uart_Receive_Buff_Index!=0)
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	a,@r0
 	jz	00104$
-	C$main.c$54$2_0$46 ==.
+	C$main.c$54$2_0$53 ==.
 ;	main.c:54: if(systick>Last_Receive_Tick+1)
 	mov	r0,#_Last_Receive_Tick
 	mov	a,#0x01
@@ -1038,7 +1141,7 @@ _systick_interrupt:
 	inc	r0
 	subb	a,@r0
 	jnc	00104$
-	C$main.c$56$3_0$47 ==.
+	C$main.c$56$3_0$54 ==.
 ;	main.c:56: On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	_On_Uart_Idle_PARM_2,@r0
@@ -1047,20 +1150,20 @@ _systick_interrupt:
 	mov	psw,#0x00
 	lcall	_On_Uart_Idle
 	mov	psw,#0x08
-	C$main.c$57$3_0$47 ==.
+	C$main.c$57$3_0$54 ==.
 ;	main.c:57: Uart_Receive_Buff_Index=0;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	@r0,#0x00
 00104$:
-	C$main.c$61$1_0$45 ==.
+	C$main.c$61$1_0$52 ==.
 ;	main.c:61: P3_3=!P3_3;
 	cpl	_P3_3
-	C$main.c$63$1_0$45 ==.
+	C$main.c$63$1_0$52 ==.
 ;	main.c:63: On_SysTick_Timer();
 	mov	psw,#0x00
 	lcall	_On_SysTick_Timer
 	mov	psw,#0x08
-	C$main.c$64$1_0$45 ==.
+	C$main.c$64$1_0$52 ==.
 ;	main.c:64: }
 	pop	psw
 	pop	(0+0)
@@ -1076,19 +1179,19 @@ _systick_interrupt:
 	pop	b
 	pop	acc
 	pop	bits
-	C$main.c$64$1_0$45 ==.
+	C$main.c$64$1_0$52 ==.
 	XG$systick_interrupt$0$0 ==.
 	reti
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Uart_Init'
 ;------------------------------------------------------------
-;AUXR                      Allocated with name '_Uart_Init_AUXR_65536_48'
-;T2H                       Allocated with name '_Uart_Init_T2H_65536_48'
-;T2L                       Allocated with name '_Uart_Init_T2L_65536_48'
-;P_SW1                     Allocated with name '_Uart_Init_P_SW1_65536_48'
+;AUXR                      Allocated with name '_Uart_Init_AUXR_65536_55'
+;T2H                       Allocated with name '_Uart_Init_T2H_65536_55'
+;T2L                       Allocated with name '_Uart_Init_T2L_65536_55'
+;P_SW1                     Allocated with name '_Uart_Init_P_SW1_65536_55'
 ;------------------------------------------------------------
 	G$Uart_Init$0$0 ==.
-	C$main.c$78$1_0$48 ==.
+	C$main.c$78$1_0$55 ==.
 ;	main.c:78: void Uart_Init()
 ;	-----------------------------------------
 ;	 function Uart_Init
@@ -1102,41 +1205,41 @@ _Uart_Init:
 	ar2 = 0x02
 	ar1 = 0x01
 	ar0 = 0x00
-	C$main.c$84$1_0$48 ==.
+	C$main.c$84$1_0$55 ==.
 ;	main.c:84: ACC = P_SW1;
-	mov	_ACC,_Uart_Init_P_SW1_65536_48
-	C$main.c$85$1_0$48 ==.
+	mov	_ACC,_Uart_Init_P_SW1_65536_55
+	C$main.c$85$1_0$55 ==.
 ;	main.c:85: ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=0
 	anl	_ACC,#0x3f
-	C$main.c$86$1_0$48 ==.
+	C$main.c$86$1_0$55 ==.
 ;	main.c:86: P_SW1 = ACC;                //(P3.0/RxD, P3.1/TxD)
-	mov	_Uart_Init_P_SW1_65536_48,_ACC
-	C$main.c$98$1_0$48 ==.
+	mov	_Uart_Init_P_SW1_65536_55,_ACC
+	C$main.c$98$1_0$55 ==.
 ;	main.c:98: SCON = 0x50;                //8位可变波特率
 	mov	_SCON,#0x50
-	C$main.c$105$1_0$48 ==.
+	C$main.c$105$1_0$55 ==.
 ;	main.c:105: T2L = (65536 - (FOSC/4/BAUD)) & 0xff;   //设置波特率重装值
-	mov	_Uart_Init_T2L_65536_48,#0xb8
-	C$main.c$106$1_0$48 ==.
+	mov	_Uart_Init_T2L_65536_55,#0xb8
+	C$main.c$106$1_0$55 ==.
 ;	main.c:106: T2H = (65536 - (FOSC/4/BAUD))>>8;
-	mov	_Uart_Init_T2H_65536_48,#0xff
-	C$main.c$107$1_0$48 ==.
+	mov	_Uart_Init_T2H_65536_55,#0xff
+	C$main.c$107$1_0$55 ==.
 ;	main.c:107: AUXR |= 0x14;                //T2为1T模式, 并启动定时器2
-	orl	_Uart_Init_AUXR_65536_48,#0x14
-	C$main.c$108$1_0$48 ==.
+	orl	_Uart_Init_AUXR_65536_55,#0x14
+	C$main.c$108$1_0$55 ==.
 ;	main.c:108: AUXR |= 0x01;               //选择定时器2为串口1的波特率发生器
-	orl	_Uart_Init_AUXR_65536_48,#0x01
-	C$main.c$109$1_0$48 ==.
+	orl	_Uart_Init_AUXR_65536_55,#0x01
+	C$main.c$109$1_0$55 ==.
 ;	main.c:109: ES = 1;                     //使能串口1中断
 ;	assignBit
 	setb	_ES
-	C$main.c$110$1_0$48 ==.
+	C$main.c$110$1_0$55 ==.
 ;	main.c:110: EA = 1;
 ;	assignBit
 	setb	_EA
-	C$main.c$111$1_0$48 ==.
+	C$main.c$111$1_0$55 ==.
 ;	main.c:111: }
-	C$main.c$111$1_0$48 ==.
+	C$main.c$111$1_0$55 ==.
 	XG$Uart_Init$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -1145,40 +1248,40 @@ _Uart_Init:
 ;data                      Allocated to registers r7 
 ;------------------------------------------------------------
 	G$Uart_Send$0$0 ==.
-	C$main.c$112$1_0$50 ==.
+	C$main.c$112$1_0$57 ==.
 ;	main.c:112: void Uart_Send(uint8_t data)
 ;	-----------------------------------------
 ;	 function Uart_Send
 ;	-----------------------------------------
 _Uart_Send:
 	mov	r7,dpl
-	C$main.c$114$1_0$50 ==.
+	C$main.c$114$1_0$57 ==.
 ;	main.c:114: while(Tx_Busy);//串口发送忙标志
 00101$:
 	jb	_Tx_Busy,00101$
-	C$main.c$115$1_0$50 ==.
+	C$main.c$115$1_0$57 ==.
 ;	main.c:115: ACC = data;                  //获取校验位P (PSW.0)
 	mov	_ACC,r7
-	C$main.c$116$1_0$50 ==.
+	C$main.c$116$1_0$57 ==.
 ;	main.c:116: if (P)                      //根据P来设置校验位
 	mov	c,_P
-	C$main.c$132$1_0$50 ==.
+	C$main.c$132$1_0$57 ==.
 ;	main.c:132: Tx_Busy = 1;
 ;	assignBit
 	setb	_Tx_Busy
-	C$main.c$133$1_0$50 ==.
+	C$main.c$133$1_0$57 ==.
 ;	main.c:133: SBUF = ACC;                 //写数据到UART数据寄存器	
 	mov	_SBUF,_ACC
-	C$main.c$134$1_0$50 ==.
+	C$main.c$134$1_0$57 ==.
 ;	main.c:134: }
-	C$main.c$134$1_0$50 ==.
+	C$main.c$134$1_0$57 ==.
 	XG$Uart_Send$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Uart_Interrupt'
 ;------------------------------------------------------------
 	G$Uart_Interrupt$0$0 ==.
-	C$main.c$138$1_0$54 ==.
+	C$main.c$138$1_0$61 ==.
 ;	main.c:138: void Uart_Interrupt() __interrupt(4)
 ;	-----------------------------------------
 ;	 function Uart_Interrupt
@@ -1199,23 +1302,23 @@ _Uart_Interrupt:
 	push	(0+0)
 	push	psw
 	mov	psw,#0x00
-	C$main.c$140$1_0$54 ==.
+	C$main.c$140$1_0$61 ==.
 ;	main.c:140: if(TI)
-	C$main.c$142$2_0$55 ==.
+	C$main.c$142$2_0$62 ==.
 ;	main.c:142: TI=0;
 ;	assignBit
 	jbc	_TI,00121$
 	sjmp	00102$
 00121$:
-	C$main.c$143$2_0$55 ==.
+	C$main.c$143$2_0$62 ==.
 ;	main.c:143: Tx_Busy=0;
 ;	assignBit
 	clr	_Tx_Busy
 00102$:
-	C$main.c$145$1_0$54 ==.
+	C$main.c$145$1_0$61 ==.
 ;	main.c:145: if(RI)
 	jnb	_RI,00107$
-	C$main.c$159$2_0$56 ==.
+	C$main.c$159$2_0$63 ==.
 ;	main.c:159: Uart_Receive_Buff[Uart_Receive_Buff_Index++]=SBUF;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	ar7,@r0
@@ -1227,24 +1330,24 @@ _Uart_Interrupt:
 	add	a,#_Uart_Receive_Buff
 	mov	r0,a
 	mov	@r0,_SBUF
-	C$main.c$160$2_0$56 ==.
+	C$main.c$160$2_0$63 ==.
 ;	main.c:160: if(Uart_Receive_Buff_Index>=sizeof(Uart_Receive_Buff))
 	mov	r0,#_Uart_Receive_Buff_Index
 	cjne	@r0,#0x40,00123$
 00123$:
 	jc	00104$
-	C$main.c$162$3_0$57 ==.
+	C$main.c$162$3_0$64 ==.
 ;	main.c:162: On_Uart_Buff_Full(Uart_Receive_Buff,sizeof(Uart_Receive_Buff));
 	mov	_On_Uart_Buff_Full_PARM_2,#0x40
 	mov	(_On_Uart_Buff_Full_PARM_2 + 1),#0x00
 	mov	dpl,#_Uart_Receive_Buff
 	lcall	_On_Uart_Buff_Full
-	C$main.c$163$3_0$57 ==.
+	C$main.c$163$3_0$64 ==.
 ;	main.c:163: Uart_Receive_Buff_Index=0;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	@r0,#0x00
 00104$:
-	C$main.c$165$2_0$56 ==.
+	C$main.c$165$2_0$63 ==.
 ;	main.c:165: Last_Receive_Tick=systick;
 	mov	r0,#_systick
 	mov	r1,#_Last_Receive_Tick
@@ -1278,12 +1381,12 @@ _Uart_Interrupt:
 	inc	r1
 	mov	a,@r0
 	mov	@r1,a
-	C$main.c$166$2_0$56 ==.
+	C$main.c$166$2_0$63 ==.
 ;	main.c:166: RI=0;
 ;	assignBit
 	clr	_RI
 00107$:
-	C$main.c$168$1_0$54 ==.
+	C$main.c$168$1_0$61 ==.
 ;	main.c:168: }
 	pop	psw
 	pop	(0+0)
@@ -1299,58 +1402,58 @@ _Uart_Interrupt:
 	pop	b
 	pop	acc
 	pop	bits
-	C$main.c$168$1_0$54 ==.
+	C$main.c$168$1_0$61 ==.
 	XG$Uart_Interrupt$0$0 ==.
 	reti
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Clk_In_Init'
 ;------------------------------------------------------------
-;P3M1                      Allocated with name '_Clk_In_Init_P3M1_65536_58'
-;P3M0                      Allocated with name '_Clk_In_Init_P3M0_65536_58'
+;P3M1                      Allocated with name '_Clk_In_Init_P3M1_65536_65'
+;P3M0                      Allocated with name '_Clk_In_Init_P3M0_65536_65'
 ;------------------------------------------------------------
 	G$Clk_In_Init$0$0 ==.
-	C$main.c$170$1_0$58 ==.
+	C$main.c$170$1_0$65 ==.
 ;	main.c:170: void Clk_In_Init()
 ;	-----------------------------------------
 ;	 function Clk_In_Init
 ;	-----------------------------------------
 _Clk_In_Init:
-	C$main.c$175$1_0$58 ==.
+	C$main.c$175$1_0$65 ==.
 ;	main.c:175: P3M1&=~(1<<2);
-	anl	_Clk_In_Init_P3M1_65536_58,#0xfb
-	C$main.c$176$1_0$58 ==.
+	anl	_Clk_In_Init_P3M1_65536_65,#0xfb
+	C$main.c$176$1_0$65 ==.
 ;	main.c:176: P3M0&=~(1<<2);
-	anl	_Clk_In_Init_P3M0_65536_58,#0xfb
-	C$main.c$178$1_0$58 ==.
+	anl	_Clk_In_Init_P3M0_65536_65,#0xfb
+	C$main.c$178$1_0$65 ==.
 ;	main.c:178: P3_2=1;//准双向口输出高电平
 ;	assignBit
 	setb	_P3_2
-	C$main.c$180$1_0$58 ==.
+	C$main.c$180$1_0$65 ==.
 ;	main.c:180: INT0 = 1;
 ;	assignBit
 	setb	_INT0
-	C$main.c$181$1_0$58 ==.
+	C$main.c$181$1_0$65 ==.
 ;	main.c:181: IT0 = 0;                    //设置INT0的中断类型 (1:仅下降沿 0:上升沿和下降沿)
 ;	assignBit
 	clr	_IT0
-	C$main.c$182$1_0$58 ==.
+	C$main.c$182$1_0$65 ==.
 ;	main.c:182: EX0 = 1;                    //使能INT0中断
 ;	assignBit
 	setb	_EX0
-	C$main.c$183$1_0$58 ==.
+	C$main.c$183$1_0$65 ==.
 ;	main.c:183: EA = 1;
 ;	assignBit
 	setb	_EA
-	C$main.c$185$1_0$58 ==.
+	C$main.c$185$1_0$65 ==.
 ;	main.c:185: }
-	C$main.c$185$1_0$58 ==.
+	C$main.c$185$1_0$65 ==.
 	XG$Clk_In_Init$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Clk_In_Interrupt'
 ;------------------------------------------------------------
 	G$Clk_In_Interrupt$0$0 ==.
-	C$main.c$187$1_0$59 ==.
+	C$main.c$187$1_0$66 ==.
 ;	main.c:187: void Clk_In_Interrupt() __interrupt (0)
 ;	-----------------------------------------
 ;	 function Clk_In_Interrupt
@@ -1371,19 +1474,19 @@ _Clk_In_Interrupt:
 	push	(0+0)
 	push	psw
 	mov	psw,#0x00
-	C$main.c$189$1_0$59 ==.
+	C$main.c$189$1_0$66 ==.
 ;	main.c:189: if(TR0)//当T0作为系统主时间时，停止T0,重置系统主时间
-	C$main.c$191$2_0$60 ==.
+	C$main.c$191$2_0$67 ==.
 ;	main.c:191: TR0=0;//关闭定时器0
 ;	assignBit
 	jbc	_TR0,00109$
 	sjmp	00102$
 00109$:
-	C$main.c$192$2_0$60 ==.
+	C$main.c$192$2_0$67 ==.
 ;	main.c:192: ET0=0;//关闭定时器0中断
 ;	assignBit
 	clr	_ET0
-	C$main.c$193$2_0$60 ==.
+	C$main.c$193$2_0$67 ==.
 ;	main.c:193: systick=0;//清零系统主时间
 	mov	r0,#_systick
 	clr	a
@@ -1403,10 +1506,10 @@ _Clk_In_Interrupt:
 	inc	r0
 	mov	@r0,a
 00102$:
-	C$main.c$195$1_0$59 ==.
+	C$main.c$195$1_0$66 ==.
 ;	main.c:195: systick_interrupt();//调用中断函数
 	lcall	_systick_interrupt
-	C$main.c$196$1_0$59 ==.
+	C$main.c$196$1_0$66 ==.
 ;	main.c:196: }
 	pop	psw
 	pop	(0+0)
@@ -1422,25 +1525,25 @@ _Clk_In_Interrupt:
 	pop	b
 	pop	acc
 	pop	bits
-	C$main.c$196$1_0$59 ==.
+	C$main.c$196$1_0$66 ==.
 	XG$Clk_In_Interrupt$0$0 ==.
 	reti
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'On_SysTick_Timer'
 ;------------------------------------------------------------
 	G$On_SysTick_Timer$0$0 ==.
-	C$main.c$200$1_0$61 ==.
+	C$main.c$200$1_0$68 ==.
 ;	main.c:200: void On_SysTick_Timer()//系统的毫秒级定时器
 ;	-----------------------------------------
 ;	 function On_SysTick_Timer
 ;	-----------------------------------------
 _On_SysTick_Timer:
-	C$main.c$202$1_0$61 ==.
+	C$main.c$202$1_0$68 ==.
 ;	main.c:202: LS_Refresh();//刷新点阵屏	
 	lcall	_LS_Refresh
-	C$main.c$203$1_0$61 ==.
+	C$main.c$203$1_0$68 ==.
 ;	main.c:203: }
-	C$main.c$203$1_0$61 ==.
+	C$main.c$203$1_0$68 ==.
 	XG$On_SysTick_Timer$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -1451,14 +1554,14 @@ _On_SysTick_Timer:
 ;i                         Allocated to registers r6 
 ;------------------------------------------------------------
 	G$On_Uart_Idle$0$0 ==.
-	C$main.c$205$1_0$63 ==.
+	C$main.c$205$1_0$70 ==.
 ;	main.c:205: void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
 ;	-----------------------------------------
 ;	 function On_Uart_Idle
 ;	-----------------------------------------
 _On_Uart_Idle:
 	mov	r7,dpl
-	C$main.c$207$1_0$63 ==.
+	C$main.c$207$1_0$70 ==.
 ;	main.c:207: if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
 	mov	a,#0x08
 	cjne	a,_On_Uart_Idle_PARM_2,00116$
@@ -1468,11 +1571,11 @@ _On_Uart_Idle:
 00116$:
 	sjmp	00106$
 00117$:
-	C$main.c$210$3_0$65 ==.
+	C$main.c$210$3_0$72 ==.
 ;	main.c:210: for(i=0;i<8;i++)
 	mov	r6,#0x00
 00104$:
-	C$main.c$212$4_0$66 ==.
+	C$main.c$212$4_0$73 ==.
 ;	main.c:212: LS_RAM[i]=buff[i];
 	mov	a,r6
 	add	a,#_LS_RAM
@@ -1482,16 +1585,16 @@ _On_Uart_Idle:
 	mov	r0,a
 	mov	ar5,@r0
 	mov	@r1,ar5
-	C$main.c$210$3_0$65 ==.
+	C$main.c$210$3_0$72 ==.
 ;	main.c:210: for(i=0;i<8;i++)
 	inc	r6
 	cjne	r6,#0x08,00118$
 00118$:
 	jc	00104$
 00106$:
-	C$main.c$215$1_0$63 ==.
+	C$main.c$215$1_0$70 ==.
 ;	main.c:215: }
-	C$main.c$215$1_0$63 ==.
+	C$main.c$215$1_0$70 ==.
 	XG$On_Uart_Idle$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -1501,51 +1604,602 @@ _On_Uart_Idle:
 ;buff                      Allocated to registers 
 ;------------------------------------------------------------
 	G$On_Uart_Buff_Full$0$0 ==.
-	C$main.c$216$1_0$68 ==.
+	C$main.c$216$1_0$75 ==.
 ;	main.c:216: void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
 ;	-----------------------------------------
 ;	 function On_Uart_Buff_Full
 ;	-----------------------------------------
 _On_Uart_Buff_Full:
-	C$main.c$219$1_0$68 ==.
+	C$main.c$219$1_0$75 ==.
 ;	main.c:219: UNUSED(length);
-	C$main.c$221$1_0$68 ==.
+	C$main.c$221$1_0$75 ==.
 ;	main.c:221: }
-	C$main.c$221$1_0$68 ==.
+	C$main.c$221$1_0$75 ==.
 	XG$On_Uart_Buff_Full$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'main'
 ;------------------------------------------------------------
+;sloc0                     Allocated with name '_main_sloc0_1_0'
+;------------------------------------------------------------
 	G$main$0$0 ==.
-	C$main.c$223$1_0$69 ==.
+	C$main.c$223$1_0$76 ==.
 ;	main.c:223: void main()
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-	C$main.c$225$1_0$69 ==.
+	C$main.c$225$1_0$76 ==.
 ;	main.c:225: systick_init();//初始化主时间
 	lcall	_systick_init
-	C$main.c$226$1_0$69 ==.
+	C$main.c$226$1_0$76 ==.
 ;	main.c:226: Clk_In_Init();//初始化外部中断
 	lcall	_Clk_In_Init
-	C$main.c$227$1_0$69 ==.
+	C$main.c$227$1_0$76 ==.
 ;	main.c:227: Uart_Init();//初始化串口
 	lcall	_Uart_Init
-	C$main.c$228$1_0$69 ==.
+	C$main.c$228$1_0$76 ==.
 ;	main.c:228: LS_Init();//初始化点阵屏
 	lcall	_LS_Init
-	C$main.c$230$1_0$69 ==.
+	C$main.c$230$1_0$76 ==.
 ;	main.c:230: while(1)
 00102$:
-	sjmp	00102$
-	C$main.c$245$1_0$69 ==.
-;	main.c:245: }
-	C$main.c$245$1_0$69 ==.
+	C$main.c$246$1_0$76 ==.
+;	main.c:246: LS_Show_Char_Font5x7((systick/1000)%26+'A');
+	mov	__divulonglong_PARM_2,#0xe8
+	mov	(__divulonglong_PARM_2 + 1),#0x03
+	clr	a
+	mov	(__divulonglong_PARM_2 + 2),a
+	mov	(__divulonglong_PARM_2 + 3),a
+	mov	(__divulonglong_PARM_2 + 4),a
+	mov	(__divulonglong_PARM_2 + 5),a
+	mov	(__divulonglong_PARM_2 + 6),a
+	mov	(__divulonglong_PARM_2 + 7),a
+	mov	r0,#_systick
+	mov	dpl,@r0
+	inc	r0
+	mov	dph,@r0
+	inc	r0
+	mov	b,@r0
+	inc	r0
+	mov	a,@r0
+	inc	r0
+	mov	ar4,@r0
+	inc	r0
+	mov	ar5,@r0
+	inc	r0
+	mov	ar6,@r0
+	inc	r0
+	mov	ar7,@r0
+	lcall	__divulonglong
+	mov	_main_sloc0_1_0,dpl
+	mov	(_main_sloc0_1_0 + 1),dph
+	mov	(_main_sloc0_1_0 + 2),b
+	mov	(_main_sloc0_1_0 + 3),a
+	mov	(_main_sloc0_1_0 + 4),r4
+	mov	(_main_sloc0_1_0 + 5),r5
+	mov	(_main_sloc0_1_0 + 6),r6
+	mov	(_main_sloc0_1_0 + 7),r7
+	mov	__modulonglong_PARM_2,#0x1a
+	clr	a
+	mov	(__modulonglong_PARM_2 + 1),a
+	mov	(__modulonglong_PARM_2 + 2),a
+	mov	(__modulonglong_PARM_2 + 3),a
+	mov	(__modulonglong_PARM_2 + 4),a
+	mov	(__modulonglong_PARM_2 + 5),a
+	mov	(__modulonglong_PARM_2 + 6),a
+	mov	(__modulonglong_PARM_2 + 7),a
+	mov	dpl,_main_sloc0_1_0
+	mov	dph,(_main_sloc0_1_0 + 1)
+	mov	b,(_main_sloc0_1_0 + 2)
+	mov	a,(_main_sloc0_1_0 + 3)
+	mov	r4,(_main_sloc0_1_0 + 4)
+	mov	r5,(_main_sloc0_1_0 + 5)
+	mov	r6,(_main_sloc0_1_0 + 6)
+	mov	r7,(_main_sloc0_1_0 + 7)
+	lcall	__modulonglong
+	mov	_main_sloc0_1_0,dpl
+	mov	(_main_sloc0_1_0 + 1),dph
+	mov	(_main_sloc0_1_0 + 2),b
+	mov	(_main_sloc0_1_0 + 3),a
+	mov	(_main_sloc0_1_0 + 4),r4
+	mov	(_main_sloc0_1_0 + 5),r5
+	mov	(_main_sloc0_1_0 + 6),r6
+	mov	(_main_sloc0_1_0 + 7),r7
+	mov	r7,_main_sloc0_1_0
+	mov	a,#0x41
+	add	a,r7
+	mov	dpl,a
+	lcall	_LS_Show_Char_Font5x7
+	ljmp	00102$
+	C$main.c$248$1_0$76 ==.
+;	main.c:248: }
+	C$main.c$248$1_0$76 ==.
 	XG$main$0$0 ==.
 	ret
 	.area CSEG    (CODE)
 	.area CONST   (CODE)
+G$Font5x7$0_0$0 == .
+_Font5x7:
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x5f	; 95
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x07	; 7
+	.db #0x00	; 0
+	.db #0x07	; 7
+	.db #0x00	; 0
+	.db #0x14	; 20
+	.db #0x7f	; 127
+	.db #0x14	; 20
+	.db #0x7f	; 127
+	.db #0x14	; 20
+	.db #0x24	; 36
+	.db #0x2a	; 42
+	.db #0x07	; 7
+	.db #0x2a	; 42
+	.db #0x12	; 18
+	.db #0x23	; 35
+	.db #0x13	; 19
+	.db #0x08	; 8
+	.db #0x64	; 100	'd'
+	.db #0x62	; 98	'b'
+	.db #0x37	; 55	'7'
+	.db #0x49	; 73	'I'
+	.db #0x55	; 85	'U'
+	.db #0x22	; 34
+	.db #0x50	; 80	'P'
+	.db #0x00	; 0
+	.db #0x05	; 5
+	.db #0x03	; 3
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x1c	; 28
+	.db #0x22	; 34
+	.db #0x41	; 65	'A'
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x41	; 65	'A'
+	.db #0x22	; 34
+	.db #0x1c	; 28
+	.db #0x00	; 0
+	.db #0x08	; 8
+	.db #0x2a	; 42
+	.db #0x1c	; 28
+	.db #0x2a	; 42
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x3e	; 62
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x00	; 0
+	.db #0x50	; 80	'P'
+	.db #0x30	; 48	'0'
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x00	; 0
+	.db #0x60	; 96
+	.db #0x60	; 96
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x10	; 16
+	.db #0x08	; 8
+	.db #0x04	; 4
+	.db #0x02	; 2
+	.db #0x3e	; 62
+	.db #0x51	; 81	'Q'
+	.db #0x49	; 73	'I'
+	.db #0x45	; 69	'E'
+	.db #0x3e	; 62
+	.db #0x00	; 0
+	.db #0x42	; 66	'B'
+	.db #0x7f	; 127
+	.db #0x40	; 64
+	.db #0x00	; 0
+	.db #0x42	; 66	'B'
+	.db #0x61	; 97	'a'
+	.db #0x51	; 81	'Q'
+	.db #0x49	; 73	'I'
+	.db #0x46	; 70	'F'
+	.db #0x21	; 33
+	.db #0x41	; 65	'A'
+	.db #0x45	; 69	'E'
+	.db #0x4b	; 75	'K'
+	.db #0x31	; 49	'1'
+	.db #0x18	; 24
+	.db #0x14	; 20
+	.db #0x12	; 18
+	.db #0x7f	; 127
+	.db #0x10	; 16
+	.db #0x27	; 39
+	.db #0x45	; 69	'E'
+	.db #0x45	; 69	'E'
+	.db #0x45	; 69	'E'
+	.db #0x39	; 57	'9'
+	.db #0x3c	; 60
+	.db #0x4a	; 74	'J'
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x30	; 48	'0'
+	.db #0x01	; 1
+	.db #0x71	; 113	'q'
+	.db #0x09	; 9
+	.db #0x05	; 5
+	.db #0x03	; 3
+	.db #0x36	; 54	'6'
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x36	; 54	'6'
+	.db #0x06	; 6
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x29	; 41
+	.db #0x1e	; 30
+	.db #0x00	; 0
+	.db #0x36	; 54	'6'
+	.db #0x36	; 54	'6'
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x56	; 86	'V'
+	.db #0x36	; 54	'6'
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x08	; 8
+	.db #0x14	; 20
+	.db #0x22	; 34
+	.db #0x41	; 65	'A'
+	.db #0x14	; 20
+	.db #0x14	; 20
+	.db #0x14	; 20
+	.db #0x14	; 20
+	.db #0x14	; 20
+	.db #0x41	; 65	'A'
+	.db #0x22	; 34
+	.db #0x14	; 20
+	.db #0x08	; 8
+	.db #0x00	; 0
+	.db #0x02	; 2
+	.db #0x01	; 1
+	.db #0x51	; 81	'Q'
+	.db #0x09	; 9
+	.db #0x06	; 6
+	.db #0x32	; 50	'2'
+	.db #0x49	; 73	'I'
+	.db #0x79	; 121	'y'
+	.db #0x41	; 65	'A'
+	.db #0x3e	; 62
+	.db #0x7e	; 126
+	.db #0x11	; 17
+	.db #0x11	; 17
+	.db #0x11	; 17
+	.db #0x7e	; 126
+	.db #0x7f	; 127
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x36	; 54	'6'
+	.db #0x3e	; 62
+	.db #0x41	; 65	'A'
+	.db #0x41	; 65	'A'
+	.db #0x41	; 65	'A'
+	.db #0x22	; 34
+	.db #0x7f	; 127
+	.db #0x41	; 65	'A'
+	.db #0x41	; 65	'A'
+	.db #0x22	; 34
+	.db #0x1c	; 28
+	.db #0x7f	; 127
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x41	; 65	'A'
+	.db #0x7f	; 127
+	.db #0x09	; 9
+	.db #0x09	; 9
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x3e	; 62
+	.db #0x41	; 65	'A'
+	.db #0x41	; 65	'A'
+	.db #0x51	; 81	'Q'
+	.db #0x32	; 50	'2'
+	.db #0x7f	; 127
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x7f	; 127
+	.db #0x00	; 0
+	.db #0x41	; 65	'A'
+	.db #0x7f	; 127
+	.db #0x41	; 65	'A'
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x40	; 64
+	.db #0x41	; 65	'A'
+	.db #0x3f	; 63
+	.db #0x01	; 1
+	.db #0x7f	; 127
+	.db #0x08	; 8
+	.db #0x14	; 20
+	.db #0x22	; 34
+	.db #0x41	; 65	'A'
+	.db #0x7f	; 127
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x7f	; 127
+	.db #0x02	; 2
+	.db #0x04	; 4
+	.db #0x02	; 2
+	.db #0x7f	; 127
+	.db #0x7f	; 127
+	.db #0x04	; 4
+	.db #0x08	; 8
+	.db #0x10	; 16
+	.db #0x7f	; 127
+	.db #0x3e	; 62
+	.db #0x41	; 65	'A'
+	.db #0x41	; 65	'A'
+	.db #0x41	; 65	'A'
+	.db #0x3e	; 62
+	.db #0x7f	; 127
+	.db #0x09	; 9
+	.db #0x09	; 9
+	.db #0x09	; 9
+	.db #0x06	; 6
+	.db #0x3e	; 62
+	.db #0x41	; 65	'A'
+	.db #0x51	; 81	'Q'
+	.db #0x21	; 33
+	.db #0x5e	; 94
+	.db #0x7f	; 127
+	.db #0x09	; 9
+	.db #0x19	; 25
+	.db #0x29	; 41
+	.db #0x46	; 70	'F'
+	.db #0x46	; 70	'F'
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x49	; 73	'I'
+	.db #0x31	; 49	'1'
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x7f	; 127
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x3f	; 63
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x3f	; 63
+	.db #0x1f	; 31
+	.db #0x20	; 32
+	.db #0x40	; 64
+	.db #0x20	; 32
+	.db #0x1f	; 31
+	.db #0x7f	; 127
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.db #0x20	; 32
+	.db #0x7f	; 127
+	.db #0x63	; 99	'c'
+	.db #0x14	; 20
+	.db #0x08	; 8
+	.db #0x14	; 20
+	.db #0x63	; 99	'c'
+	.db #0x03	; 3
+	.db #0x04	; 4
+	.db #0x78	; 120	'x'
+	.db #0x04	; 4
+	.db #0x03	; 3
+	.db #0x61	; 97	'a'
+	.db #0x51	; 81	'Q'
+	.db #0x49	; 73	'I'
+	.db #0x45	; 69	'E'
+	.db #0x43	; 67	'C'
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x7f	; 127
+	.db #0x41	; 65	'A'
+	.db #0x41	; 65	'A'
+	.db #0x02	; 2
+	.db #0x04	; 4
+	.db #0x08	; 8
+	.db #0x10	; 16
+	.db #0x20	; 32
+	.db #0x41	; 65	'A'
+	.db #0x41	; 65	'A'
+	.db #0x7f	; 127
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x04	; 4
+	.db #0x02	; 2
+	.db #0x01	; 1
+	.db #0x02	; 2
+	.db #0x04	; 4
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x00	; 0
+	.db #0x01	; 1
+	.db #0x02	; 2
+	.db #0x04	; 4
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x54	; 84	'T'
+	.db #0x54	; 84	'T'
+	.db #0x54	; 84	'T'
+	.db #0x78	; 120	'x'
+	.db #0x7f	; 127
+	.db #0x48	; 72	'H'
+	.db #0x44	; 68	'D'
+	.db #0x44	; 68	'D'
+	.db #0x38	; 56	'8'
+	.db #0x38	; 56	'8'
+	.db #0x44	; 68	'D'
+	.db #0x44	; 68	'D'
+	.db #0x44	; 68	'D'
+	.db #0x20	; 32
+	.db #0x38	; 56	'8'
+	.db #0x44	; 68	'D'
+	.db #0x44	; 68	'D'
+	.db #0x48	; 72	'H'
+	.db #0x7f	; 127
+	.db #0x38	; 56	'8'
+	.db #0x54	; 84	'T'
+	.db #0x54	; 84	'T'
+	.db #0x54	; 84	'T'
+	.db #0x18	; 24
+	.db #0x08	; 8
+	.db #0x7e	; 126
+	.db #0x09	; 9
+	.db #0x01	; 1
+	.db #0x02	; 2
+	.db #0x08	; 8
+	.db #0x14	; 20
+	.db #0x54	; 84	'T'
+	.db #0x54	; 84	'T'
+	.db #0x3c	; 60
+	.db #0x7f	; 127
+	.db #0x08	; 8
+	.db #0x04	; 4
+	.db #0x04	; 4
+	.db #0x78	; 120	'x'
+	.db #0x00	; 0
+	.db #0x44	; 68	'D'
+	.db #0x7d	; 125
+	.db #0x40	; 64
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x40	; 64
+	.db #0x44	; 68	'D'
+	.db #0x3d	; 61
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x7f	; 127
+	.db #0x10	; 16
+	.db #0x28	; 40
+	.db #0x44	; 68	'D'
+	.db #0x00	; 0
+	.db #0x41	; 65	'A'
+	.db #0x7f	; 127
+	.db #0x40	; 64
+	.db #0x00	; 0
+	.db #0x7c	; 124
+	.db #0x04	; 4
+	.db #0x18	; 24
+	.db #0x04	; 4
+	.db #0x78	; 120	'x'
+	.db #0x7c	; 124
+	.db #0x08	; 8
+	.db #0x04	; 4
+	.db #0x04	; 4
+	.db #0x78	; 120	'x'
+	.db #0x38	; 56	'8'
+	.db #0x44	; 68	'D'
+	.db #0x44	; 68	'D'
+	.db #0x44	; 68	'D'
+	.db #0x38	; 56	'8'
+	.db #0x7c	; 124
+	.db #0x14	; 20
+	.db #0x14	; 20
+	.db #0x14	; 20
+	.db #0x08	; 8
+	.db #0x08	; 8
+	.db #0x14	; 20
+	.db #0x14	; 20
+	.db #0x18	; 24
+	.db #0x7c	; 124
+	.db #0x7c	; 124
+	.db #0x08	; 8
+	.db #0x04	; 4
+	.db #0x04	; 4
+	.db #0x08	; 8
+	.db #0x48	; 72	'H'
+	.db #0x54	; 84	'T'
+	.db #0x54	; 84	'T'
+	.db #0x54	; 84	'T'
+	.db #0x20	; 32
+	.db #0x04	; 4
+	.db #0x3f	; 63
+	.db #0x44	; 68	'D'
+	.db #0x40	; 64
+	.db #0x20	; 32
+	.db #0x3c	; 60
+	.db #0x40	; 64
+	.db #0x40	; 64
+	.db #0x20	; 32
+	.db #0x7c	; 124
+	.db #0x1c	; 28
+	.db #0x20	; 32
+	.db #0x40	; 64
+	.db #0x20	; 32
+	.db #0x1c	; 28
+	.db #0x3c	; 60
+	.db #0x40	; 64
+	.db #0x30	; 48	'0'
+	.db #0x40	; 64
+	.db #0x3c	; 60
+	.db #0x44	; 68	'D'
+	.db #0x28	; 40
+	.db #0x10	; 16
+	.db #0x28	; 40
+	.db #0x44	; 68	'D'
+	.db #0x0c	; 12
+	.db #0x50	; 80	'P'
+	.db #0x50	; 80	'P'
+	.db #0x50	; 80	'P'
+	.db #0x3c	; 60
+	.db #0x44	; 68	'D'
+	.db #0x64	; 100	'd'
+	.db #0x54	; 84	'T'
+	.db #0x4c	; 76	'L'
+	.db #0x44	; 68	'D'
+	.db #0x00	; 0
+	.db #0x08	; 8
+	.db #0x36	; 54	'6'
+	.db #0x41	; 65	'A'
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x7f	; 127
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x41	; 65	'A'
+	.db #0x36	; 54	'6'
+	.db #0x08	; 8
+	.db #0x00	; 0
+	.db #0x02	; 2
+	.db #0x01	; 1
+	.db #0x02	; 2
+	.db #0x04	; 4
+	.db #0x02	; 2
+	.db #0xff	; 255
+	.db #0xff	; 255
+	.db #0xff	; 255
+	.db #0xff	; 255
+	.db #0xff	; 255
 	.area XINIT   (CODE)
 	.area CABS    (ABS,CODE)

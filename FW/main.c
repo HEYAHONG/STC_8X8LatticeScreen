@@ -240,6 +240,9 @@ void main()
 			uint8_t t_s=(systick/1000)%64;
 			LS_RAM[t_s/8]&=~(1<<(t_s%8));
 		}  */
-		
+
+		//测试代码，测试字符显示
+		//LS_Show_Char_Font5x7((systick/1000)%10+'0');
+		LS_Show_Char_Font5x7((systick/1000)%26+'A');
 	}
 }

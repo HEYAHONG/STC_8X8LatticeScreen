@@ -26,8 +26,10 @@ void LS_Init();
 */
 void LS_Deinit();
 
-extern unsigned char LS_RAM[];//点阵屏内存，修改显示需要直接修改内存
+extern unsigned char __idata LS_RAM[];//点阵屏内存，修改显示需要直接修改内存
 
 void LS_Refresh();//刷新函数，需要定时调用，否则点阵屏不会正常显示
 
+
+void LS_Show_Char_Font5x7(char c);//显示5x7字体
 #endif
