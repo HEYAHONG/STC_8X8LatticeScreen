@@ -24,12 +24,10 @@ S:Lmain.LS_Refresh$i$1_0$41({1}SC:U),E,0,0
 S:Lmain.systick_interrupt$sloc0$0_1$0({8}SI:U),E,0,0
 S:Lmain.Uart_Send$data$1_0$48({1}SC:U),R,0,0,[r7]
 S:Lmain.On_Uart_Idle$length$1_0$58({2}SI:U),E,0,0
-S:Lmain.On_Uart_Idle$buff$1_0$58({3}DG,SC:U),R,0,0,[]
-S:Lmain.On_Uart_Buff_Full$length$1_0$61({2}SI:U),E,0,0
-S:Lmain.On_Uart_Buff_Full$buff$1_0$61({3}DG,SC:U),R,0,0,[]
-S:Lmain.main$i$3_0$66({1}SC:S),R,0,0,[r7]
-S:Lmain.main$t_s$3_1$68({1}SC:U),R,0,0,[r7]
-S:Lmain.main$sloc0$0_1$0({8}SI:U),E,0,0
+S:Lmain.On_Uart_Idle$buff$1_0$58({1}DI,SC:U),R,0,0,[r7]
+S:Lmain.On_Uart_Idle$i$2_0$60({1}SC:U),R,0,0,[r6]
+S:Lmain.On_Uart_Buff_Full$length$1_0$63({2}SI:U),E,0,0
+S:Lmain.On_Uart_Buff_Full$buff$1_0$63({1}DI,SC:U),R,0,0,[]
 S:G$systick$0_0$0({8}SI:U),G,0,0
 S:G$Uart_Receive_Buff$0_0$0({64}DA64d,SC:U),G,0,0
 S:G$Uart_Receive_Buff_Index$0_0$0({1}SC:U),G,0,0

@@ -1,6 +1,9 @@
 #include "8051.h"
 #include "stdint.h"
 #include "stdlib.h"
+
+#define UNUSED(x) ((void)x)
+
 //使用STC时需要定义此宏定义
 #ifndef USING_STC15
 #define USING_STC15
@@ -35,7 +38,7 @@ void On_SysTick_Timer();//系统的毫秒级定时器
 extern __idata uint64_t Last_Receive_Tick;
 extern __idata uint8_t Uart_Receive_Buff[];
 extern __idata uint8_t Uart_Receive_Buff_Index;
-void On_Uart_Idle(uint8_t * buff,size_t length);
+void On_Uart_Idle(uint8_t  __idata * buff,size_t length);
 void systick_interrupt() __interrupt (1) __using (1) 
 {
 	systick++;
@@ -44,6 +47,7 @@ void systick_interrupt() __interrupt (1) __using (1)
 		if(systick>Last_Receive_Tick+1)
 		{
 		   On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
+		   Uart_Receive_Buff_Index=0;
 		}
 	}
 	On_SysTick_Timer();
@@ -120,7 +124,7 @@ void Uart_Send(uint8_t data)
 }
 __idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0;
 __idata uint64_t Last_Receive_Tick=0;
-void On_Uart_Buff_Full(uint8_t * buff,size_t length);
+void On_Uart_Buff_Full(uint8_t  __idata * buff,size_t length);
 void Uart_Interrupt() __interrupt(4)
 {
 if(TI)
@@ -159,12 +163,21 @@ void On_SysTick_Timer()//系统的毫秒级定时器
 	LS_Refresh();//刷新点阵屏	
 }
 
-void On_Uart_Idle(uint8_t * buff,size_t length)//串口空闲的函数
+void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
 {
-	
+if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
+{
+	uint8_t i=0;
+	for(i=0;i<8;i++)
+	{
+	  LS_RAM[i]=buff[i];
+	}
 }
-void On_Uart_Buff_Full(uint8_t * buff,size_t length)//串口缓冲满
+}
+void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
 {
+UNUSED(buff);
+UNUSED(length);
 
 }
 
@@ -177,7 +190,7 @@ void main()
 	while(1)
 	{
 		
-		//测试代码，根据时间修该显示内容
+		/* //测试代码，根据时间修该显示内容
 		if(systick%1000==0 && systick>=64000l)
 		{	
 			int8_t i=0;
@@ -186,7 +199,7 @@ void main()
 		//根据实现不显示某盏灯
 			uint8_t t_s=(systick/1000)%64;
 			LS_RAM[t_s/8]&=~(1<<(t_s%8));
-		} 
+		}  */
 		
 	}
 }
