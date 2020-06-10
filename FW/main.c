@@ -204,6 +204,13 @@ void On_SysTick_Timer()//系统的毫秒级定时器
 
 void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
 {
+if(length==1)//当长度为1时，是可显示字符就显示此字符
+{
+	if(buff[0]>=0x20 && buff[0]<0x80)
+	{
+		LS_Show_Char_Font5x7(buff[0]);	
+	}
+}
 if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
 {
 	uint8_t i=0;
@@ -242,7 +249,7 @@ void main()
 		}  */
 
 		//测试代码，测试字符显示
-		LS_Show_Char_Font5x7((systick/1000)%10+'0');
+		//LS_Show_Char_Font5x7((systick/1000)%10+'0');
 		//LS_Show_Char_Font5x7((systick/1000)%26+'A');
 	}
 }

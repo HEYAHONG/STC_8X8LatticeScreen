@@ -397,12 +397,9 @@ _systick_interrupt_sloc0_1_0:
 Lmain.On_Uart_Idle$length$1_0$69==.
 _On_Uart_Idle_PARM_2:
 	.ds 2
-Lmain.On_Uart_Buff_Full$length$1_0$74==.
+Lmain.On_Uart_Buff_Full$length$1_0$76==.
 _On_Uart_Buff_Full_PARM_2:
 	.ds 2
-Lmain.main$sloc0$0_1$0==.
-_main_sloc0_1_0:
-	.ds 8
 ;--------------------------------------------------------
 ; overlayable items in internal ram 
 ;--------------------------------------------------------
@@ -501,7 +498,7 @@ __interrupt_vect:
 	.globl __mcs51_genXINIT
 	.globl __mcs51_genXRAMCLEAR
 	.globl __mcs51_genRAMCLEAR
-	C$LatticeScreen.c$3$1_0$76 ==.
+	C$LatticeScreen.c$3$1_0$78 ==.
 ;	LatticeScreen.c:3: unsigned char __idata LS_RAM[8]={0x0,0x10,0x38,0x54,0x10,0x10,0x10,0x0};//默认显示数据，向左的箭头
 	mov	r0,#_LS_RAM
 	mov	@r0,#0x00
@@ -519,11 +516,11 @@ __interrupt_vect:
 	mov	@r0,#0x10
 	mov	r0,#(_LS_RAM + 0x0007)
 	mov	@r0,#0x00
-	C$LatticeScreen.c$94$1_0$76 ==.
+	C$LatticeScreen.c$94$1_0$78 ==.
 ;	LatticeScreen.c:94: static unsigned __idata char LS_Current_Index=0;
 	mov	r0,#_LS_Current_Index
 	mov	@r0,#0x00
-	C$main.c$24$1_0$76 ==.
+	C$main.c$24$1_0$78 ==.
 ;	main.c:24: __idata uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
 	mov	r0,#_systick
 	clr	a
@@ -542,11 +539,11 @@ __interrupt_vect:
 	mov	@r0,a
 	inc	r0
 	mov	@r0,a
-	C$main.c$135$1_0$76 ==.
+	C$main.c$135$1_0$78 ==.
 ;	main.c:135: __idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	@r0,#0x00
-	C$main.c$136$1_0$76 ==.
+	C$main.c$136$1_0$78 ==.
 ;	main.c:136: __idata uint64_t Last_Receive_Tick=0;
 	mov	r0,#_Last_Receive_Tick
 	mov	@r0,a
@@ -564,7 +561,7 @@ __interrupt_vect:
 	mov	@r0,a
 	inc	r0
 	mov	@r0,a
-	C$main.c$77$1_0$76 ==.
+	C$main.c$77$1_0$78 ==.
 ;	main.c:77: __bit Tx_Busy=0;//串口发送忙标志
 ;	assignBit
 	clr	_Tx_Busy
@@ -1766,8 +1763,8 @@ _On_SysTick_Timer:
 ;Allocation info for local variables in function 'On_Uart_Idle'
 ;------------------------------------------------------------
 ;length                    Allocated with name '_On_Uart_Idle_PARM_2'
-;buff                      Allocated to registers r7 
-;i                         Allocated to registers r6 
+;buff                      Allocated to registers r1 
+;i                         Allocated to registers r7 
 ;------------------------------------------------------------
 	G$On_Uart_Idle$0$0 ==.
 	C$main.c$205$1_0$70 ==.
@@ -1776,41 +1773,70 @@ _On_SysTick_Timer:
 ;	 function On_Uart_Idle
 ;	-----------------------------------------
 _On_Uart_Idle:
-	mov	r7,dpl
+	mov	r1,dpl
 	C$main.c$207$1_0$70 ==.
-;	main.c:207: if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
+;	main.c:207: if(length==1)//当长度为1时，是可显示字符就显示此字符
+	mov	a,#0x01
+	cjne	a,_On_Uart_Idle_PARM_2,00133$
+	dec	a
+	cjne	a,(_On_Uart_Idle_PARM_2 + 1),00133$
+	sjmp	00134$
+00133$:
+	sjmp	00105$
+00134$:
+	C$main.c$209$2_0$71 ==.
+;	main.c:209: if(buff[0]>=0x20 && buff[0]<0x80)
+	mov	ar7,@r1
+	cjne	r7,#0x20,00135$
+00135$:
+	jc	00105$
+	cjne	r7,#0x80,00137$
+00137$:
+	jnc	00105$
+	C$main.c$211$3_0$72 ==.
+;	main.c:211: LS_Show_Char_Font5x7(buff[0]);	
+	mov	dpl,r7
+	push	ar1
+	lcall	_LS_Show_Char_Font5x7
+	pop	ar1
+00105$:
+	C$main.c$214$1_0$70 ==.
+;	main.c:214: if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
 	mov	a,#0x08
-	cjne	a,_On_Uart_Idle_PARM_2,00116$
+	cjne	a,_On_Uart_Idle_PARM_2,00139$
 	clr	a
-	cjne	a,(_On_Uart_Idle_PARM_2 + 1),00116$
-	sjmp	00117$
-00116$:
-	sjmp	00106$
-00117$:
-	C$main.c$210$3_0$72 ==.
-;	main.c:210: for(i=0;i<8;i++)
-	mov	r6,#0x00
-00104$:
-	C$main.c$212$4_0$73 ==.
-;	main.c:212: LS_RAM[i]=buff[i];
-	mov	a,r6
+	cjne	a,(_On_Uart_Idle_PARM_2 + 1),00139$
+	sjmp	00140$
+00139$:
+	sjmp	00111$
+00140$:
+	C$main.c$217$3_0$74 ==.
+;	main.c:217: for(i=0;i<8;i++)
+	mov	r7,#0x00
+00109$:
+	C$main.c$219$4_0$75 ==.
+;	main.c:219: LS_RAM[i]=buff[i];
+	mov	a,r7
 	add	a,#_LS_RAM
-	mov	r1,a
-	mov	a,r6
-	add	a,r7
 	mov	r0,a
-	mov	ar5,@r0
-	mov	@r1,ar5
-	C$main.c$210$3_0$72 ==.
-;	main.c:210: for(i=0;i<8;i++)
-	inc	r6
-	cjne	r6,#0x08,00118$
-00118$:
-	jc	00104$
-00106$:
-	C$main.c$215$1_0$70 ==.
-;	main.c:215: }
-	C$main.c$215$1_0$70 ==.
+	mov	a,r7
+	add	a,r1
+	mov	r6,a
+	push	ar0
+	mov	r0,ar6
+	mov	ar6,@r0
+	pop	ar0
+	mov	@r0,ar6
+	C$main.c$217$3_0$74 ==.
+;	main.c:217: for(i=0;i<8;i++)
+	inc	r7
+	cjne	r7,#0x08,00141$
+00141$:
+	jc	00109$
+00111$:
+	C$main.c$222$1_0$70 ==.
+;	main.c:222: }
+	C$main.c$222$1_0$70 ==.
 	XG$On_Uart_Idle$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -1820,117 +1846,48 @@ _On_Uart_Idle:
 ;buff                      Allocated to registers 
 ;------------------------------------------------------------
 	G$On_Uart_Buff_Full$0$0 ==.
-	C$main.c$216$1_0$75 ==.
-;	main.c:216: void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
+	C$main.c$223$1_0$77 ==.
+;	main.c:223: void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
 ;	-----------------------------------------
 ;	 function On_Uart_Buff_Full
 ;	-----------------------------------------
 _On_Uart_Buff_Full:
-	C$main.c$219$1_0$75 ==.
-;	main.c:219: UNUSED(length);
-	C$main.c$221$1_0$75 ==.
-;	main.c:221: }
-	C$main.c$221$1_0$75 ==.
+	C$main.c$226$1_0$77 ==.
+;	main.c:226: UNUSED(length);
+	C$main.c$228$1_0$77 ==.
+;	main.c:228: }
+	C$main.c$228$1_0$77 ==.
 	XG$On_Uart_Buff_Full$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'main'
 ;------------------------------------------------------------
-;sloc0                     Allocated with name '_main_sloc0_1_0'
-;------------------------------------------------------------
 	G$main$0$0 ==.
-	C$main.c$223$1_0$76 ==.
-;	main.c:223: void main()
+	C$main.c$230$1_0$78 ==.
+;	main.c:230: void main()
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-	C$main.c$225$1_0$76 ==.
-;	main.c:225: systick_init();//初始化主时间
+	C$main.c$232$1_0$78 ==.
+;	main.c:232: systick_init();//初始化主时间
 	lcall	_systick_init
-	C$main.c$226$1_0$76 ==.
-;	main.c:226: Clk_In_Init();//初始化外部中断
+	C$main.c$233$1_0$78 ==.
+;	main.c:233: Clk_In_Init();//初始化外部中断
 	lcall	_Clk_In_Init
-	C$main.c$227$1_0$76 ==.
-;	main.c:227: Uart_Init();//初始化串口
+	C$main.c$234$1_0$78 ==.
+;	main.c:234: Uart_Init();//初始化串口
 	lcall	_Uart_Init
-	C$main.c$228$1_0$76 ==.
-;	main.c:228: LS_Init();//初始化点阵屏
+	C$main.c$235$1_0$78 ==.
+;	main.c:235: LS_Init();//初始化点阵屏
 	lcall	_LS_Init
-	C$main.c$230$1_0$76 ==.
-;	main.c:230: while(1)
+	C$main.c$237$1_0$78 ==.
+;	main.c:237: while(1)
 00102$:
-	C$main.c$245$1_0$76 ==.
-;	main.c:245: LS_Show_Char_Font5x7((systick/1000)%10+'0');
-	mov	__divulonglong_PARM_2,#0xe8
-	mov	(__divulonglong_PARM_2 + 1),#0x03
-	clr	a
-	mov	(__divulonglong_PARM_2 + 2),a
-	mov	(__divulonglong_PARM_2 + 3),a
-	mov	(__divulonglong_PARM_2 + 4),a
-	mov	(__divulonglong_PARM_2 + 5),a
-	mov	(__divulonglong_PARM_2 + 6),a
-	mov	(__divulonglong_PARM_2 + 7),a
-	mov	r0,#_systick
-	mov	dpl,@r0
-	inc	r0
-	mov	dph,@r0
-	inc	r0
-	mov	b,@r0
-	inc	r0
-	mov	a,@r0
-	inc	r0
-	mov	ar4,@r0
-	inc	r0
-	mov	ar5,@r0
-	inc	r0
-	mov	ar6,@r0
-	inc	r0
-	mov	ar7,@r0
-	lcall	__divulonglong
-	mov	_main_sloc0_1_0,dpl
-	mov	(_main_sloc0_1_0 + 1),dph
-	mov	(_main_sloc0_1_0 + 2),b
-	mov	(_main_sloc0_1_0 + 3),a
-	mov	(_main_sloc0_1_0 + 4),r4
-	mov	(_main_sloc0_1_0 + 5),r5
-	mov	(_main_sloc0_1_0 + 6),r6
-	mov	(_main_sloc0_1_0 + 7),r7
-	mov	__modulonglong_PARM_2,#0x0a
-	clr	a
-	mov	(__modulonglong_PARM_2 + 1),a
-	mov	(__modulonglong_PARM_2 + 2),a
-	mov	(__modulonglong_PARM_2 + 3),a
-	mov	(__modulonglong_PARM_2 + 4),a
-	mov	(__modulonglong_PARM_2 + 5),a
-	mov	(__modulonglong_PARM_2 + 6),a
-	mov	(__modulonglong_PARM_2 + 7),a
-	mov	dpl,_main_sloc0_1_0
-	mov	dph,(_main_sloc0_1_0 + 1)
-	mov	b,(_main_sloc0_1_0 + 2)
-	mov	a,(_main_sloc0_1_0 + 3)
-	mov	r4,(_main_sloc0_1_0 + 4)
-	mov	r5,(_main_sloc0_1_0 + 5)
-	mov	r6,(_main_sloc0_1_0 + 6)
-	mov	r7,(_main_sloc0_1_0 + 7)
-	lcall	__modulonglong
-	mov	_main_sloc0_1_0,dpl
-	mov	(_main_sloc0_1_0 + 1),dph
-	mov	(_main_sloc0_1_0 + 2),b
-	mov	(_main_sloc0_1_0 + 3),a
-	mov	(_main_sloc0_1_0 + 4),r4
-	mov	(_main_sloc0_1_0 + 5),r5
-	mov	(_main_sloc0_1_0 + 6),r6
-	mov	(_main_sloc0_1_0 + 7),r7
-	mov	r7,_main_sloc0_1_0
-	mov	a,#0x30
-	add	a,r7
-	mov	dpl,a
-	lcall	_LS_Show_Char_Font5x7
-	ljmp	00102$
-	C$main.c$248$1_0$76 ==.
-;	main.c:248: }
-	C$main.c$248$1_0$76 ==.
+	sjmp	00102$
+	C$main.c$255$1_0$78 ==.
+;	main.c:255: }
+	C$main.c$255$1_0$78 ==.
 	XG$main$0$0 ==.
 	ret
 	.area CSEG    (CODE)
