@@ -242,7 +242,7 @@ void main()
 		}  */
 
 		//测试代码，测试字符显示
-		//LS_Show_Char_Font5x7((systick/1000)%10+'0');
-		LS_Show_Char_Font5x7((systick/1000)%26+'A');
+		LS_Show_Char_Font5x7((systick/1000)%10+'0');
+		//LS_Show_Char_Font5x7((systick/1000)%26+'A');
 	}
 }

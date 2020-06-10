@@ -17,7 +17,7 @@
 	.globl _Uart_Init
 	.globl _systick_interrupt
 	.globl _systick_init
-	.globl _LS_DisplayOneRow
+	.globl _LS_DisplayOneCol
 	.globl _LS_595_DataOut
 	.globl _CY
 	.globl _AC
@@ -123,7 +123,7 @@
 	.globl _LS_RAM
 	.globl _On_Uart_Buff_Full_PARM_2
 	.globl _On_Uart_Idle_PARM_2
-	.globl _LS_DisplayOneRow_PARM_2
+	.globl _LS_DisplayOneCol_PARM_2
 	.globl _LS_595_DataOut_PARM_2
 	.globl _LS_Init
 	.globl _LS_Deinit
@@ -388,8 +388,8 @@ bits:
 Lmain.LS_595_DataOut$Col_Data$1_0$31==.
 _LS_595_DataOut_PARM_2:
 	.ds 1
-Lmain.LS_DisplayOneRow$Col_Index$1_0$39==.
-_LS_DisplayOneRow_PARM_2:
+Lmain.LS_DisplayOneCol$Row_Index$1_0$39==.
+_LS_DisplayOneCol_PARM_2:
 	.ds 1
 Lmain.systick_interrupt$sloc0$0_1$0==.
 _systick_interrupt_sloc0_1_0:
@@ -797,27 +797,27 @@ _LS_595_DataOut:
 	XG$LS_595_DataOut$0$0 ==.
 	ret
 ;------------------------------------------------------------
-;Allocation info for local variables in function 'LS_DisplayOneRow'
+;Allocation info for local variables in function 'LS_DisplayOneCol'
 ;------------------------------------------------------------
-;Col_Index                 Allocated with name '_LS_DisplayOneRow_PARM_2'
-;Row_Data                  Allocated to registers r7 
+;Row_Index                 Allocated with name '_LS_DisplayOneCol_PARM_2'
+;Col_Data                  Allocated to registers r7 
 ;------------------------------------------------------------
-	G$LS_DisplayOneRow$0$0 ==.
+	G$LS_DisplayOneCol$0$0 ==.
 	C$LatticeScreen.c$85$1_0$40 ==.
-;	LatticeScreen.c:85: void LS_DisplayOneRow(unsigned char Row_Data,unsigned char Col_Index)
+;	LatticeScreen.c:85: void LS_DisplayOneCol(unsigned char Col_Data,unsigned char Row_Index)
 ;	-----------------------------------------
-;	 function LS_DisplayOneRow
+;	 function LS_DisplayOneCol
 ;	-----------------------------------------
-_LS_DisplayOneRow:
+_LS_DisplayOneCol:
 	mov	r7,dpl
 	C$LatticeScreen.c$87$1_0$40 ==.
-;	LatticeScreen.c:87: if(Col_Index < 8)
+;	LatticeScreen.c:87: if(Row_Index < 8)
 	mov	a,#0x100 - 0x08
-	add	a,_LS_DisplayOneRow_PARM_2
+	add	a,_LS_DisplayOneCol_PARM_2
 	jc	00103$
 	C$LatticeScreen.c$89$2_0$41 ==.
-;	LatticeScreen.c:89: LS_595_DataOut(Row_Data,~(1<<Col_Index));
-	mov	r6,_LS_DisplayOneRow_PARM_2
+;	LatticeScreen.c:89: LS_595_DataOut(1<<Row_Index,~(Col_Data));
+	mov	r6,_LS_DisplayOneCol_PARM_2
 	mov	b,r6
 	inc	b
 	mov	a,#0x01
@@ -826,15 +826,16 @@ _LS_DisplayOneRow:
 	add	a,acc
 00112$:
 	djnz	b,00110$
+	mov	dpl,a
+	mov	a,r7
 	cpl	a
 	mov	_LS_595_DataOut_PARM_2,a
-	mov	dpl,r7
 	lcall	_LS_595_DataOut
 00103$:
 	C$LatticeScreen.c$92$1_0$40 ==.
 ;	LatticeScreen.c:92: }
 	C$LatticeScreen.c$92$1_0$40 ==.
-	XG$LS_DisplayOneRow$0$0 ==.
+	XG$LS_DisplayOneCol$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'LS_Refresh'
@@ -847,7 +848,7 @@ _LS_DisplayOneRow:
 ;	-----------------------------------------
 _LS_Refresh:
 	C$LatticeScreen.c$99$1_0$42 ==.
-;	LatticeScreen.c:99: LS_DisplayOneRow(LS_RAM[LS_Current_Index],LS_Current_Index++);
+;	LatticeScreen.c:99: LS_DisplayOneCol(LS_RAM[LS_Current_Index],LS_Current_Index++);
 	mov	r0,#_LS_Current_Index
 	mov	a,@r0
 	add	a,#_LS_RAM
@@ -859,8 +860,8 @@ _LS_Refresh:
 	mov	a,r7
 	inc	a
 	mov	@r0,a
-	mov	_LS_DisplayOneRow_PARM_2,r7
-	lcall	_LS_DisplayOneRow
+	mov	_LS_DisplayOneCol_PARM_2,r7
+	lcall	_LS_DisplayOneCol
 	C$LatticeScreen.c$100$1_0$42 ==.
 ;	LatticeScreen.c:100: if(LS_Current_Index>=8)
 	mov	r0,#_LS_Current_Index
@@ -892,26 +893,28 @@ _LS_Refresh:
 ;	-----------------------------------------
 _LS_Show_Char_Font5x7:
 	mov	r7,dpl
+	C$LatticeScreen.c$210$1_0$45 ==.
+;	LatticeScreen.c:210: if(c<' ')//不可显示字符，单8x8点阵不做处理
+	cjne	r7,#0x20,00164$
+00164$:
+	jnc	00102$
 	C$LatticeScreen.c$211$1_0$45 ==.
-;	LatticeScreen.c:211: if(c<' ')//不可显示字符，单8x8点阵不做处理
-	cjne	r7,#0x20,00116$
-00116$:
+;	LatticeScreen.c:211: return;
+	ljmp	00106$
+00102$:
 	C$LatticeScreen.c$212$1_0$45 ==.
-;	LatticeScreen.c:212: return;
-	jc	00106$
-	C$LatticeScreen.c$214$1_0$45 ==.
-;	LatticeScreen.c:214: LS_RAM[0]=0x00;
+;	LatticeScreen.c:212: LS_RAM[0]=0x00;
 	mov	r0,#_LS_RAM
 	mov	@r0,#0x00
-	C$LatticeScreen.c$215$1_0$45 ==.
-;	LatticeScreen.c:215: LS_RAM[1]=0x00;
+	C$LatticeScreen.c$213$1_0$45 ==.
+;	LatticeScreen.c:213: LS_RAM[1]=0x00;
 	mov	r0,#(_LS_RAM + 0x0001)
 	mov	@r0,#0x00
-	C$LatticeScreen.c$216$1_0$45 ==.
-;	LatticeScreen.c:216: LS_RAM[7]=0x00;
+	C$LatticeScreen.c$214$1_0$45 ==.
+;	LatticeScreen.c:214: LS_RAM[7]=0x00;
 	mov	r0,#(_LS_RAM + 0x0007)
-	C$LatticeScreen.c$218$1_1$46 ==.
-;	LatticeScreen.c:218: uint16_t font_pos=(((uint16_t)c-0x20)*5);
+	C$LatticeScreen.c$217$1_1$46 ==.
+;	LatticeScreen.c:217: uint16_t font_pos=(((uint16_t)c-0x20)*5);
 	clr	a
 	mov	@r0,a
 	mov	r6,a
@@ -925,17 +928,19 @@ _LS_Show_Char_Font5x7:
 	lcall	__mulint
 	mov	r6,dpl
 	mov	r7,dph
-	C$LatticeScreen.c$219$2_1$47 ==.
-;	LatticeScreen.c:219: for(i=0;i<5;i++)
+	C$LatticeScreen.c$218$2_1$47 ==.
+;	LatticeScreen.c:218: for(i=0;i<5;i++)
 	mov	r5,#0x00
 00104$:
-	C$LatticeScreen.c$221$3_1$48 ==.
-;	LatticeScreen.c:221: LS_RAM[i+2]=Font5x7[font_pos+i];
+	C$LatticeScreen.c$222$3_1$48 ==.
+;	LatticeScreen.c:222: LS_RAM[i+2]=
 	mov	ar4,r5
 	mov	a,#0x02
 	add	a,r4
 	add	a,#_LS_RAM
 	mov	r1,a
+	C$LatticeScreen.c$223$3_1$48 ==.
+;	LatticeScreen.c:223: ((Font5x7[font_pos+i]&(1<<0))?(1<<7):(0))+
 	mov	ar3,r5
 	mov	r4,#0x00
 	mov	a,r3
@@ -952,18 +957,229 @@ _LS_Show_Char_Font5x7:
 	mov	dph,a
 	clr	a
 	movc	a,@a+dptr
+	jnb	acc.0,00108$
+	mov	r3,#0x80
+	mov	r4,#0xff
+	sjmp	00109$
+00108$:
+	mov	r3,#0x00
+	mov	r4,#0x00
+00109$:
+	C$LatticeScreen.c$224$3_1$48 ==.
+;	LatticeScreen.c:224: ((Font5x7[font_pos+i]&(1<<1))?(1<<6):(0))+
+	mov	ar2,r5
+	mov	r4,#0x00
+	mov	a,r2
+	add	a,r6
+	mov	r2,a
+	mov	a,r4
+	addc	a,r7
 	mov	r4,a
-	mov	@r1,a
-	C$LatticeScreen.c$219$2_1$47 ==.
-;	LatticeScreen.c:219: for(i=0;i<5;i++)
-	inc	r5
-	cjne	r5,#0x05,00118$
+	mov	a,r2
+	add	a,#_Font5x7
+	mov	dpl,a
+	mov	a,r4
+	addc	a,#(_Font5x7 >> 8)
+	mov	dph,a
+	clr	a
+	movc	a,@a+dptr
+	jnb	acc.1,00110$
+	mov	r2,#0x40
+	mov	r4,#0x00
+	sjmp	00111$
+00110$:
+	mov	r2,#0x00
+	mov	r4,#0x00
+00111$:
+	mov	a,r2
+	add	a,r3
+	mov	r4,a
+	C$LatticeScreen.c$225$3_1$48 ==.
+;	LatticeScreen.c:225: ((Font5x7[font_pos+i]&(1<<2))?(1<<5):(0))+
+	mov	ar2,r5
+	mov	r3,#0x00
+	mov	a,r2
+	add	a,r6
+	mov	r2,a
+	mov	a,r3
+	addc	a,r7
+	mov	r3,a
+	mov	a,r2
+	add	a,#_Font5x7
+	mov	dpl,a
+	mov	a,r3
+	addc	a,#(_Font5x7 >> 8)
+	mov	dph,a
+	clr	a
+	movc	a,@a+dptr
+	jnb	acc.2,00112$
+	mov	r2,#0x20
+	mov	r3,#0x00
+	sjmp	00113$
+00112$:
+	mov	r2,#0x00
+	mov	r3,#0x00
+00113$:
+	mov	a,r2
+	add	a,r4
+	mov	r4,a
+	C$LatticeScreen.c$226$3_1$48 ==.
+;	LatticeScreen.c:226: ((Font5x7[font_pos+i]&(1<<3))?(1<<4):(0))+
+	mov	ar2,r5
+	mov	r3,#0x00
+	mov	a,r2
+	add	a,r6
+	mov	r2,a
+	mov	a,r3
+	addc	a,r7
+	mov	r3,a
+	mov	a,r2
+	add	a,#_Font5x7
+	mov	dpl,a
+	mov	a,r3
+	addc	a,#(_Font5x7 >> 8)
+	mov	dph,a
+	clr	a
+	movc	a,@a+dptr
+	jnb	acc.3,00114$
+	mov	r2,#0x10
+	mov	r3,#0x00
+	sjmp	00115$
+00114$:
+	mov	r2,#0x00
+	mov	r3,#0x00
+00115$:
+	mov	a,r2
+	add	a,r4
+	mov	r4,a
+	C$LatticeScreen.c$227$3_1$48 ==.
+;	LatticeScreen.c:227: ((Font5x7[font_pos+i]&(1<<4))?(1<<3):(0))+
+	mov	ar2,r5
+	mov	r3,#0x00
+	mov	a,r2
+	add	a,r6
+	mov	r2,a
+	mov	a,r3
+	addc	a,r7
+	mov	r3,a
+	mov	a,r2
+	add	a,#_Font5x7
+	mov	dpl,a
+	mov	a,r3
+	addc	a,#(_Font5x7 >> 8)
+	mov	dph,a
+	clr	a
+	movc	a,@a+dptr
+	jnb	acc.4,00116$
+	mov	r2,#0x08
+	mov	r3,#0x00
+	sjmp	00117$
+00116$:
+	mov	r2,#0x00
+	mov	r3,#0x00
+00117$:
+	mov	a,r2
+	add	a,r4
+	mov	r4,a
+	C$LatticeScreen.c$228$3_1$48 ==.
+;	LatticeScreen.c:228: ((Font5x7[font_pos+i]&(1<<5))?(1<<2):(0))+
+	mov	ar2,r5
+	mov	r3,#0x00
+	mov	a,r2
+	add	a,r6
+	mov	r2,a
+	mov	a,r3
+	addc	a,r7
+	mov	r3,a
+	mov	a,r2
+	add	a,#_Font5x7
+	mov	dpl,a
+	mov	a,r3
+	addc	a,#(_Font5x7 >> 8)
+	mov	dph,a
+	clr	a
+	movc	a,@a+dptr
+	jnb	acc.5,00118$
+	mov	r2,#0x04
+	mov	r3,#0x00
+	sjmp	00119$
 00118$:
-	jc	00104$
+	mov	r2,#0x00
+	mov	r3,#0x00
+00119$:
+	mov	a,r2
+	add	a,r4
+	mov	r4,a
+	C$LatticeScreen.c$229$3_1$48 ==.
+;	LatticeScreen.c:229: ((Font5x7[font_pos+i]&(1<<6))?(1<<1):(0))+
+	mov	ar2,r5
+	mov	r3,#0x00
+	mov	a,r2
+	add	a,r6
+	mov	r2,a
+	mov	a,r3
+	addc	a,r7
+	mov	r3,a
+	mov	a,r2
+	add	a,#_Font5x7
+	mov	dpl,a
+	mov	a,r3
+	addc	a,#(_Font5x7 >> 8)
+	mov	dph,a
+	clr	a
+	movc	a,@a+dptr
+	jnb	acc.6,00120$
+	mov	r2,#0x02
+	mov	r3,#0x00
+	sjmp	00121$
+00120$:
+	mov	r2,#0x00
+	mov	r3,#0x00
+00121$:
+	mov	a,r2
+	add	a,r4
+	mov	r4,a
+	C$LatticeScreen.c$230$3_1$48 ==.
+;	LatticeScreen.c:230: ((Font5x7[font_pos+i]&(1<<7))?(1<<0):(0));
+	mov	ar2,r5
+	mov	r3,#0x00
+	mov	a,r2
+	add	a,r6
+	mov	r2,a
+	mov	a,r3
+	addc	a,r7
+	mov	r3,a
+	mov	a,r2
+	add	a,#_Font5x7
+	mov	dpl,a
+	mov	a,r3
+	addc	a,#(_Font5x7 >> 8)
+	mov	dph,a
+	clr	a
+	movc	a,@a+dptr
+	jnb	acc.7,00122$
+	mov	r2,#0x01
+	mov	r3,#0x00
+	sjmp	00123$
+00122$:
+	mov	r2,#0x00
+	mov	r3,#0x00
+00123$:
+	mov	a,r2
+	add	a,r4
+	mov	@r1,a
+	C$LatticeScreen.c$218$2_1$47 ==.
+;	LatticeScreen.c:218: for(i=0;i<5;i++)
+	inc	r5
+	cjne	r5,#0x05,00174$
+00174$:
+	jnc	00175$
+	ljmp	00104$
+00175$:
 00106$:
-	C$LatticeScreen.c$224$2_1$45 ==.
-;	LatticeScreen.c:224: }
-	C$LatticeScreen.c$224$2_1$45 ==.
+	C$LatticeScreen.c$234$2_1$45 ==.
+;	LatticeScreen.c:234: }
+	C$LatticeScreen.c$234$2_1$45 ==.
 	XG$LS_Show_Char_Font5x7$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -1644,8 +1860,8 @@ _main:
 	C$main.c$230$1_0$76 ==.
 ;	main.c:230: while(1)
 00102$:
-	C$main.c$246$1_0$76 ==.
-;	main.c:246: LS_Show_Char_Font5x7((systick/1000)%26+'A');
+	C$main.c$245$1_0$76 ==.
+;	main.c:245: LS_Show_Char_Font5x7((systick/1000)%10+'0');
 	mov	__divulonglong_PARM_2,#0xe8
 	mov	(__divulonglong_PARM_2 + 1),#0x03
 	clr	a
@@ -1680,7 +1896,7 @@ _main:
 	mov	(_main_sloc0_1_0 + 5),r5
 	mov	(_main_sloc0_1_0 + 6),r6
 	mov	(_main_sloc0_1_0 + 7),r7
-	mov	__modulonglong_PARM_2,#0x1a
+	mov	__modulonglong_PARM_2,#0x0a
 	clr	a
 	mov	(__modulonglong_PARM_2 + 1),a
 	mov	(__modulonglong_PARM_2 + 2),a
@@ -1707,7 +1923,7 @@ _main:
 	mov	(_main_sloc0_1_0 + 6),r6
 	mov	(_main_sloc0_1_0 + 7),r7
 	mov	r7,_main_sloc0_1_0
-	mov	a,#0x41
+	mov	a,#0x30
 	add	a,r7
 	mov	dpl,a
 	lcall	_LS_Show_Char_Font5x7

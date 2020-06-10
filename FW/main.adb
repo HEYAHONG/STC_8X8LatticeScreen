@@ -2,7 +2,7 @@ M:main
 F:G$LS_Init$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$LS_Deinit$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$LS_595_DataOut$0_0$0({2}DF,SV:S),C,0,0,0,0,0
-F:G$LS_DisplayOneRow$0_0$0({2}DF,SV:S),C,0,0,0,0,0
+F:G$LS_DisplayOneCol$0_0$0({2}DF,SV:S),C,0,0,0,0,0
 F:G$LS_Refresh$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$LS_Show_Char_Font5x7$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$systick_init$0_0$0({2}DF,SV:S),C,0,0,0,0,0
@@ -19,8 +19,8 @@ F:G$main$0_0$0({2}DF,SV:S),C,0,0,0,0,0
 S:Lmain.LS_595_DataOut$Col_Data$1_0$31({1}SC:U),E,0,0
 S:Lmain.LS_595_DataOut$Row_Data$1_0$31({1}SC:U),R,0,0,[r7]
 S:Lmain.LS_595_DataOut$i$1_0$32({1}SC:U),R,0,0,[r6]
-S:Lmain.LS_DisplayOneRow$Col_Index$1_0$39({1}SC:U),E,0,0
-S:Lmain.LS_DisplayOneRow$Row_Data$1_0$39({1}SC:U),R,0,0,[r7]
+S:Lmain.LS_DisplayOneCol$Row_Index$1_0$39({1}SC:U),E,0,0
+S:Lmain.LS_DisplayOneCol$Col_Data$1_0$39({1}SC:U),R,0,0,[r7]
 S:Lmain.LS_Show_Char_Font5x7$c$1_0$44({1}SC:U),R,0,0,[r7]
 S:Lmain.LS_Show_Char_Font5x7$i$1_1$46({1}SC:U),R,0,0,[r5]
 S:Lmain.LS_Show_Char_Font5x7$font_pos$1_1$46({2}SI:U),R,0,0,[r6,r7]
@@ -174,7 +174,7 @@ S:G$wctomb$0_0$0({2}DF,SI:S),C,0,0
 S:G$mbstowcs$0_0$0({2}DF,SI:U),C,0,0
 S:G$wcstombs$0_0$0({2}DF,SI:U),C,0,0
 S:G$LS_595_DataOut$0_0$0({2}DF,SV:S),C,0,0
-S:G$LS_DisplayOneRow$0_0$0({2}DF,SV:S),C,0,0
+S:G$LS_DisplayOneCol$0_0$0({2}DF,SV:S),C,0,0
 S:G$systick_init$0_0$0({2}DF,SV:S),C,0,0
 S:G$systick_interrupt$0_0$0({2}DF,SV:S),C,0,0
 S:G$Uart_Init$0_0$0({2}DF,SV:S),C,0,0

@@ -82,11 +82,11 @@ RCK=1;
 }
 
 
-void LS_DisplayOneRow(unsigned char Row_Data,unsigned char Col_Index)
+void LS_DisplayOneCol(unsigned char Col_Data,unsigned char Row_Index)
 {
-if(Col_Index < 8)
+if(Row_Index < 8)
 {
-   LS_595_DataOut(Row_Data,~(1<<Col_Index));
+   LS_595_DataOut(1<<Row_Index,~(Col_Data));
 }
 
 }
@@ -96,7 +96,7 @@ static unsigned __idata char LS_Current_Index=0;
 void LS_Refresh()
 {
 
-  LS_DisplayOneRow(LS_RAM[LS_Current_Index],LS_Current_Index++);
+  LS_DisplayOneCol(LS_RAM[LS_Current_Index],LS_Current_Index++);
   if(LS_Current_Index>=8)
   {
   	LS_Current_Index=0;
@@ -207,19 +207,29 @@ const uint8_t __code Font5x7[]=//5X7字体
 
 void LS_Show_Char_Font5x7(char c)//显示5x7字体
 {
-
 if(c<' ')//不可显示字符，单8x8点阵不做处理
 	return;
-
 LS_RAM[0]=0x00;
 LS_RAM[1]=0x00;
 LS_RAM[7]=0x00;
+
 uint8_t i=0;
 uint16_t font_pos=(((uint16_t)c-0x20)*5);
 for(i=0;i<5;i++)
 {
-	LS_RAM[i+2]=Font5x7[font_pos+i];
+//由于字体是按列显示的，需要将显示数据上下颠倒才能正常显示
+	//LS_RAM[i+2]=Font5x7[font_pos+i];
+	LS_RAM[i+2]=
+	((Font5x7[font_pos+i]&(1<<0))?(1<<7):(0))+
+	((Font5x7[font_pos+i]&(1<<1))?(1<<6):(0))+
+	((Font5x7[font_pos+i]&(1<<2))?(1<<5):(0))+
+	((Font5x7[font_pos+i]&(1<<3))?(1<<4):(0))+
+	((Font5x7[font_pos+i]&(1<<4))?(1<<3):(0))+
+	((Font5x7[font_pos+i]&(1<<5))?(1<<2):(0))+
+	((Font5x7[font_pos+i]&(1<<6))?(1<<1):(0))+
+	((Font5x7[font_pos+i]&(1<<7))?(1<<0):(0));
 }
+
 
 }
 
