@@ -42,19 +42,23 @@ P3M0|=(1<<3);
 }
 
 void On_SysTick_Timer();//系统的毫秒级定时器
-extern __idata uint64_t Last_Receive_Tick;
+extern __idata int8_t Receive_Timeout_Tick;
 extern __idata uint8_t Uart_Receive_Buff[];
-extern __idata uint8_t Uart_Receive_Buff_Index;
+extern __idata uint8_t Uart_Receive_Buff_Index,Uart_Echo_To_Send;
+extern __bit Echo_Rx;	
 void On_Uart_Idle(uint8_t  __idata * buff,size_t length);
 void systick_interrupt() __interrupt (1) __using (1) 
 {
 	systick++;
 	if(Uart_Receive_Buff_Index!=0)
 	{//检查串口数据
-		if(systick>Last_Receive_Tick+1)
+		Receive_Timeout_Tick--;
+		if(!Echo_Rx || (Echo_Rx && Uart_Receive_Buff_Index<=Uart_Echo_To_Send))//当未回送完成时，不检查串口空闲
+		if(Receive_Timeout_Tick<=0)
 		{
 		   On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
 		   Uart_Receive_Buff_Index=0;
+		   Uart_Echo_To_Send=0;
 		}
 	}
 	//翻转P3_3
@@ -75,6 +79,8 @@ void systick_interrupt() __interrupt (1) __using (1)
 #define S1_S0 0x40              //P_SW1.6
 #define S1_S1 0x80              //P_SW1.7
 __bit Tx_Busy=0;//串口发送忙标志
+__bit Echo_Rx=1;//是否将接收到的数据发送出去
+__bit Echo_Data=0;//是否有回送的数据
 void Uart_Init()
 {
 volatile static __sfr __at(0x8e) AUXR  ;               //辅助寄存器
@@ -132,8 +138,8 @@ void Uart_Send(uint8_t data)
     Tx_Busy = 1;
     SBUF = ACC;                 //写数据到UART数据寄存器	
 }
-__idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0;
-__idata uint64_t Last_Receive_Tick=0;
+__idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0,Uart_Echo_To_Send=0;
+__idata int8_t Receive_Timeout_Tick=2;
 void On_Uart_Buff_Full(uint8_t  __idata * buff,size_t length);
 void Uart_Interrupt() __interrupt(4)
 {
@@ -156,16 +162,45 @@ if(RI)
 			i=0;
 		}
 	} */
+	
 	Uart_Receive_Buff[Uart_Receive_Buff_Index++]=SBUF;
+	if(Echo_Rx)
+	{
+		Echo_Data=1;
+	};
 	if(Uart_Receive_Buff_Index>=sizeof(Uart_Receive_Buff))
 	{
 		On_Uart_Buff_Full(Uart_Receive_Buff,sizeof(Uart_Receive_Buff));
 		Uart_Receive_Buff_Index=0;
+		Uart_Echo_To_Send=0;
 	}
-	Last_Receive_Tick=systick;
+	Receive_Timeout_Tick=2;
 	RI=0;
+	
 }
 }
+
+void Check_Uart_Echo()//检查回送数据
+{
+	if(Echo_Rx)
+	{
+		if(Echo_Data)
+		{
+			
+			while(Uart_Echo_To_Send < Uart_Receive_Buff_Index) 
+				Uart_Send(Uart_Receive_Buff[Uart_Echo_To_Send++]);
+				
+			if(Uart_Echo_To_Send>Uart_Receive_Buff_Index)
+				Uart_Echo_To_Send=0;
+		}
+	}
+	else
+	{
+		Uart_Echo_To_Send=Uart_Receive_Buff_Index;
+	}
+	Echo_Data=0;
+}
+
 //外部中断0作为系统时钟设置
 void Clk_In_Init()
 {
@@ -210,6 +245,15 @@ if(length==1)//当长度为1时，是可显示字符就显示此字符
 	{
 		LS_Show_Char_Font5x7(buff[0]);	
 	}
+
+	if(buff[0]==0xff)//开启串口回送
+	{
+		Echo_Rx=1;
+	}
+	if(buff[0]==0x00)//关闭串口回送
+	{
+		Echo_Rx=0;
+	}
 }
 if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
 {
@@ -236,6 +280,8 @@ void main()
 
 	while(1)
 	{
+		Check_Uart_Echo();//检查回送数据
+
 		
 		/* //测试代码，根据时间修该显示内容
 		if(systick%1000==0 && systick>=64000l)
