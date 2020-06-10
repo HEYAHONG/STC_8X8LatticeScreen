@@ -237,6 +237,9 @@ void On_SysTick_Timer()//系统的毫秒级定时器
 	LS_Refresh();//刷新点阵屏	
 }
 
+uint16_t __idata Device_Address=0;//默认地址 
+__bit     Device_Address_Set_Flag=0;//设置标志，发送本机地址的下一个地址
+
 void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
 {
 if(length==1)//当长度为1时，是可显示字符就显示此字符
@@ -255,6 +258,37 @@ if(length==1)//当长度为1时，是可显示字符就显示此字符
 		Echo_Rx=0;
 	}
 }
+if(length==2)//当长度为2时表明这是一个地址设置包，包内含有当前地址（16位）
+{
+	if(!Echo_Rx)//关闭回送时才能设置地址
+		{
+		Device_Address_Set_Flag=1;
+		Device_Address=buff[1];
+		Device_Address*=256;
+		Device_Address+=buff[0];
+		}
+}
+if(length==3)//长度为3时,表示这是对某一个地址的进行字符设置,参考长度为1时的情况
+{
+uint16_t address=buff[0]+(uint16_t)256*buff[1];
+if(address==Device_Address)//是本模块的设置包
+{
+	if(buff[2]>=0x20 && buff[2]<0x80)
+	{
+		LS_Show_Char_Font5x7(buff[2]);	
+	}
+
+	if(buff[2]==0xff)//开启串口回送
+	{
+		Echo_Rx=1;
+	}
+	if(buff[2]==0x00)//关闭串口回送
+	{
+		Echo_Rx=0;
+	}
+}
+}
+
 if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
 {
 	uint8_t i=0;
@@ -263,12 +297,37 @@ if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
 	  LS_RAM[i]=buff[i];
 	}
 }
+
+if(length==10)//当长度为10时，根据地址设置显示内容，参考长度为8时的效果
+{
+uint16_t address=buff[0]+(uint16_t)256*buff[1];
+if(address==Device_Address)//是本模块的设置包
+	{
+	uint8_t i=0;
+	for(i=0;i<8;i++)
+	{
+	  LS_RAM[i]=buff[i+2];
+	}
+
+	}
+}
 }
 void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
 {
 UNUSED(buff);
 UNUSED(length);
 
+}
+
+void Check_Device_Address_Set()
+{
+	if(Device_Address_Set_Flag)
+	{
+		//发送下一个地址设置包
+		Uart_Send(Device_Address+1);
+		Uart_Send((Device_Address+1)>>8);
+		Device_Address_Set_Flag=0;
+	}
 }
 
 void main()
@@ -281,7 +340,7 @@ void main()
 	while(1)
 	{
 		Check_Uart_Echo();//检查回送数据
-
+		Check_Device_Address_Set();//检查地址设置包
 		
 		/* //测试代码，根据时间修该显示内容
 		if(systick%1000==0 && systick>=64000l)
