@@ -17,6 +17,7 @@ F:G$On_SysTick_Timer$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$On_Uart_Idle$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$On_Uart_Buff_Full$0_0$0({2}DF,SV:S),Z,0,0,0,0,0
 F:G$Check_Device_Address_Set$0_0$0({2}DF,SV:S),C,0,0,0,0,0
+F:G$Check_Echo_Rx_ON$0_0$0({2}DF,SV:S),C,0,0,0,0,0
 F:G$main$0_0$0({2}DF,SV:S),C,0,0,0,0,0
 S:Lmain.LS_595_DataOut$Col_Data$1_0$31({1}SC:U),E,0,0
 S:Lmain.LS_595_DataOut$Row_Data$1_0$31({1}SC:U),R,0,0,[r7]
@@ -29,12 +30,12 @@ S:Lmain.LS_Show_Char_Font5x7$font_pos$1_1$46({2}SI:U),R,0,0,[r6,r7]
 S:Lmain.Uart_Send$data$1_0$56({1}SC:U),R,0,0,[r7]
 S:Lmain.On_Uart_Idle$length$1_0$74({2}SI:U),E,0,0
 S:Lmain.On_Uart_Idle$buff$1_0$74({1}DI,SC:U),R,0,0,[r1]
-S:Lmain.On_Uart_Idle$address$2_0$82({2}SI:U),R,0,0,[r5,r4]
-S:Lmain.On_Uart_Idle$i$2_0$87({1}SC:U),R,0,0,[r7]
-S:Lmain.On_Uart_Idle$address$2_0$90({2}SI:U),R,0,0,[r5,r4]
-S:Lmain.On_Uart_Idle$i$3_0$91({1}SC:U),R,0,0,[r7]
-S:Lmain.On_Uart_Buff_Full$length$1_0$94({2}SI:U),E,0,0
-S:Lmain.On_Uart_Buff_Full$buff$1_0$94({1}DI,SC:U),R,0,0,[]
+S:Lmain.On_Uart_Idle$address$2_0$83({2}SI:U),R,0,0,[r5,r4]
+S:Lmain.On_Uart_Idle$i$2_0$88({1}SC:U),R,0,0,[r7]
+S:Lmain.On_Uart_Idle$address$2_0$91({2}SI:U),R,0,0,[r5,r4]
+S:Lmain.On_Uart_Idle$i$3_0$92({1}SC:U),R,0,0,[r7]
+S:Lmain.On_Uart_Buff_Full$length$1_0$95({2}SI:U),E,0,0
+S:Lmain.On_Uart_Buff_Full$buff$1_0$95({1}DI,SC:U),R,0,0,[]
 S:G$LS_RAM$0_0$0({8}DA8d,SC:U),G,0,0
 S:Fmain$LS_Current_Index$0_0$0({1}SC:U),G,0,0
 S:G$systick$0_0$0({8}SI:U),G,0,0
@@ -47,6 +48,7 @@ S:G$Tx_Busy$0_0$0({1}SB0$1:U),H,0,0
 S:G$Echo_Rx$0_0$0({1}SB0$1:U),H,0,0
 S:G$Echo_Data$0_0$0({1}SB0$1:U),H,0,0
 S:G$Device_Address_Set_Flag$0_0$0({1}SB0$1:U),H,0,0
+S:G$Echo_Rx_On_Flag$0_0$0({1}SB0$1:U),H,0,0
 S:G$P0$0_0$0({1}SC:U),I,0,0
 S:G$SP$0_0$0({1}SC:U),I,0,0
 S:G$DPL$0_0$0({1}SC:U),I,0,0
@@ -192,5 +194,6 @@ S:G$Check_Uart_Echo$0_0$0({2}DF,SV:S),C,0,0
 S:G$Clk_In_Init$0_0$0({2}DF,SV:S),C,0,0
 S:G$Clk_In_Interrupt$0_0$0({2}DF,SV:S),C,0,0
 S:G$Check_Device_Address_Set$0_0$0({2}DF,SV:S),C,0,0
+S:G$Check_Echo_Rx_ON$0_0$0({2}DF,SV:S),C,0,0
 S:G$main$0_0$0({2}DF,SV:S),C,0,0
 S:G$Font5x7$0_0$0({480}DA480d,SC:U),D,0,0

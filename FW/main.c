@@ -239,6 +239,7 @@ void On_SysTick_Timer()//系统的毫秒级定时器
 
 uint16_t __idata Device_Address=0;//默认地址 
 __bit     Device_Address_Set_Flag=0;//设置标志，发送本机地址的下一个地址
+__bit	  Echo_Rx_On_Flag=0;//打开回显标志，回显由关变为开时为1.
 
 void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
 {
@@ -251,6 +252,10 @@ if(length==1)//当长度为1时，是可显示字符就显示此字符
 
 	if(buff[0]==0xff)//开启串口回送
 	{
+		if(!Echo_Rx)//当处于关闭回显状态时
+		{
+		 Echo_Rx_On_Flag=1;
+		}
 		Echo_Rx=1;
 	}
 	if(buff[0]==0x00)//关闭串口回送
@@ -330,6 +335,15 @@ void Check_Device_Address_Set()
 	}
 }
 
+void Check_Echo_Rx_ON()//检查回显
+{
+if(Echo_Rx_On_Flag)
+{
+	Uart_Send(0xff);//发送打开回显命令
+	Echo_Rx_On_Flag=0;
+}
+}
+
 void main()
 {	
 	systick_init();//初始化主时间
@@ -341,6 +355,7 @@ void main()
 	{
 		Check_Uart_Echo();//检查回送数据
 		Check_Device_Address_Set();//检查地址设置包
+		Check_Echo_Rx_ON();//检查回显打开状态
 		
 		/* //测试代码，根据时间修该显示内容
 		if(systick%1000==0 && systick>=64000l)
