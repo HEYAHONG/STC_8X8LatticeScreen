@@ -41,26 +41,12 @@ P3M0|=(1<<3);
 
 }
 
-void On_SysTick_Timer();//系统的毫秒级定时器
-extern __idata int8_t Receive_Timeout_Tick;
-extern __idata uint8_t Uart_Receive_Buff[];
-extern __idata uint8_t Uart_Receive_Buff_Index,Uart_Echo_To_Send;
-extern __bit Echo_Rx;	
+void On_SysTick_Timer();//系统的毫秒级定时器	
 void On_Uart_Idle(uint8_t  __idata * buff,size_t length);
 void systick_interrupt() __interrupt (1) __using (1) 
 {
 	systick++;
-	if(Uart_Receive_Buff_Index!=0)
-	{//检查串口数据
-		Receive_Timeout_Tick--;
-		if(!Echo_Rx || (Echo_Rx && Uart_Receive_Buff_Index<=Uart_Echo_To_Send))//当未回送完成时，不检查串口空闲
-		if(Receive_Timeout_Tick<=0)
-		{
-		   On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
-		   Uart_Receive_Buff_Index=0;
-		   Uart_Echo_To_Send=0;
-		}
-	}
+	
 	//翻转P3_3
 	P3_3=!P3_3;
 	
@@ -87,6 +73,7 @@ volatile static __sfr __at(0x8e) AUXR  ;               //辅助寄存器
 volatile static __sfr __at(0xd6) T2H   ;               //定时器2高8位
 volatile static __sfr __at(0xd7) T2L  ;               //定时器2低8位
 volatile static __sfr __at(0xA2) P_SW1 ;             //外设功能切换寄存器1
+volatile static __sfr __at(0xAF) IE2;//中断控制器2
     ACC = P_SW1;
     ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=0
     P_SW1 = ACC;                //(P3.0/RxD, P3.1/TxD)
@@ -113,8 +100,32 @@ volatile static __sfr __at(0xA2) P_SW1 ;             //外设功能切换寄存�
     AUXR |= 0x14;                //T2为1T模式, 并启动定时器2
     AUXR |= 0x01;               //选择定时器2为串口1的波特率发生器
     ES = 1;                     //使能串口1中断
+
+    IE2 |= 0x04;//启动定时器2中断
+    
     EA = 1;
 }
+
+extern __idata int8_t Receive_Timeout_Tick;
+extern __idata uint8_t Uart_Receive_Buff[];
+extern __idata uint8_t Uart_Receive_Buff_Index,Uart_Echo_To_Send;
+extern __bit Echo_Rx;
+
+void Uart_Timer2_Interrupt() __interrupt (12) //定时器2(串口时钟源)中断
+{
+	if(Uart_Receive_Buff_Index!=0)
+	{//检查串口数据
+		Receive_Timeout_Tick--;
+		if(!Echo_Rx || (Echo_Rx && Uart_Receive_Buff_Index<=Uart_Echo_To_Send))//当未回送完成时，不检查串口空闲
+		if(Receive_Timeout_Tick<=0)
+		{
+		   On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
+		   Uart_Receive_Buff_Index=0;
+		   Uart_Echo_To_Send=0;
+		}
+	}
+}
+
 void Uart_Send(uint8_t data)
 {
     while(Tx_Busy);//串口发送忙标志
@@ -174,7 +185,7 @@ if(RI)
 		Uart_Receive_Buff_Index=0;
 		Uart_Echo_To_Send=0;
 	}
-	Receive_Timeout_Tick=2;
+	Receive_Timeout_Tick=48;
 	RI=0;
 	
 }

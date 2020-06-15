@@ -17,6 +17,7 @@
 	.globl _Check_Uart_Echo
 	.globl _Uart_Interrupt
 	.globl _Uart_Send
+	.globl _Uart_Timer2_Interrupt
 	.globl _Uart_Init
 	.globl _systick_interrupt
 	.globl _systick_init
@@ -120,8 +121,8 @@
 	.globl _P0
 	.globl _Echo_Rx_On_Flag
 	.globl _Device_Address_Set_Flag
-	.globl _Echo_Data
 	.globl _Echo_Rx
+	.globl _Echo_Data
 	.globl _Tx_Busy
 	.globl _Device_Address
 	.globl _Receive_Timeout_Tick
@@ -202,18 +203,20 @@ Lmain.systick_init$P3M1$1_1$50 == 0x00b1
 _systick_init_P3M1_65537_50	=	0x00b1
 Lmain.systick_init$P3M0$1_1$50 == 0x00b2
 _systick_init_P3M0_65537_50	=	0x00b2
-Lmain.Uart_Init$AUXR$1_0$55 == 0x008e
-_Uart_Init_AUXR_65536_55	=	0x008e
-Lmain.Uart_Init$T2H$1_0$55 == 0x00d6
-_Uart_Init_T2H_65536_55	=	0x00d6
-Lmain.Uart_Init$T2L$1_0$55 == 0x00d7
-_Uart_Init_T2L_65536_55	=	0x00d7
-Lmain.Uart_Init$P_SW1$1_0$55 == 0x00a2
-_Uart_Init_P_SW1_65536_55	=	0x00a2
-Lmain.Clk_In_Init$P3M1$1_0$70 == 0x00b1
-_Clk_In_Init_P3M1_65536_70	=	0x00b1
-Lmain.Clk_In_Init$P3M0$1_0$70 == 0x00b2
-_Clk_In_Init_P3M0_65536_70	=	0x00b2
+Lmain.Uart_Init$AUXR$1_0$53 == 0x008e
+_Uart_Init_AUXR_65536_53	=	0x008e
+Lmain.Uart_Init$T2H$1_0$53 == 0x00d6
+_Uart_Init_T2H_65536_53	=	0x00d6
+Lmain.Uart_Init$T2L$1_0$53 == 0x00d7
+_Uart_Init_T2L_65536_53	=	0x00d7
+Lmain.Uart_Init$P_SW1$1_0$53 == 0x00a2
+_Uart_Init_P_SW1_65536_53	=	0x00a2
+Lmain.Uart_Init$IE2$1_0$53 == 0x00af
+_Uart_Init_IE2_65536_53	=	0x00af
+Lmain.Clk_In_Init$P3M1$1_0$71 == 0x00b1
+_Clk_In_Init_P3M1_65536_71	=	0x00b1
+Lmain.Clk_In_Init$P3M0$1_0$71 == 0x00b2
+_Clk_In_Init_P3M0_65536_71	=	0x00b2
 ;--------------------------------------------------------
 ; special function bits
 ;--------------------------------------------------------
@@ -400,10 +403,10 @@ _LS_595_DataOut_PARM_2:
 Lmain.LS_DisplayOneCol$Row_Index$1_0$39==.
 _LS_DisplayOneCol_PARM_2:
 	.ds 1
-Lmain.On_Uart_Idle$length$1_0$74==.
+Lmain.On_Uart_Idle$length$1_0$75==.
 _On_Uart_Idle_PARM_2:
 	.ds 2
-Lmain.On_Uart_Buff_Full$length$1_0$95==.
+Lmain.On_Uart_Buff_Full$length$1_0$96==.
 _On_Uart_Buff_Full_PARM_2:
 	.ds 2
 ;--------------------------------------------------------
@@ -456,11 +459,11 @@ _Device_Address::
 G$Tx_Busy$0_0$0==.
 _Tx_Busy::
 	.ds 1
-G$Echo_Rx$0_0$0==.
-_Echo_Rx::
-	.ds 1
 G$Echo_Data$0_0$0==.
 _Echo_Data::
+	.ds 1
+G$Echo_Rx$0_0$0==.
+_Echo_Rx::
 	.ds 1
 G$Device_Address_Set_Flag$0_0$0==.
 _Device_Address_Set_Flag::
@@ -509,6 +512,22 @@ __interrupt_vect:
 	reti
 	.ds	7
 	ljmp	_Uart_Interrupt
+	.ds	5
+	reti
+	.ds	7
+	reti
+	.ds	7
+	reti
+	.ds	7
+	reti
+	.ds	7
+	reti
+	.ds	7
+	reti
+	.ds	7
+	reti
+	.ds	7
+	ljmp	_Uart_Timer2_Interrupt
 ;--------------------------------------------------------
 ; global & static initialisations
 ;--------------------------------------------------------
@@ -522,7 +541,7 @@ __interrupt_vect:
 	.globl __mcs51_genXINIT
 	.globl __mcs51_genXRAMCLEAR
 	.globl __mcs51_genRAMCLEAR
-	C$LatticeScreen.c$3$1_0$101 ==.
+	C$LatticeScreen.c$3$1_0$102 ==.
 ;	LatticeScreen.c:3: unsigned char __idata LS_RAM[8]={0x0,0x10,0x38,0x54,0x10,0x10,0x10,0x0};//默认显示数据，向左的箭头
 	mov	r0,#_LS_RAM
 	mov	@r0,#0x00
@@ -540,11 +559,11 @@ __interrupt_vect:
 	mov	@r0,#0x10
 	mov	r0,#(_LS_RAM + 0x0007)
 	mov	@r0,#0x00
-	C$LatticeScreen.c$94$1_0$101 ==.
+	C$LatticeScreen.c$94$1_0$102 ==.
 ;	LatticeScreen.c:94: static unsigned __idata char LS_Current_Index=0;
 	mov	r0,#_LS_Current_Index
 	mov	@r0,#0x00
-	C$main.c$24$1_0$101 ==.
+	C$main.c$24$1_0$102 ==.
 ;	main.c:24: __idata uint64_t systick=0;//系统主时间，由Timer0驱动，需要链接liblonglong.lib,否则无法链接成功
 	mov	r0,#_systick
 	clr	a
@@ -563,42 +582,42 @@ __interrupt_vect:
 	mov	@r0,a
 	inc	r0
 	mov	@r0,a
-	C$main.c$141$1_0$101 ==.
-;	main.c:141: __idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0,Uart_Echo_To_Send=0;
+	C$main.c$152$1_0$102 ==.
+;	main.c:152: __idata uint8_t Uart_Receive_Buff[64],Uart_Receive_Buff_Index=0,Uart_Echo_To_Send=0;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	@r0,#0x00
-	C$main.c$141$1_0$101 ==.
-;	main.c:141: __idata int8_t Receive_Timeout_Tick=2;
+	C$main.c$152$1_0$102 ==.
+;	main.c:152: __idata int8_t Receive_Timeout_Tick=2;
 	mov	r0,#_Uart_Echo_To_Send
 	mov	@r0,#0x00
-	C$main.c$142$1_0$101 ==.
-;	main.c:142: void On_Uart_Buff_Full(uint8_t  __idata * buff,size_t length);
+	C$main.c$153$1_0$102 ==.
+;	main.c:153: void On_Uart_Buff_Full(uint8_t  __idata * buff,size_t length);
 	mov	r0,#_Receive_Timeout_Tick
 	mov	@r0,#0x02
-	C$main.c$240$1_0$101 ==.
-;	main.c:240: uint16_t __idata Device_Address=0;//默认地址 
+	C$main.c$251$1_0$102 ==.
+;	main.c:251: uint16_t __idata Device_Address=0;//默认地址 
 	mov	r0,#_Device_Address
 	mov	@r0,a
 	inc	r0
 	mov	@r0,a
-	C$main.c$81$1_0$101 ==.
-;	main.c:81: __bit Tx_Busy=0;//串口发送忙标志
+	C$main.c$67$1_0$102 ==.
+;	main.c:67: __bit Tx_Busy=0;//串口发送忙标志
 ;	assignBit
 	clr	_Tx_Busy
-	C$main.c$82$1_0$101 ==.
-;	main.c:82: __bit Echo_Rx=1;//是否将接收到的数据发送出去
-;	assignBit
-	setb	_Echo_Rx
-	C$main.c$83$1_0$101 ==.
-;	main.c:83: __bit Echo_Data=0;//是否有回送的数据
+	C$main.c$69$1_0$102 ==.
+;	main.c:69: __bit Echo_Data=0;//是否有回送的数据
 ;	assignBit
 	clr	_Echo_Data
-	C$main.c$241$1_0$101 ==.
-;	main.c:241: __bit     Device_Address_Set_Flag=0;//设置标志，发送本机地址的下一个地址
+	C$main.c$112$1_0$102 ==.
+;	main.c:112: extern __bit Echo_Rx;
+;	assignBit
+	setb	_Echo_Rx
+	C$main.c$252$1_0$102 ==.
+;	main.c:252: __bit     Device_Address_Set_Flag=0;//设置标志，发送本机地址的下一个地址
 ;	assignBit
 	clr	_Device_Address_Set_Flag
-	C$main.c$242$1_0$101 ==.
-;	main.c:242: __bit	  Echo_Rx_On_Flag=0;//打开回显标志，回显由关变为开时为1.
+	C$main.c$253$1_0$102 ==.
+;	main.c:253: __bit	  Echo_Rx_On_Flag=0;//打开回显标志，回显由关变为开时为1.
 ;	assignBit
 	clr	_Echo_Rx_On_Flag
 	.area GSFINAL (CODE)
@@ -1268,8 +1287,8 @@ _systick_init:
 ;Allocation info for local variables in function 'systick_interrupt'
 ;------------------------------------------------------------
 	G$systick_interrupt$0$0 ==.
-	C$main.c$50$1_1$52 ==.
-;	main.c:50: void systick_interrupt() __interrupt (1) __using (1) 
+	C$main.c$46$1_1$52 ==.
+;	main.c:46: void systick_interrupt() __interrupt (1) __using (1) 
 ;	-----------------------------------------
 ;	 function systick_interrupt
 ;	-----------------------------------------
@@ -1297,89 +1316,42 @@ _systick_interrupt:
 	push	(0+0)
 	push	psw
 	mov	psw,#0x08
-	C$main.c$52$1_0$52 ==.
-;	main.c:52: systick++;
+	C$main.c$48$1_0$52 ==.
+;	main.c:48: systick++;
 	mov	r0,#_systick
 	inc	@r0
-	cjne	@r0,#0x00,00127$
+	cjne	@r0,#0x00,00103$
 	inc	r0
 	inc	@r0
-	cjne	@r0,#0x00,00127$
+	cjne	@r0,#0x00,00103$
 	inc	r0
 	inc	@r0
-	cjne	@r0,#0x00,00127$
+	cjne	@r0,#0x00,00103$
 	inc	r0
 	inc	@r0
-	cjne	@r0,#0x00,00127$
+	cjne	@r0,#0x00,00103$
 	inc	r0
 	inc	@r0
-	cjne	@r0,#0x00,00127$
+	cjne	@r0,#0x00,00103$
 	inc	r0
 	inc	@r0
-	cjne	@r0,#0x00,00127$
+	cjne	@r0,#0x00,00103$
 	inc	r0
 	inc	@r0
-	cjne	@r0,#0x00,00127$
+	cjne	@r0,#0x00,00103$
 	inc	r0
 	inc	@r0
-00127$:
-	C$main.c$53$1_0$52 ==.
-;	main.c:53: if(Uart_Receive_Buff_Index!=0)
-	mov	r0,#_Uart_Receive_Buff_Index
-	mov	a,@r0
-	jz	00108$
-	C$main.c$55$2_0$53 ==.
-;	main.c:55: Receive_Timeout_Tick--;
-	mov	r0,#_Receive_Timeout_Tick
-	dec	@r0
-	C$main.c$56$2_0$53 ==.
-;	main.c:56: if(!Echo_Rx || (Echo_Rx && Uart_Receive_Buff_Index<=Uart_Echo_To_Send))//当未回送完成时，不检查串口空闲
-	jnb	_Echo_Rx,00103$
-	jnb	_Echo_Rx,00108$
-	mov	r0,#_Uart_Receive_Buff_Index
-	mov	r1,#_Uart_Echo_To_Send
-	clr	c
-	mov	a,@r1
-	subb	a,@r0
-	jc	00108$
 00103$:
-	C$main.c$57$2_0$53 ==.
-;	main.c:57: if(Receive_Timeout_Tick<=0)
-	mov	r0,#_Receive_Timeout_Tick
-	clr	c
-	mov	a,#(0x00 ^ 0x80)
-	mov	b,@r0
-	xrl	b,#0x80
-	subb	a,b
-	jc	00108$
-	C$main.c$59$3_0$54 ==.
-;	main.c:59: On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
-	mov	r0,#_Uart_Receive_Buff_Index
-	mov	_On_Uart_Idle_PARM_2,@r0
-	mov	(_On_Uart_Idle_PARM_2 + 1),#0x00
-	mov	dpl,#_Uart_Receive_Buff
-	mov	psw,#0x00
-	lcall	_On_Uart_Idle
-	mov	psw,#0x08
-	C$main.c$60$3_0$54 ==.
-;	main.c:60: Uart_Receive_Buff_Index=0;
-	mov	r0,#_Uart_Receive_Buff_Index
-	mov	@r0,#0x00
-	C$main.c$61$3_0$54 ==.
-;	main.c:61: Uart_Echo_To_Send=0;
-	mov	r0,#_Uart_Echo_To_Send
-	mov	@r0,#0x00
-00108$:
-	C$main.c$65$1_0$52 ==.
-;	main.c:65: P3_3=!P3_3;
+	C$main.c$51$1_0$52 ==.
+;	main.c:51: P3_3=!P3_3;
 	cpl	_P3_3
-	C$main.c$67$1_0$52 ==.
-;	main.c:67: On_SysTick_Timer();
+	C$main.c$53$1_0$52 ==.
+;	main.c:53: On_SysTick_Timer();
 	mov	psw,#0x00
 	lcall	_On_SysTick_Timer
 	mov	psw,#0x08
-	C$main.c$68$1_0$52 ==.
-;	main.c:68: }
+	C$main.c$54$1_0$52 ==.
+;	main.c:54: }
 	pop	psw
 	pop	(0+0)
 	pop	(0+1)
@@ -1394,20 +1366,21 @@ _systick_interrupt:
 	pop	b
 	pop	acc
 	pop	bits
-	C$main.c$68$1_0$52 ==.
+	C$main.c$54$1_0$52 ==.
 	XG$systick_interrupt$0$0 ==.
 	reti
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Uart_Init'
 ;------------------------------------------------------------
-;AUXR                      Allocated with name '_Uart_Init_AUXR_65536_55'
-;T2H                       Allocated with name '_Uart_Init_T2H_65536_55'
-;T2L                       Allocated with name '_Uart_Init_T2L_65536_55'
-;P_SW1                     Allocated with name '_Uart_Init_P_SW1_65536_55'
+;AUXR                      Allocated with name '_Uart_Init_AUXR_65536_53'
+;T2H                       Allocated with name '_Uart_Init_T2H_65536_53'
+;T2L                       Allocated with name '_Uart_Init_T2L_65536_53'
+;P_SW1                     Allocated with name '_Uart_Init_P_SW1_65536_53'
+;IE2                       Allocated with name '_Uart_Init_IE2_65536_53'
 ;------------------------------------------------------------
 	G$Uart_Init$0$0 ==.
-	C$main.c$84$1_0$55 ==.
-;	main.c:84: void Uart_Init()
+	C$main.c$70$1_0$53 ==.
+;	main.c:70: void Uart_Init()
 ;	-----------------------------------------
 ;	 function Uart_Init
 ;	-----------------------------------------
@@ -1420,84 +1393,176 @@ _Uart_Init:
 	ar2 = 0x02
 	ar1 = 0x01
 	ar0 = 0x00
-	C$main.c$90$1_0$55 ==.
-;	main.c:90: ACC = P_SW1;
-	mov	_ACC,_Uart_Init_P_SW1_65536_55
-	C$main.c$91$1_0$55 ==.
-;	main.c:91: ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=0
+	C$main.c$77$1_0$53 ==.
+;	main.c:77: ACC = P_SW1;
+	mov	_ACC,_Uart_Init_P_SW1_65536_53
+	C$main.c$78$1_0$53 ==.
+;	main.c:78: ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=0
 	anl	_ACC,#0x3f
-	C$main.c$92$1_0$55 ==.
-;	main.c:92: P_SW1 = ACC;                //(P3.0/RxD, P3.1/TxD)
-	mov	_Uart_Init_P_SW1_65536_55,_ACC
-	C$main.c$104$1_0$55 ==.
-;	main.c:104: SCON = 0x50;                //8位可变波特率
+	C$main.c$79$1_0$53 ==.
+;	main.c:79: P_SW1 = ACC;                //(P3.0/RxD, P3.1/TxD)
+	mov	_Uart_Init_P_SW1_65536_53,_ACC
+	C$main.c$91$1_0$53 ==.
+;	main.c:91: SCON = 0x50;                //8位可变波特率
 	mov	_SCON,#0x50
-	C$main.c$111$1_0$55 ==.
-;	main.c:111: T2L = (65536 - (FOSC/4/BAUD)) & 0xff;   //设置波特率重装值
-	mov	_Uart_Init_T2L_65536_55,#0xb8
-	C$main.c$112$1_0$55 ==.
-;	main.c:112: T2H = (65536 - (FOSC/4/BAUD))>>8;
-	mov	_Uart_Init_T2H_65536_55,#0xff
-	C$main.c$113$1_0$55 ==.
-;	main.c:113: AUXR |= 0x14;                //T2为1T模式, 并启动定时器2
-	orl	_Uart_Init_AUXR_65536_55,#0x14
-	C$main.c$114$1_0$55 ==.
-;	main.c:114: AUXR |= 0x01;               //选择定时器2为串口1的波特率发生器
-	orl	_Uart_Init_AUXR_65536_55,#0x01
-	C$main.c$115$1_0$55 ==.
-;	main.c:115: ES = 1;                     //使能串口1中断
+	C$main.c$98$1_0$53 ==.
+;	main.c:98: T2L = (65536 - (FOSC/4/BAUD)) & 0xff;   //设置波特率重装值
+	mov	_Uart_Init_T2L_65536_53,#0xb8
+	C$main.c$99$1_0$53 ==.
+;	main.c:99: T2H = (65536 - (FOSC/4/BAUD))>>8;
+	mov	_Uart_Init_T2H_65536_53,#0xff
+	C$main.c$100$1_0$53 ==.
+;	main.c:100: AUXR |= 0x14;                //T2为1T模式, 并启动定时器2
+	orl	_Uart_Init_AUXR_65536_53,#0x14
+	C$main.c$101$1_0$53 ==.
+;	main.c:101: AUXR |= 0x01;               //选择定时器2为串口1的波特率发生器
+	orl	_Uart_Init_AUXR_65536_53,#0x01
+	C$main.c$102$1_0$53 ==.
+;	main.c:102: ES = 1;                     //使能串口1中断
 ;	assignBit
 	setb	_ES
-	C$main.c$116$1_0$55 ==.
-;	main.c:116: EA = 1;
+	C$main.c$104$1_0$53 ==.
+;	main.c:104: IE2 |= 0x04;//启动定时器2中断
+	orl	_Uart_Init_IE2_65536_53,#0x04
+	C$main.c$106$1_0$53 ==.
+;	main.c:106: EA = 1;
 ;	assignBit
 	setb	_EA
-	C$main.c$117$1_0$55 ==.
-;	main.c:117: }
-	C$main.c$117$1_0$55 ==.
+	C$main.c$107$1_0$53 ==.
+;	main.c:107: }
+	C$main.c$107$1_0$53 ==.
 	XG$Uart_Init$0$0 ==.
 	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'Uart_Timer2_Interrupt'
+;------------------------------------------------------------
+	G$Uart_Timer2_Interrupt$0$0 ==.
+	C$main.c$114$1_0$54 ==.
+;	main.c:114: void Uart_Timer2_Interrupt() __interrupt (12) //定时器2(串口时钟源)中断
+;	-----------------------------------------
+;	 function Uart_Timer2_Interrupt
+;	-----------------------------------------
+_Uart_Timer2_Interrupt:
+	push	bits
+	push	acc
+	push	b
+	push	dpl
+	push	dph
+	push	(0+7)
+	push	(0+6)
+	push	(0+5)
+	push	(0+4)
+	push	(0+3)
+	push	(0+2)
+	push	(0+1)
+	push	(0+0)
+	push	psw
+	mov	psw,#0x00
+	C$main.c$116$1_0$54 ==.
+;	main.c:116: if(Uart_Receive_Buff_Index!=0)
+	mov	r0,#_Uart_Receive_Buff_Index
+	mov	a,@r0
+	jz	00109$
+	C$main.c$118$2_0$55 ==.
+;	main.c:118: Receive_Timeout_Tick--;
+	mov	r0,#_Receive_Timeout_Tick
+	dec	@r0
+	C$main.c$119$2_0$55 ==.
+;	main.c:119: if(!Echo_Rx || (Echo_Rx && Uart_Receive_Buff_Index<=Uart_Echo_To_Send))//当未回送完成时，不检查串口空闲
+	jnb	_Echo_Rx,00103$
+	jnb	_Echo_Rx,00109$
+	mov	r0,#_Uart_Receive_Buff_Index
+	mov	r1,#_Uart_Echo_To_Send
+	clr	c
+	mov	a,@r1
+	subb	a,@r0
+	jc	00109$
+00103$:
+	C$main.c$120$2_0$55 ==.
+;	main.c:120: if(Receive_Timeout_Tick<=0)
+	mov	r0,#_Receive_Timeout_Tick
+	clr	c
+	mov	a,#(0x00 ^ 0x80)
+	mov	b,@r0
+	xrl	b,#0x80
+	subb	a,b
+	jc	00109$
+	C$main.c$122$3_0$56 ==.
+;	main.c:122: On_Uart_Idle(Uart_Receive_Buff,Uart_Receive_Buff_Index);
+	mov	r0,#_Uart_Receive_Buff_Index
+	mov	_On_Uart_Idle_PARM_2,@r0
+	mov	(_On_Uart_Idle_PARM_2 + 1),#0x00
+	mov	dpl,#_Uart_Receive_Buff
+	lcall	_On_Uart_Idle
+	C$main.c$123$3_0$56 ==.
+;	main.c:123: Uart_Receive_Buff_Index=0;
+	mov	r0,#_Uart_Receive_Buff_Index
+	mov	@r0,#0x00
+	C$main.c$124$3_0$56 ==.
+;	main.c:124: Uart_Echo_To_Send=0;
+	mov	r0,#_Uart_Echo_To_Send
+	mov	@r0,#0x00
+00109$:
+	C$main.c$127$1_0$54 ==.
+;	main.c:127: }
+	pop	psw
+	pop	(0+0)
+	pop	(0+1)
+	pop	(0+2)
+	pop	(0+3)
+	pop	(0+4)
+	pop	(0+5)
+	pop	(0+6)
+	pop	(0+7)
+	pop	dph
+	pop	dpl
+	pop	b
+	pop	acc
+	pop	bits
+	C$main.c$127$1_0$54 ==.
+	XG$Uart_Timer2_Interrupt$0$0 ==.
+	reti
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Uart_Send'
 ;------------------------------------------------------------
 ;data                      Allocated to registers r7 
 ;------------------------------------------------------------
 	G$Uart_Send$0$0 ==.
-	C$main.c$118$1_0$57 ==.
-;	main.c:118: void Uart_Send(uint8_t data)
+	C$main.c$129$1_0$58 ==.
+;	main.c:129: void Uart_Send(uint8_t data)
 ;	-----------------------------------------
 ;	 function Uart_Send
 ;	-----------------------------------------
 _Uart_Send:
 	mov	r7,dpl
-	C$main.c$120$1_0$57 ==.
-;	main.c:120: while(Tx_Busy);//串口发送忙标志
+	C$main.c$131$1_0$58 ==.
+;	main.c:131: while(Tx_Busy);//串口发送忙标志
 00101$:
 	jb	_Tx_Busy,00101$
-	C$main.c$121$1_0$57 ==.
-;	main.c:121: ACC = data;                  //获取校验位P (PSW.0)
+	C$main.c$132$1_0$58 ==.
+;	main.c:132: ACC = data;                  //获取校验位P (PSW.0)
 	mov	_ACC,r7
-	C$main.c$122$1_0$57 ==.
-;	main.c:122: if (P)                      //根据P来设置校验位
+	C$main.c$133$1_0$58 ==.
+;	main.c:133: if (P)                      //根据P来设置校验位
 	mov	c,_P
-	C$main.c$138$1_0$57 ==.
-;	main.c:138: Tx_Busy = 1;
+	C$main.c$149$1_0$58 ==.
+;	main.c:149: Tx_Busy = 1;
 ;	assignBit
 	setb	_Tx_Busy
-	C$main.c$139$1_0$57 ==.
-;	main.c:139: SBUF = ACC;                 //写数据到UART数据寄存器	
+	C$main.c$150$1_0$58 ==.
+;	main.c:150: SBUF = ACC;                 //写数据到UART数据寄存器	
 	mov	_SBUF,_ACC
-	C$main.c$140$1_0$57 ==.
-;	main.c:140: }
-	C$main.c$140$1_0$57 ==.
+	C$main.c$151$1_0$58 ==.
+;	main.c:151: }
+	C$main.c$151$1_0$58 ==.
 	XG$Uart_Send$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Uart_Interrupt'
 ;------------------------------------------------------------
 	G$Uart_Interrupt$0$0 ==.
-	C$main.c$144$1_0$61 ==.
-;	main.c:144: void Uart_Interrupt() __interrupt(4)
+	C$main.c$155$1_0$62 ==.
+;	main.c:155: void Uart_Interrupt() __interrupt(4)
 ;	-----------------------------------------
 ;	 function Uart_Interrupt
 ;	-----------------------------------------
@@ -1517,24 +1582,24 @@ _Uart_Interrupt:
 	push	(0+0)
 	push	psw
 	mov	psw,#0x00
-	C$main.c$146$1_0$61 ==.
-;	main.c:146: if(TI)
-	C$main.c$148$2_0$62 ==.
-;	main.c:148: TI=0;
+	C$main.c$157$1_0$62 ==.
+;	main.c:157: if(TI)
+	C$main.c$159$2_0$63 ==.
+;	main.c:159: TI=0;
 ;	assignBit
 	jbc	_TI,00127$
 	sjmp	00102$
 00127$:
-	C$main.c$149$2_0$62 ==.
-;	main.c:149: Tx_Busy=0;
+	C$main.c$160$2_0$63 ==.
+;	main.c:160: Tx_Busy=0;
 ;	assignBit
 	clr	_Tx_Busy
 00102$:
-	C$main.c$151$1_0$61 ==.
-;	main.c:151: if(RI)
+	C$main.c$162$1_0$62 ==.
+;	main.c:162: if(RI)
 	jnb	_RI,00109$
-	C$main.c$166$2_0$63 ==.
-;	main.c:166: Uart_Receive_Buff[Uart_Receive_Buff_Index++]=SBUF;
+	C$main.c$177$2_0$64 ==.
+;	main.c:177: Uart_Receive_Buff[Uart_Receive_Buff_Index++]=SBUF;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	ar7,@r0
 	mov	r0,#_Uart_Receive_Buff_Index
@@ -1545,46 +1610,46 @@ _Uart_Interrupt:
 	add	a,#_Uart_Receive_Buff
 	mov	r0,a
 	mov	@r0,_SBUF
-	C$main.c$167$2_0$63 ==.
-;	main.c:167: if(Echo_Rx)
+	C$main.c$178$2_0$64 ==.
+;	main.c:178: if(Echo_Rx)
 	jnb	_Echo_Rx,00104$
-	C$main.c$169$3_0$64 ==.
-;	main.c:169: Echo_Data=1;
+	C$main.c$180$3_0$65 ==.
+;	main.c:180: Echo_Data=1;
 ;	assignBit
 	setb	_Echo_Data
 00104$:
-	C$main.c$171$2_0$63 ==.
-;	main.c:171: if(Uart_Receive_Buff_Index>=sizeof(Uart_Receive_Buff))
+	C$main.c$182$2_0$64 ==.
+;	main.c:182: if(Uart_Receive_Buff_Index>=sizeof(Uart_Receive_Buff))
 	mov	r0,#_Uart_Receive_Buff_Index
 	cjne	@r0,#0x40,00130$
 00130$:
 	jc	00106$
-	C$main.c$173$3_0$65 ==.
-;	main.c:173: On_Uart_Buff_Full(Uart_Receive_Buff,sizeof(Uart_Receive_Buff));
+	C$main.c$184$3_0$66 ==.
+;	main.c:184: On_Uart_Buff_Full(Uart_Receive_Buff,sizeof(Uart_Receive_Buff));
 	mov	_On_Uart_Buff_Full_PARM_2,#0x40
 	mov	(_On_Uart_Buff_Full_PARM_2 + 1),#0x00
 	mov	dpl,#_Uart_Receive_Buff
 	lcall	_On_Uart_Buff_Full
-	C$main.c$174$3_0$65 ==.
-;	main.c:174: Uart_Receive_Buff_Index=0;
+	C$main.c$185$3_0$66 ==.
+;	main.c:185: Uart_Receive_Buff_Index=0;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	@r0,#0x00
-	C$main.c$175$3_0$65 ==.
-;	main.c:175: Uart_Echo_To_Send=0;
+	C$main.c$186$3_0$66 ==.
+;	main.c:186: Uart_Echo_To_Send=0;
 	mov	r0,#_Uart_Echo_To_Send
 	mov	@r0,#0x00
 00106$:
-	C$main.c$177$2_0$63 ==.
-;	main.c:177: Receive_Timeout_Tick=2;
+	C$main.c$188$2_0$64 ==.
+;	main.c:188: Receive_Timeout_Tick=48;
 	mov	r0,#_Receive_Timeout_Tick
-	mov	@r0,#0x02
-	C$main.c$178$2_0$63 ==.
-;	main.c:178: RI=0;
+	mov	@r0,#0x30
+	C$main.c$189$2_0$64 ==.
+;	main.c:189: RI=0;
 ;	assignBit
 	clr	_RI
 00109$:
-	C$main.c$181$1_0$61 ==.
-;	main.c:181: }
+	C$main.c$192$1_0$62 ==.
+;	main.c:192: }
 	pop	psw
 	pop	(0+0)
 	pop	(0+1)
@@ -1599,27 +1664,27 @@ _Uart_Interrupt:
 	pop	b
 	pop	acc
 	pop	bits
-	C$main.c$181$1_0$61 ==.
+	C$main.c$192$1_0$62 ==.
 	XG$Uart_Interrupt$0$0 ==.
 	reti
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Check_Uart_Echo'
 ;------------------------------------------------------------
 	G$Check_Uart_Echo$0$0 ==.
-	C$main.c$183$1_0$66 ==.
-;	main.c:183: void Check_Uart_Echo()//检查回送数据
+	C$main.c$194$1_0$67 ==.
+;	main.c:194: void Check_Uart_Echo()//检查回送数据
 ;	-----------------------------------------
 ;	 function Check_Uart_Echo
 ;	-----------------------------------------
 _Check_Uart_Echo:
-	C$main.c$185$1_0$66 ==.
-;	main.c:185: if(Echo_Rx)
+	C$main.c$196$1_0$67 ==.
+;	main.c:196: if(Echo_Rx)
 	jnb	_Echo_Rx,00109$
-	C$main.c$187$2_0$67 ==.
-;	main.c:187: if(Echo_Data)
+	C$main.c$198$2_0$68 ==.
+;	main.c:198: if(Echo_Data)
 	jnb	_Echo_Data,00110$
-	C$main.c$190$3_0$68 ==.
-;	main.c:190: while(Uart_Echo_To_Send < Uart_Receive_Buff_Index) 
+	C$main.c$201$3_0$69 ==.
+;	main.c:201: while(Uart_Echo_To_Send < Uart_Receive_Buff_Index) 
 00101$:
 	mov	r0,#_Uart_Echo_To_Send
 	mov	r1,#_Uart_Receive_Buff_Index
@@ -1627,8 +1692,8 @@ _Check_Uart_Echo:
 	mov	a,@r0
 	subb	a,@r1
 	jnc	00103$
-	C$main.c$191$3_0$68 ==.
-;	main.c:191: Uart_Send(Uart_Receive_Buff[Uart_Echo_To_Send++]);
+	C$main.c$202$3_0$69 ==.
+;	main.c:202: Uart_Send(Uart_Receive_Buff[Uart_Echo_To_Send++]);
 	mov	r0,#_Uart_Echo_To_Send
 	mov	ar7,@r0
 	mov	r0,#_Uart_Echo_To_Send
@@ -1642,86 +1707,86 @@ _Check_Uart_Echo:
 	lcall	_Uart_Send
 	sjmp	00101$
 00103$:
-	C$main.c$193$3_0$68 ==.
-;	main.c:193: if(Uart_Echo_To_Send>Uart_Receive_Buff_Index)
+	C$main.c$204$3_0$69 ==.
+;	main.c:204: if(Uart_Echo_To_Send>Uart_Receive_Buff_Index)
 	mov	r0,#_Uart_Echo_To_Send
 	mov	r1,#_Uart_Receive_Buff_Index
 	clr	c
 	mov	a,@r1
 	subb	a,@r0
 	jnc	00110$
-	C$main.c$194$3_0$68 ==.
-;	main.c:194: Uart_Echo_To_Send=0;
+	C$main.c$205$3_0$69 ==.
+;	main.c:205: Uart_Echo_To_Send=0;
 	mov	r0,#_Uart_Echo_To_Send
 	mov	@r0,#0x00
 	sjmp	00110$
 00109$:
-	C$main.c$199$2_0$69 ==.
-;	main.c:199: Uart_Echo_To_Send=Uart_Receive_Buff_Index;
+	C$main.c$210$2_0$70 ==.
+;	main.c:210: Uart_Echo_To_Send=Uart_Receive_Buff_Index;
 	mov	r0,#_Uart_Receive_Buff_Index
 	mov	a,@r0
 	mov	r0,#_Uart_Echo_To_Send
 	mov	@r0,a
 00110$:
-	C$main.c$201$1_0$66 ==.
-;	main.c:201: Echo_Data=0;
+	C$main.c$212$1_0$67 ==.
+;	main.c:212: Echo_Data=0;
 ;	assignBit
 	clr	_Echo_Data
-	C$main.c$202$1_0$66 ==.
-;	main.c:202: }
-	C$main.c$202$1_0$66 ==.
+	C$main.c$213$1_0$67 ==.
+;	main.c:213: }
+	C$main.c$213$1_0$67 ==.
 	XG$Check_Uart_Echo$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Clk_In_Init'
 ;------------------------------------------------------------
-;P3M1                      Allocated with name '_Clk_In_Init_P3M1_65536_70'
-;P3M0                      Allocated with name '_Clk_In_Init_P3M0_65536_70'
+;P3M1                      Allocated with name '_Clk_In_Init_P3M1_65536_71'
+;P3M0                      Allocated with name '_Clk_In_Init_P3M0_65536_71'
 ;------------------------------------------------------------
 	G$Clk_In_Init$0$0 ==.
-	C$main.c$205$1_0$70 ==.
-;	main.c:205: void Clk_In_Init()
+	C$main.c$216$1_0$71 ==.
+;	main.c:216: void Clk_In_Init()
 ;	-----------------------------------------
 ;	 function Clk_In_Init
 ;	-----------------------------------------
 _Clk_In_Init:
-	C$main.c$210$1_0$70 ==.
-;	main.c:210: P3M1&=~(1<<2);
-	anl	_Clk_In_Init_P3M1_65536_70,#0xfb
-	C$main.c$211$1_0$70 ==.
-;	main.c:211: P3M0&=~(1<<2);
-	anl	_Clk_In_Init_P3M0_65536_70,#0xfb
-	C$main.c$213$1_0$70 ==.
-;	main.c:213: P3_2=1;//准双向口输出高电平
+	C$main.c$221$1_0$71 ==.
+;	main.c:221: P3M1&=~(1<<2);
+	anl	_Clk_In_Init_P3M1_65536_71,#0xfb
+	C$main.c$222$1_0$71 ==.
+;	main.c:222: P3M0&=~(1<<2);
+	anl	_Clk_In_Init_P3M0_65536_71,#0xfb
+	C$main.c$224$1_0$71 ==.
+;	main.c:224: P3_2=1;//准双向口输出高电平
 ;	assignBit
 	setb	_P3_2
-	C$main.c$215$1_0$70 ==.
-;	main.c:215: INT0 = 1;
+	C$main.c$226$1_0$71 ==.
+;	main.c:226: INT0 = 1;
 ;	assignBit
 	setb	_INT0
-	C$main.c$216$1_0$70 ==.
-;	main.c:216: IT0 = 0;                    //设置INT0的中断类型 (1:仅下降沿 0:上升沿和下降沿)
+	C$main.c$227$1_0$71 ==.
+;	main.c:227: IT0 = 0;                    //设置INT0的中断类型 (1:仅下降沿 0:上升沿和下降沿)
 ;	assignBit
 	clr	_IT0
-	C$main.c$217$1_0$70 ==.
-;	main.c:217: EX0 = 1;                    //使能INT0中断
+	C$main.c$228$1_0$71 ==.
+;	main.c:228: EX0 = 1;                    //使能INT0中断
 ;	assignBit
 	setb	_EX0
-	C$main.c$218$1_0$70 ==.
-;	main.c:218: EA = 1;
+	C$main.c$229$1_0$71 ==.
+;	main.c:229: EA = 1;
 ;	assignBit
 	setb	_EA
-	C$main.c$220$1_0$70 ==.
-;	main.c:220: }
-	C$main.c$220$1_0$70 ==.
+	C$main.c$231$1_0$71 ==.
+;	main.c:231: }
+	C$main.c$231$1_0$71 ==.
 	XG$Clk_In_Init$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Clk_In_Interrupt'
 ;------------------------------------------------------------
 	G$Clk_In_Interrupt$0$0 ==.
-	C$main.c$222$1_0$71 ==.
-;	main.c:222: void Clk_In_Interrupt() __interrupt (0)
+	C$main.c$233$1_0$72 ==.
+;	main.c:233: void Clk_In_Interrupt() __interrupt (0)
 ;	-----------------------------------------
 ;	 function Clk_In_Interrupt
 ;	-----------------------------------------
@@ -1741,20 +1806,20 @@ _Clk_In_Interrupt:
 	push	(0+0)
 	push	psw
 	mov	psw,#0x00
-	C$main.c$224$1_0$71 ==.
-;	main.c:224: if(TR0)//当T0作为系统主时间时，停止T0,重置系统主时间
-	C$main.c$226$2_0$72 ==.
-;	main.c:226: TR0=0;//关闭定时器0
+	C$main.c$235$1_0$72 ==.
+;	main.c:235: if(TR0)//当T0作为系统主时间时，停止T0,重置系统主时间
+	C$main.c$237$2_0$73 ==.
+;	main.c:237: TR0=0;//关闭定时器0
 ;	assignBit
 	jbc	_TR0,00109$
 	sjmp	00102$
 00109$:
-	C$main.c$227$2_0$72 ==.
-;	main.c:227: ET0=0;//关闭定时器0中断
+	C$main.c$238$2_0$73 ==.
+;	main.c:238: ET0=0;//关闭定时器0中断
 ;	assignBit
 	clr	_ET0
-	C$main.c$228$2_0$72 ==.
-;	main.c:228: systick=0;//清零系统主时间
+	C$main.c$239$2_0$73 ==.
+;	main.c:239: systick=0;//清零系统主时间
 	mov	r0,#_systick
 	clr	a
 	mov	@r0,a
@@ -1773,11 +1838,11 @@ _Clk_In_Interrupt:
 	inc	r0
 	mov	@r0,a
 00102$:
-	C$main.c$230$1_0$71 ==.
-;	main.c:230: systick_interrupt();//调用中断函数
+	C$main.c$241$1_0$72 ==.
+;	main.c:241: systick_interrupt();//调用中断函数
 	lcall	_systick_interrupt
-	C$main.c$231$1_0$71 ==.
-;	main.c:231: }
+	C$main.c$242$1_0$72 ==.
+;	main.c:242: }
 	pop	psw
 	pop	(0+0)
 	pop	(0+1)
@@ -1792,25 +1857,25 @@ _Clk_In_Interrupt:
 	pop	b
 	pop	acc
 	pop	bits
-	C$main.c$231$1_0$71 ==.
+	C$main.c$242$1_0$72 ==.
 	XG$Clk_In_Interrupt$0$0 ==.
 	reti
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'On_SysTick_Timer'
 ;------------------------------------------------------------
 	G$On_SysTick_Timer$0$0 ==.
-	C$main.c$235$1_0$73 ==.
-;	main.c:235: void On_SysTick_Timer()//系统的毫秒级定时器
+	C$main.c$246$1_0$74 ==.
+;	main.c:246: void On_SysTick_Timer()//系统的毫秒级定时器
 ;	-----------------------------------------
 ;	 function On_SysTick_Timer
 ;	-----------------------------------------
 _On_SysTick_Timer:
-	C$main.c$237$1_0$73 ==.
-;	main.c:237: LS_Refresh();//刷新点阵屏	
+	C$main.c$248$1_0$74 ==.
+;	main.c:248: LS_Refresh();//刷新点阵屏	
 	lcall	_LS_Refresh
-	C$main.c$238$1_0$73 ==.
-;	main.c:238: }
-	C$main.c$238$1_0$73 ==.
+	C$main.c$249$1_0$74 ==.
+;	main.c:249: }
+	C$main.c$249$1_0$74 ==.
 	XG$On_SysTick_Timer$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -1824,15 +1889,15 @@ _On_SysTick_Timer:
 ;i                         Allocated to registers r7 
 ;------------------------------------------------------------
 	G$On_Uart_Idle$0$0 ==.
-	C$main.c$244$1_0$75 ==.
-;	main.c:244: void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
+	C$main.c$255$1_0$76 ==.
+;	main.c:255: void On_Uart_Idle(uint8_t __idata * buff,size_t length)//串口空闲的函数
 ;	-----------------------------------------
 ;	 function On_Uart_Idle
 ;	-----------------------------------------
 _On_Uart_Idle:
 	mov	r1,dpl
-	C$main.c$246$1_0$75 ==.
-;	main.c:246: if(length==1)//当长度为1时，是可显示字符就显示此字符
+	C$main.c$257$1_0$76 ==.
+;	main.c:257: if(length==1)//当长度为1时，是可显示字符就显示此字符
 	mov	a,#0x01
 	cjne	a,_On_Uart_Idle_PARM_2,00217$
 	dec	a
@@ -1841,8 +1906,8 @@ _On_Uart_Idle:
 00217$:
 	sjmp	00111$
 00218$:
-	C$main.c$248$2_0$76 ==.
-;	main.c:248: if(buff[0]>=0x20 && buff[0]<0x80)
+	C$main.c$259$2_0$77 ==.
+;	main.c:259: if(buff[0]>=0x20 && buff[0]<0x80)
 	mov	ar7,@r1
 	cjne	r7,#0x20,00219$
 00219$:
@@ -1850,41 +1915,41 @@ _On_Uart_Idle:
 	cjne	r7,#0x80,00221$
 00221$:
 	jnc	00102$
-	C$main.c$250$3_0$77 ==.
-;	main.c:250: LS_Show_Char_Font5x7(buff[0]);	
+	C$main.c$261$3_0$78 ==.
+;	main.c:261: LS_Show_Char_Font5x7(buff[0]);	
 	mov	dpl,r7
 	push	ar1
 	lcall	_LS_Show_Char_Font5x7
 	pop	ar1
 00102$:
-	C$main.c$253$2_0$76 ==.
-;	main.c:253: if(buff[0]==0xff)//开启串口回送
+	C$main.c$264$2_0$77 ==.
+;	main.c:264: if(buff[0]==0xff)//开启串口回送
 	mov	ar7,@r1
 	cjne	r7,#0xff,00107$
-	C$main.c$255$3_0$78 ==.
-;	main.c:255: if(!Echo_Rx)//当处于关闭回显状态时
+	C$main.c$266$3_0$79 ==.
+;	main.c:266: if(!Echo_Rx)//当处于关闭回显状态时
 	jb	_Echo_Rx,00105$
-	C$main.c$257$4_0$79 ==.
-;	main.c:257: Echo_Rx_On_Flag=1;
+	C$main.c$268$4_0$80 ==.
+;	main.c:268: Echo_Rx_On_Flag=1;
 ;	assignBit
 	setb	_Echo_Rx_On_Flag
 00105$:
-	C$main.c$259$3_0$78 ==.
-;	main.c:259: Echo_Rx=1;
+	C$main.c$270$3_0$79 ==.
+;	main.c:270: Echo_Rx=1;
 ;	assignBit
 	setb	_Echo_Rx
 00107$:
-	C$main.c$261$2_0$76 ==.
-;	main.c:261: if(buff[0]==0x00)//关闭串口回送
+	C$main.c$272$2_0$77 ==.
+;	main.c:272: if(buff[0]==0x00)//关闭串口回送
 	mov	a,r7
 	jnz	00111$
-	C$main.c$263$3_0$80 ==.
-;	main.c:263: Echo_Rx=0;
+	C$main.c$274$3_0$81 ==.
+;	main.c:274: Echo_Rx=0;
 ;	assignBit
 	clr	_Echo_Rx
 00111$:
-	C$main.c$266$1_0$75 ==.
-;	main.c:266: if(length==2)//当长度为2时表明这是一个地址设置包，包内含有当前地址（16位）
+	C$main.c$277$1_0$76 ==.
+;	main.c:277: if(length==2)//当长度为2时表明这是一个地址设置包，包内含有当前地址（16位）
 	mov	a,#0x02
 	cjne	a,_On_Uart_Idle_PARM_2,00227$
 	clr	a
@@ -1893,25 +1958,25 @@ _On_Uart_Idle:
 00227$:
 	sjmp	00115$
 00228$:
-	C$main.c$268$2_0$81 ==.
-;	main.c:268: if(!Echo_Rx)//关闭回送时才能设置地址
+	C$main.c$279$2_0$82 ==.
+;	main.c:279: if(!Echo_Rx)//关闭回送时才能设置地址
 	jb	_Echo_Rx,00115$
-	C$main.c$270$3_0$82 ==.
-;	main.c:270: Device_Address_Set_Flag=1;
+	C$main.c$281$3_0$83 ==.
+;	main.c:281: Device_Address_Set_Flag=1;
 ;	assignBit
 	setb	_Device_Address_Set_Flag
-	C$main.c$271$3_0$82 ==.
-;	main.c:271: Device_Address=buff[1];
+	C$main.c$282$3_0$83 ==.
+;	main.c:282: Device_Address=buff[1];
 	mov	a,r1
 	inc	a
 	mov	r0,a
 	mov	ar7,@r0
-	C$main.c$272$3_0$82 ==.
-;	main.c:272: Device_Address*=256;
+	C$main.c$283$3_0$83 ==.
+;	main.c:283: Device_Address*=256;
 	mov	ar6,r7
 	mov	r7,#0x00
-	C$main.c$273$3_0$82 ==.
-;	main.c:273: Device_Address+=buff[0];
+	C$main.c$284$3_0$83 ==.
+;	main.c:284: Device_Address+=buff[0];
 	mov	ar5,@r1
 	mov	r4,#0x00
 	mov	a,r5
@@ -1925,8 +1990,8 @@ _On_Uart_Idle:
 	inc	r0
 	mov	@r0,ar6
 00115$:
-	C$main.c$276$1_0$75 ==.
-;	main.c:276: if(length==3)//长度为3时,表示这是对某一个地址的进行字符设置,参考长度为1时的情况
+	C$main.c$287$1_0$76 ==.
+;	main.c:287: if(length==3)//长度为3时,表示这是对某一个地址的进行字符设置,参考长度为1时的情况
 	mov	a,#0x03
 	cjne	a,_On_Uart_Idle_PARM_2,00230$
 	clr	a
@@ -1935,8 +2000,8 @@ _On_Uart_Idle:
 00230$:
 	sjmp	00126$
 00231$:
-	C$main.c$278$2_0$83 ==.
-;	main.c:278: uint16_t address=buff[0]+(uint16_t)256*buff[1];
+	C$main.c$289$2_0$84 ==.
+;	main.c:289: uint16_t address=buff[0]+(uint16_t)256*buff[1];
 	mov	ar7,@r1
 	mov	r6,#0x00
 	mov	a,r1
@@ -1950,8 +2015,8 @@ _On_Uart_Idle:
 	mov	a,r4
 	addc	a,r6
 	mov	r4,a
-	C$main.c$279$2_0$83 ==.
-;	main.c:279: if(address==Device_Address)//是本模块的设置包
+	C$main.c$290$2_0$84 ==.
+;	main.c:290: if(address==Device_Address)//是本模块的设置包
 	mov	r0,#_Device_Address
 	mov	a,@r0
 	cjne	a,ar5,00232$
@@ -1962,8 +2027,8 @@ _On_Uart_Idle:
 00232$:
 	sjmp	00126$
 00233$:
-	C$main.c$281$3_0$84 ==.
-;	main.c:281: if(buff[2]>=0x20 && buff[2]<0x80)
+	C$main.c$292$3_0$85 ==.
+;	main.c:292: if(buff[2]>=0x20 && buff[2]<0x80)
 	mov	a,#0x02
 	add	a,r1
 	mov	r0,a
@@ -1974,8 +2039,8 @@ _On_Uart_Idle:
 	cjne	r7,#0x80,00236$
 00236$:
 	jnc	00117$
-	C$main.c$283$4_0$85 ==.
-;	main.c:283: LS_Show_Char_Font5x7(buff[2]);	
+	C$main.c$294$4_0$86 ==.
+;	main.c:294: LS_Show_Char_Font5x7(buff[2]);	
 	mov	dpl,r7
 	push	ar1
 	push	ar0
@@ -1983,26 +2048,26 @@ _On_Uart_Idle:
 	pop	ar0
 	pop	ar1
 00117$:
-	C$main.c$286$3_0$84 ==.
-;	main.c:286: if(buff[2]==0xff)//开启串口回送
+	C$main.c$297$3_0$85 ==.
+;	main.c:297: if(buff[2]==0xff)//开启串口回送
 	mov	ar7,@r0
 	cjne	r7,#0xff,00120$
-	C$main.c$288$4_0$86 ==.
-;	main.c:288: Echo_Rx=1;
+	C$main.c$299$4_0$87 ==.
+;	main.c:299: Echo_Rx=1;
 ;	assignBit
 	setb	_Echo_Rx
 00120$:
-	C$main.c$290$3_0$84 ==.
-;	main.c:290: if(buff[2]==0x00)//关闭串口回送
+	C$main.c$301$3_0$85 ==.
+;	main.c:301: if(buff[2]==0x00)//关闭串口回送
 	mov	a,r7
 	jnz	00126$
-	C$main.c$292$4_0$87 ==.
-;	main.c:292: Echo_Rx=0;
+	C$main.c$303$4_0$88 ==.
+;	main.c:303: Echo_Rx=0;
 ;	assignBit
 	clr	_Echo_Rx
 00126$:
-	C$main.c$297$1_0$75 ==.
-;	main.c:297: if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
+	C$main.c$308$1_0$76 ==.
+;	main.c:308: if(length==8)//当长度为8时,直接复制数据到8X8点阵显示内存
 	mov	a,#0x08
 	cjne	a,_On_Uart_Idle_PARM_2,00241$
 	clr	a
@@ -2011,12 +2076,12 @@ _On_Uart_Idle:
 00241$:
 	sjmp	00129$
 00242$:
-	C$main.c$300$3_0$89 ==.
-;	main.c:300: for(i=0;i<8;i++)
+	C$main.c$311$3_0$90 ==.
+;	main.c:311: for(i=0;i<8;i++)
 	mov	r7,#0x00
 00135$:
-	C$main.c$302$4_0$90 ==.
-;	main.c:302: LS_RAM[i]=buff[i];
+	C$main.c$313$4_0$91 ==.
+;	main.c:313: LS_RAM[i]=buff[i];
 	mov	a,r7
 	add	a,#_LS_RAM
 	mov	r0,a
@@ -2028,15 +2093,15 @@ _On_Uart_Idle:
 	mov	ar6,@r0
 	pop	ar0
 	mov	@r0,ar6
-	C$main.c$300$3_0$89 ==.
-;	main.c:300: for(i=0;i<8;i++)
+	C$main.c$311$3_0$90 ==.
+;	main.c:311: for(i=0;i<8;i++)
 	inc	r7
 	cjne	r7,#0x08,00243$
 00243$:
 	jc	00135$
 00129$:
-	C$main.c$306$1_0$75 ==.
-;	main.c:306: if(length==10)//当长度为10时，根据地址设置显示内容，参考长度为8时的效果
+	C$main.c$317$1_0$76 ==.
+;	main.c:317: if(length==10)//当长度为10时，根据地址设置显示内容，参考长度为8时的效果
 	mov	a,#0x0a
 	cjne	a,_On_Uart_Idle_PARM_2,00245$
 	clr	a
@@ -2045,8 +2110,8 @@ _On_Uart_Idle:
 00245$:
 	sjmp	00139$
 00246$:
-	C$main.c$308$2_0$91 ==.
-;	main.c:308: uint16_t address=buff[0]+(uint16_t)256*buff[1];
+	C$main.c$319$2_0$92 ==.
+;	main.c:319: uint16_t address=buff[0]+(uint16_t)256*buff[1];
 	mov	ar7,@r1
 	mov	r6,#0x00
 	mov	a,r1
@@ -2060,8 +2125,8 @@ _On_Uart_Idle:
 	mov	a,r4
 	addc	a,r6
 	mov	r4,a
-	C$main.c$309$2_0$91 ==.
-;	main.c:309: if(address==Device_Address)//是本模块的设置包
+	C$main.c$320$2_0$92 ==.
+;	main.c:320: if(address==Device_Address)//是本模块的设置包
 	mov	r0,#_Device_Address
 	mov	a,@r0
 	cjne	a,ar5,00247$
@@ -2072,12 +2137,12 @@ _On_Uart_Idle:
 00247$:
 	sjmp	00139$
 00248$:
-	C$main.c$312$4_0$93 ==.
-;	main.c:312: for(i=0;i<8;i++)
+	C$main.c$323$4_0$94 ==.
+;	main.c:323: for(i=0;i<8;i++)
 	mov	r7,#0x00
 00137$:
-	C$main.c$314$5_0$94 ==.
-;	main.c:314: LS_RAM[i]=buff[i+2];
+	C$main.c$325$5_0$95 ==.
+;	main.c:325: LS_RAM[i]=buff[i+2];
 	mov	a,r7
 	add	a,#_LS_RAM
 	mov	r0,a
@@ -2096,16 +2161,16 @@ _On_Uart_Idle:
 	mov	ar6,@r0
 	pop	ar0
 	mov	@r0,ar6
-	C$main.c$312$4_0$93 ==.
-;	main.c:312: for(i=0;i<8;i++)
+	C$main.c$323$4_0$94 ==.
+;	main.c:323: for(i=0;i<8;i++)
 	inc	r7
 	cjne	r7,#0x08,00249$
 00249$:
 	jc	00137$
 00139$:
-	C$main.c$319$1_0$75 ==.
-;	main.c:319: }
-	C$main.c$319$1_0$75 ==.
+	C$main.c$330$1_0$76 ==.
+;	main.c:330: }
+	C$main.c$330$1_0$76 ==.
 	XG$On_Uart_Idle$0$0 ==.
 	ret
 ;------------------------------------------------------------
@@ -2115,41 +2180,41 @@ _On_Uart_Idle:
 ;buff                      Allocated to registers 
 ;------------------------------------------------------------
 	G$On_Uart_Buff_Full$0$0 ==.
-	C$main.c$320$1_0$96 ==.
-;	main.c:320: void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
+	C$main.c$331$1_0$97 ==.
+;	main.c:331: void On_Uart_Buff_Full(uint8_t __idata * buff,size_t length)//串口缓冲满
 ;	-----------------------------------------
 ;	 function On_Uart_Buff_Full
 ;	-----------------------------------------
 _On_Uart_Buff_Full:
-	C$main.c$323$1_0$96 ==.
-;	main.c:323: UNUSED(length);
-	C$main.c$325$1_0$96 ==.
-;	main.c:325: }
-	C$main.c$325$1_0$96 ==.
+	C$main.c$334$1_0$97 ==.
+;	main.c:334: UNUSED(length);
+	C$main.c$336$1_0$97 ==.
+;	main.c:336: }
+	C$main.c$336$1_0$97 ==.
 	XG$On_Uart_Buff_Full$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Check_Device_Address_Set'
 ;------------------------------------------------------------
 	G$Check_Device_Address_Set$0$0 ==.
-	C$main.c$327$1_0$97 ==.
-;	main.c:327: void Check_Device_Address_Set()
+	C$main.c$338$1_0$98 ==.
+;	main.c:338: void Check_Device_Address_Set()
 ;	-----------------------------------------
 ;	 function Check_Device_Address_Set
 ;	-----------------------------------------
 _Check_Device_Address_Set:
-	C$main.c$329$1_0$97 ==.
-;	main.c:329: if(Device_Address_Set_Flag)
+	C$main.c$340$1_0$98 ==.
+;	main.c:340: if(Device_Address_Set_Flag)
 	jnb	_Device_Address_Set_Flag,00103$
-	C$main.c$332$2_0$98 ==.
-;	main.c:332: Uart_Send(Device_Address+1);
+	C$main.c$343$2_0$99 ==.
+;	main.c:343: Uart_Send(Device_Address+1);
 	mov	r0,#_Device_Address
 	mov	a,@r0
 	inc	a
 	mov	dpl,a
 	lcall	_Uart_Send
-	C$main.c$333$2_0$98 ==.
-;	main.c:333: Uart_Send((Device_Address+1)>>8);
+	C$main.c$344$2_0$99 ==.
+;	main.c:344: Uart_Send((Device_Address+1)>>8);
 	mov	r0,#_Device_Address
 	mov	a,#0x01
 	add	a,@r0
@@ -2158,81 +2223,81 @@ _Check_Device_Address_Set:
 	addc	a,@r0
 	mov	dpl,a
 	lcall	_Uart_Send
-	C$main.c$334$2_0$98 ==.
-;	main.c:334: Device_Address_Set_Flag=0;
+	C$main.c$345$2_0$99 ==.
+;	main.c:345: Device_Address_Set_Flag=0;
 ;	assignBit
 	clr	_Device_Address_Set_Flag
 00103$:
-	C$main.c$336$1_0$97 ==.
-;	main.c:336: }
-	C$main.c$336$1_0$97 ==.
+	C$main.c$347$1_0$98 ==.
+;	main.c:347: }
+	C$main.c$347$1_0$98 ==.
 	XG$Check_Device_Address_Set$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'Check_Echo_Rx_ON'
 ;------------------------------------------------------------
 	G$Check_Echo_Rx_ON$0$0 ==.
-	C$main.c$338$1_0$99 ==.
-;	main.c:338: void Check_Echo_Rx_ON()//检查回显
+	C$main.c$349$1_0$100 ==.
+;	main.c:349: void Check_Echo_Rx_ON()//检查回显
 ;	-----------------------------------------
 ;	 function Check_Echo_Rx_ON
 ;	-----------------------------------------
 _Check_Echo_Rx_ON:
-	C$main.c$340$1_0$99 ==.
-;	main.c:340: if(Echo_Rx_On_Flag)
+	C$main.c$351$1_0$100 ==.
+;	main.c:351: if(Echo_Rx_On_Flag)
 	jnb	_Echo_Rx_On_Flag,00103$
-	C$main.c$342$2_0$100 ==.
-;	main.c:342: Uart_Send(0xff);//发送打开回显命令
+	C$main.c$353$2_0$101 ==.
+;	main.c:353: Uart_Send(0xff);//发送打开回显命令
 	mov	dpl,#0xff
 	lcall	_Uart_Send
-	C$main.c$343$2_0$100 ==.
-;	main.c:343: Echo_Rx_On_Flag=0;
+	C$main.c$354$2_0$101 ==.
+;	main.c:354: Echo_Rx_On_Flag=0;
 ;	assignBit
 	clr	_Echo_Rx_On_Flag
 00103$:
-	C$main.c$345$1_0$99 ==.
-;	main.c:345: }
-	C$main.c$345$1_0$99 ==.
+	C$main.c$356$1_0$100 ==.
+;	main.c:356: }
+	C$main.c$356$1_0$100 ==.
 	XG$Check_Echo_Rx_ON$0$0 ==.
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'main'
 ;------------------------------------------------------------
 	G$main$0$0 ==.
-	C$main.c$347$1_0$101 ==.
-;	main.c:347: void main()
+	C$main.c$358$1_0$102 ==.
+;	main.c:358: void main()
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-	C$main.c$349$1_0$101 ==.
-;	main.c:349: systick_init();//初始化主时间
+	C$main.c$360$1_0$102 ==.
+;	main.c:360: systick_init();//初始化主时间
 	lcall	_systick_init
-	C$main.c$350$1_0$101 ==.
-;	main.c:350: Clk_In_Init();//初始化外部中断
+	C$main.c$361$1_0$102 ==.
+;	main.c:361: Clk_In_Init();//初始化外部中断
 	lcall	_Clk_In_Init
-	C$main.c$351$1_0$101 ==.
-;	main.c:351: Uart_Init();//初始化串口
+	C$main.c$362$1_0$102 ==.
+;	main.c:362: Uart_Init();//初始化串口
 	lcall	_Uart_Init
-	C$main.c$352$1_0$101 ==.
-;	main.c:352: LS_Init();//初始化点阵屏
+	C$main.c$363$1_0$102 ==.
+;	main.c:363: LS_Init();//初始化点阵屏
 	lcall	_LS_Init
-	C$main.c$354$1_0$101 ==.
-;	main.c:354: while(1)
+	C$main.c$365$1_0$102 ==.
+;	main.c:365: while(1)
 00102$:
-	C$main.c$356$2_0$102 ==.
-;	main.c:356: Check_Uart_Echo();//检查回送数据
+	C$main.c$367$2_0$103 ==.
+;	main.c:367: Check_Uart_Echo();//检查回送数据
 	lcall	_Check_Uart_Echo
-	C$main.c$357$2_0$102 ==.
-;	main.c:357: Check_Device_Address_Set();//检查地址设置包
+	C$main.c$368$2_0$103 ==.
+;	main.c:368: Check_Device_Address_Set();//检查地址设置包
 	lcall	_Check_Device_Address_Set
-	C$main.c$358$2_0$102 ==.
-;	main.c:358: Check_Echo_Rx_ON();//检查回显打开状态
+	C$main.c$369$2_0$103 ==.
+;	main.c:369: Check_Echo_Rx_ON();//检查回显打开状态
 	lcall	_Check_Echo_Rx_ON
 	sjmp	00102$
-	C$main.c$375$1_0$101 ==.
-;	main.c:375: }
-	C$main.c$375$1_0$101 ==.
+	C$main.c$386$1_0$102 ==.
+;	main.c:386: }
+	C$main.c$386$1_0$102 ==.
 	XG$main$0$0 ==.
 	ret
 	.area CSEG    (CODE)
