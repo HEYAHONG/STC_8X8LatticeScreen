@@ -238,7 +238,14 @@ void Clk_In_Interrupt() __interrupt (0)
 		ET0=0;//关闭定时器0中断
 		systick=0;//清零系统主时间
 	}
-	systick_interrupt();//调用中断函数
+	{//做与系统主时间中断一样的事
+		systick++;
+	
+		//翻转P3_3
+		P3_3=!P3_3;
+	
+		On_SysTick_Timer();
+	}
 }
 
 
