@@ -1,1 +1,15 @@
+*.adb
+*.asm
+*.cdb
+*.hashes
+*.lk
+*.lst
+*.mem
+*.map
+*.omf
+*.rel
+*.rst
+*.sym
 *~
+
+
