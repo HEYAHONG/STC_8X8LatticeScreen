@@ -1,4 +1,5 @@
 #include "8051.h"
+#include "stdint.h"
 
 #ifndef __LatticeScreen__
 #define __LatticeScreen__
